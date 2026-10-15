@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import styles from "./ContactForm.module.css";
@@ -22,15 +22,25 @@ function validate(data: FormData, t: Labels["errors"]): Errors {
   return errors;
 }
 
+type ContactFormProps = {
+  labels: Labels;
+  recipient: string;
+  phone: { display: string; href: string };
+};
+
 /**
- * Validates the request, then opens the visitor's email app with it filled in.
- * There is no server endpoint yet; swap `handOff` for a Server Action or form
- * service when one is chosen.
+ * Validates the request, then shows it written out with three ways to send it:
+ * open it in the visitor's email app, copy it, or call. Nothing is lost if the
+ * visitor has no email app set up (common on office PCs that use webmail).
+ * There is no server endpoint yet; when one is chosen, replace `prepare` with a real send.
  */
-export function ContactForm({ labels, recipient }: { labels: Labels; recipient: string }) {
+export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const readyRef = useRef<HTMLHeadingElement>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState("");
+  const [draft, setDraft] = useState<{ text: string; mailto: string } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const order: FieldName[] = ["name", "company", "phone", "email", "type", "location", "message"];
   const fieldLabel: Record<FieldName, string> = {
@@ -43,15 +53,22 @@ export function ContactForm({ labels, recipient }: { labels: Labels; recipient: 
     message: labels.message,
   };
 
-  function handOff(data: FormData) {
+  function prepare(data: FormData) {
     const lines = order
       .map((k) => [k, String(data.get(k) ?? "").trim()] as const)
       .filter(([, v]) => v)
-      .map(([k, v]) => `${fieldLabel[k]}: ${v}`);
-    window.location.href =
-      `mailto:${recipient}?subject=${encodeURIComponent(labels.emailSubject)}` +
-      `&body=${encodeURIComponent(lines.join("\n"))}`;
+      .map(([k, v]) => `${fieldLabel[k].replace(/\s*\(.*\)$/, "")}: ${v}`);
+    const text = lines.join("\n");
+    const mailto =
+      `mailto:${recipient}?subject=${encodeURIComponent(labels.emailSubject)}` + `&body=${encodeURIComponent(text)}`;
+    setDraft({ text, mailto });
+    setCopied(false);
   }
+
+  // Move focus to the result so keyboard and screen-reader users land on it.
+  useEffect(() => {
+    if (draft) readyRef.current?.focus();
+  }, [draft]);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -65,8 +82,19 @@ export function ContactForm({ labels, recipient }: { labels: Labels; recipient: 
       formRef.current?.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
       return;
     }
-    handOff(data);
-    setStatus(labels.ready);
+    setStatus("");
+    prepare(data);
+  }
+
+  async function copy() {
+    if (!draft) return;
+    try {
+      await navigator.clipboard.writeText(`${labels.emailSubject}\n\n${draft.text}`);
+      setCopied(true);
+    } catch {
+      // Clipboard can be blocked; the text is selectable in the box as a fallback.
+      setCopied(false);
+    }
   }
 
   // Re-check a single field when the visitor leaves it, so fixes clear the error.
@@ -88,8 +116,59 @@ export function ContactForm({ labels, recipient }: { labels: Labels; recipient: 
       </span>
     ) : null;
 
+  const readyView = draft ? (
+      <section className={styles.ready} aria-labelledby="ready-h">
+        <h2 id="ready-h" ref={readyRef} tabIndex={-1} className={styles.readyTitle}>
+          {labels.ready.title}
+        </h2>
+        <p>{labels.ready.body}</p>
+
+        <div className={styles.readyActions}>
+          <a className={styles.primaryAction} href={draft.mailto}>
+            {labels.ready.openEmail}
+          </a>
+          <button type="button" className={styles.secondaryAction} onClick={copy}>
+            {copied ? labels.ready.copied : labels.ready.copy}
+          </button>
+          <a className={styles.secondaryAction} href={phone.href} dir="ltr">
+            {labels.ready.call} {phone.display}
+          </a>
+        </div>
+
+        <p className={styles.sendTo}>
+          {labels.ready.sendTo}{" "}
+          <a href={`mailto:${recipient}`} dir="ltr">
+            {recipient}
+          </a>
+        </p>
+
+        <label className={styles.draftLabel} htmlFor="f-draft">
+          {labels.ready.yourRequest}
+        </label>
+        <textarea
+          id="f-draft"
+          className={styles.draft}
+          readOnly
+          value={`${labels.emailSubject}\n\n${draft.text}`}
+          rows={Math.min(10, draft.text.split("\n").length + 3)}
+          onFocus={(e) => e.currentTarget.select()}
+        />
+
+        <p role="status" className="visually-hidden">
+          {copied ? labels.ready.copied : ""}
+        </p>
+
+        <button type="button" className={styles.editLink} onClick={() => setDraft(null)}>
+          {labels.ready.edit}
+        </button>
+      </section>
+  ) : null;
+
   return (
-    <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} onBlur={onBlur}>
+    <>
+    {readyView}
+    {/* Kept mounted (just hidden) so "Change details" brings back what the visitor typed. */}
+    <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} onBlur={onBlur} hidden={!!draft}>
       <div className={styles.field}>
         <label htmlFor="f-name">{labels.name}</label>
         <input id="f-name" name="name" type="text" autoComplete="name" required
@@ -148,5 +227,6 @@ export function ContactForm({ labels, recipient }: { labels: Labels; recipient: 
         <Button type="submit">{labels.submit}</Button>
       </div>
     </form>
+    </>
   );
 }

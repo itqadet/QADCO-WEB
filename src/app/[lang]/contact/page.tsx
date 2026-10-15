@@ -23,7 +23,7 @@ export default async function ContactPage() {
 
       <Container as="section" aria-label={contact.sectionLabel} style={{ paddingBottom: "var(--section)" }}>
         <Split>
-          <ContactForm labels={contact.form} recipient={settings.email.display} />
+          <ContactForm labels={contact.form} recipient={settings.email.display} phone={settings.phone} />
           <div>
             <h2>{contact.directTitle}</h2>
             <ContactList detailed />

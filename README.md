@@ -67,12 +67,15 @@ Projects, the project register, skyline towers, brands and contact details are e
 
 **CORS:** in sanity.io/manage → API → CORS origins, add `http://localhost:3000` and the live domain, each with *Allow credentials* ticked, or the Studio can't sign in.
 
-## Deploying to Vercel
+## Deploying
 
-1. Push this folder to a GitHub repository (it already ignores `.env.local` and `node_modules`).
-2. In Vercel, *Add New → Project*, import the repository. Framework: Next.js (detected).
-3. Environment variables: `NEXT_PUBLIC_SANITY_PROJECT_ID=vj2fsewo`, `NEXT_PUBLIC_SANITY_DATASET=production`, `NEXT_PUBLIC_SITE_URL=https://your-domain`.
-4. Deploy, then add the Vercel URL (and later your own domain) to Sanity's CORS origins.
+The site is hosted on Vercel (project `qadco-web`, live at https://qadco-web.vercel.app) and connected to
+https://github.com/yusufShire/QADCO-WEB. **Every push to `main` deploys to production automatically**;
+pushes to other branches get a preview link.
+
+Environment variables are set in the Vercel project: `NEXT_PUBLIC_SANITY_PROJECT_ID=vj2fsewo`,
+`NEXT_PUBLIC_SANITY_DATASET=production`, `NEXT_PUBLIC_SITE_URL=https://qadco-web.vercel.app`.
+When a custom domain is added, update `NEXT_PUBLIC_SITE_URL` and add the domain to Sanity's CORS origins.
 
 ## Before launch
 

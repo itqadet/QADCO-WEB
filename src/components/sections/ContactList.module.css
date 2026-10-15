@@ -1,0 +1,31 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.label {
+  color: var(--muted);
+}
+
+.value,
+.plain {
+  justify-self: start;
+}
+.value {
+  font-weight: 600;
+}
+
+.map {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: var(--fs-small);
+}

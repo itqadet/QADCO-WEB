@@ -1,0 +1,20 @@
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: var(--col-gap);
+  align-items: start;
+  padding-block: clamp(2rem, 4vw, 3rem);
+}
+.row + .row {
+  border-top: 1px solid var(--rule);
+}
+
+.title {
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem);
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

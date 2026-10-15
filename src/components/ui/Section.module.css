@@ -1,0 +1,37 @@
+.section {
+  padding-block: var(--section);
+}
+
+.plain + .plain {
+  border-top: 1px solid var(--rule);
+}
+
+.tight {
+  padding-top: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+.band {
+  background: var(--gypsum-2);
+  padding-block: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 24px var(--col-gap);
+  align-items: end;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.head h2 {
+  margin: 0;
+}
+.head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: 1fr;
+  }
+}

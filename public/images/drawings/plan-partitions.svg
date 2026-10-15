@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" font-family="Archivo, Arial, sans-serif">
+  <title>Floor plan: drywall and glass partitions</title>
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M0 0V6" stroke="#14215A" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+  <!-- external walls -->
+  <rect x="30" y="24" width="420" height="276" fill="none" stroke="#14215A" stroke-width="6"/>
+  <!-- drywall partitions (double skin, hatched core) -->
+  <g fill="url(#hatch)" stroke="#14215A" stroke-width="1.6">
+    <rect x="194" y="27" width="12" height="120"/>
+    <rect x="194" y="195" width="12" height="102"/>
+    <rect x="33" y="194" width="110" height="12"/>
+  </g>
+  <!-- door in drywall, swing into room -->
+  <g fill="none" stroke="#14215A" stroke-width="1.4">
+    <path d="M200 147v48"/>
+    <path d="M200 147h-46"/>
+    <path d="M154 147a46 46 0 0 0 46 46" stroke-dasharray="3 3"/>
+    <path d="M143 194v12"/>
+  </g>
+  <!-- glass partition with mullions -->
+  <g stroke="#7E0A12" stroke-width="1.6" fill="none">
+    <path d="M206 168h244"/>
+    <path d="M206 172h244"/>
+  </g>
+  <g stroke="#7E0A12" stroke-width="3">
+    <path d="M266 164v12M326 164v12M386 164v12"/>
+  </g>
+  <!-- glass door -->
+  <g fill="none" stroke="#7E0A12" stroke-width="1.4">
+    <path d="M396 170v-44"/>
+    <path d="M396 126a44 44 0 0 1 44 44" stroke-dasharray="3 3"/>
+  </g>
+  <!-- desk blocks for scale -->
+  <g fill="#14215A" fill-opacity=".08" stroke="#14215A" stroke-opacity=".35">
+    <rect x="236" y="214" width="80" height="40"/><rect x="340" y="214" width="80" height="40"/>
+    <rect x="60" y="230" width="64" height="44"/>
+  </g>
+  <!-- dimensions -->
+  <g stroke="#14215A" stroke-width="1">
+    <path d="M30 326h420M30 318v16M450 318v16M200 318v16"/>
+  </g>
+  <g fill="#14215A" font-size="12" text-anchor="middle">
+    <text x="115" y="346">2850</text><text x="325" y="346">4150</text>
+  </g>
+</svg>

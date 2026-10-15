@@ -1,0 +1,90 @@
+.tree {
+  display: grid;
+  justify-items: center;
+}
+
+.head {
+  margin: 0;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* one horizontal bus with a drop to each department */
+.groups {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 28px 0 0;
+  list-style: none;
+}
+.groups::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 14px;
+  border-left: 1.5px solid var(--ink);
+}
+.groups::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 12.5%;
+  right: 12.5%;
+  border-top: 1.5px solid var(--ink);
+}
+
+.group {
+  position: relative;
+  padding: 14px 16px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--maroon);
+}
+.group::before {
+  content: "";
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  height: 14px;
+  border-left: 1.5px solid var(--ink);
+}
+.group h3 {
+  margin-bottom: 0.5em;
+  font-size: 1.0625rem;
+}
+.group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.group li {
+  padding: 5px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .groups {
+    grid-template-columns: 1fr 1fr;
+  }
+  .groups::after,
+  .groups::before,
+  .group::before {
+    display: none;
+  }
+  .groups {
+    padding-top: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .groups {
+    grid-template-columns: 1fr;
+  }
+}

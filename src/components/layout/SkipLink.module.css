@@ -1,0 +1,13 @@
+.skip {
+  position: absolute;
+  inset-inline-start: 16px;
+  top: -100px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: #fff;
+}
+.skip:focus {
+  top: 12px;
+  color: #fff;
+}

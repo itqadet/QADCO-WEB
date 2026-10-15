@@ -1,0 +1,34 @@
+.sheet {
+  margin: 0;
+  padding: 18px 18px 0;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+.sheet img {
+  width: 100%;
+  height: auto;
+}
+
+.titleBlock {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  margin: 14px -18px 0;
+  border-top: 1px solid var(--rule);
+  font-stretch: 75%;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+:lang(ar) .titleBlock {
+  font-stretch: normal;
+}
+
+.titleBlock span {
+  padding: 8px 14px;
+}
+.titleBlock span + span {
+  border-inline-start: 1px solid var(--rule);
+}
+.titleBlock strong {
+  color: var(--ink);
+  font-weight: 600;
+}

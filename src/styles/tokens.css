@@ -1,0 +1,47 @@
+/* QADCO Design System: tokens.
+   Colours are sampled from the logo (maroon #800008, navy #102060). */
+
+:root {
+  /* colour */
+  --gypsum: #f3f3f0;
+  --gypsum-2: #e6e7e2;
+  --paper: #fbfbf9;
+  --ink: #14215a;
+  --ink-deep: #0b1438;
+  --maroon: #7e0a12;
+  --maroon-deep: #5f070d;
+  --cove: #f2d49b;
+  --muted: #5a6378;
+  --rule: #c9ccd3;
+  --error: #a3121c;
+  --highlight: #fff3c4;
+
+  /* type: families come from next/font variables set on <html> */
+  --font-latin: var(--font-archivo), "Segoe UI", Arial, sans-serif;
+  --font-body: var(--font-latin);
+  --font-head: var(--font-latin);
+
+  --fs-small: 0.875rem;
+  --fs-body: 1.0625rem;
+  --fs-lede: 1.1875rem;
+  --fs-h3: 1.375rem;
+  --fs-h2: clamp(1.9rem, 1.4rem + 2vw, 2.75rem);
+  --fs-h1: clamp(2.4rem, 1.6rem + 3.6vw, 4.25rem);
+  --lh-body: 1.6;
+
+  /* layout */
+  --wrap: 1240px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --section: clamp(4rem, 3rem + 5vw, 7.5rem);
+  --col-gap: clamp(24px, 4vw, 64px);
+  --radius: 2px;
+  --header-h: 72px;
+
+  color-scheme: light;
+}
+
+:lang(ar) {
+  --font-body: var(--font-plex-arabic), var(--font-latin), Tahoma, sans-serif;
+  --font-head: var(--font-reem-kufi), var(--font-plex-arabic), Tahoma, sans-serif;
+  --lh-body: 1.8;
+}

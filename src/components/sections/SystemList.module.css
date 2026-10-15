@@ -1,0 +1,19 @@
+.list {
+  margin: 1.25rem 0 1rem;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: 32px;
+}
+
+.list li {
+  break-inside: avoid;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (max-width: 520px) {
+  .list {
+    columns: 1;
+  }
+}

@@ -1,0 +1,5 @@
+# Local-only files: settings are configured in the Vercel project instead.
+.env*.local
+.next
+node_modules
+.claude

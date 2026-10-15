@@ -1,0 +1,147 @@
+.story {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: var(--col-gap);
+}
+
+/* ---------- pinned visual (wide screens) ---------- */
+.stage {
+  position: relative;
+}
+.pinned {
+  position: sticky;
+  top: calc(var(--header-h) + 6vh);
+  aspect-ratio: 4 / 3;
+}
+
+.visual {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+.visual[data-active] {
+  opacity: 1;
+  transform: none;
+}
+.visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.visual[data-kind="drawing"] img {
+  object-fit: contain;
+  padding: 6%;
+}
+
+.tag {
+  position: absolute;
+  bottom: 14px;
+  inset-inline-start: 14px;
+  padding: 6px 12px;
+  background: var(--paper);
+  border-inline-start: 3px solid var(--maroon);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.progress {
+  position: absolute;
+  bottom: -22px;
+  inset-inline: 0;
+  display: flex;
+  gap: 6px;
+}
+.progress span {
+  flex: 1;
+  height: 3px;
+  background: var(--rule);
+  transition: background-color 400ms ease;
+}
+.progress span[data-done] {
+  background: var(--maroon);
+}
+
+/* ---------- steps ---------- */
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: min(72vh, 680px);
+  padding-block: 2rem;
+  opacity: 0.35;
+  transition: opacity 400ms ease;
+}
+.step[data-active] {
+  opacity: 1;
+}
+.step:first-child {
+  justify-content: flex-start;
+  padding-top: clamp(1rem, 6vh, 4rem);
+}
+
+.number {
+  font: 700 1rem/1 var(--font-latin);
+  color: var(--maroon);
+  letter-spacing: 0.04em;
+}
+.title {
+  margin: 0.6rem 0 0.4em;
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.6rem);
+}
+.body {
+  max-width: 42ch;
+  font-size: var(--fs-lede);
+  color: var(--ink);
+}
+
+.inlineVisual {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .story {
+    grid-template-columns: 1fr;
+  }
+  .stage {
+    display: none;
+  }
+  .step {
+    min-height: 0;
+    padding-block: 1.5rem 2.5rem;
+    opacity: 1;
+  }
+  .inlineVisual {
+    display: block;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+  }
+  .inlineVisual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .inlineVisual[data-kind="drawing"] img {
+    object-fit: contain;
+    padding: 6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual,
+  .step {
+    transition: none;
+  }
+}

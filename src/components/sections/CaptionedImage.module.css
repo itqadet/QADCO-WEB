@@ -1,0 +1,15 @@
+.figure {
+  margin: 0;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.caption {
+  padding-top: 8px;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}

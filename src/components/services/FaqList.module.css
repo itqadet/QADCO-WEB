@@ -1,0 +1,35 @@
+.item {
+  border-top: 1px solid var(--rule);
+}
+.item:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+  padding: 18px 0;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+.summary::-webkit-details-marker {
+  display: none;
+}
+.summary::after {
+  content: "+";
+  font: 400 1.5rem/1 var(--font-latin);
+  color: var(--maroon);
+  transition: transform 180ms ease;
+}
+.item[open] .summary::after {
+  transform: rotate(45deg);
+}
+
+.answer {
+  margin: 0;
+  padding-bottom: 18px;
+  color: var(--muted);
+}

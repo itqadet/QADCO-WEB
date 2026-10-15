@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" font-family="Archivo, Arial, sans-serif">
+  <title>Wall elevation: panelling, door and cove</title>
+  <!-- ceiling line and cove -->
+  <path d="M24 36h432" stroke="#14215A" stroke-width="3"/>
+  <path d="M24 46h432" stroke="#7E0A12" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <path d="M24 54h432" stroke="#14215A" stroke-width="1.4"/>
+  <!-- floor and skirting -->
+  <path d="M24 300h432" stroke="#14215A" stroke-width="3"/>
+  <path d="M24 288h432" stroke="#14215A" stroke-width="1.2"/>
+  <!-- dado rail -->
+  <path d="M24 206h146M310 206h146" stroke="#14215A" stroke-width="1.6"/>
+  <g fill="none" stroke="#14215A" stroke-width="1.4">
+    <!-- left bay -->
+    <rect x="40" y="72" width="54" height="118"/><rect x="48" y="80" width="38" height="102" stroke-opacity=".5"/>
+    <rect x="108" y="72" width="54" height="118"/><rect x="116" y="80" width="38" height="102" stroke-opacity=".5"/>
+    <rect x="40" y="220" width="54" height="56"/><rect x="108" y="220" width="54" height="56"/>
+    <!-- right bay -->
+    <rect x="318" y="72" width="54" height="118"/><rect x="326" y="80" width="38" height="102" stroke-opacity=".5"/>
+    <rect x="386" y="72" width="54" height="118"/><rect x="394" y="80" width="38" height="102" stroke-opacity=".5"/>
+    <rect x="318" y="220" width="54" height="56"/><rect x="386" y="220" width="54" height="56"/>
+  </g>
+  <!-- door with frame -->
+  <g fill="none" stroke="#14215A">
+    <rect x="186" y="78" width="108" height="210" stroke-width="2.4"/>
+    <rect x="196" y="88" width="88" height="200" stroke-width="1.4"/>
+    <path d="M240 88v200" stroke-width="1"/>
+    <path d="M226 190h8M246 190h8" stroke="#7E0A12" stroke-width="3"/>
+  </g>
+  <!-- dimensions -->
+  <g stroke="#14215A" stroke-width="1">
+    <path d="M468 36v264M460 36h16M460 300h16"/>
+    <path d="M24 326h432M24 318v16M456 318v16"/>
+  </g>
+  <g fill="#14215A" font-size="12" text-anchor="middle">
+    <text x="240" y="346">4200</text>
+    <text x="0" y="0" transform="translate(462 168) rotate(-90)">3000</text>
+  </g>
+</svg>

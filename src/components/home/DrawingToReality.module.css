@@ -1,0 +1,166 @@
+.frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  touch-action: pan-y;
+  cursor: ew-resize;
+  user-select: none;
+  box-shadow: 0 1px 0 var(--rule), 0 30px 60px -40px rgb(11 20 56 / 0.45);
+}
+
+.drawing,
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* faint drafting grid behind the drawing */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: linear-gradient(rgb(20 33 90 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(20 33 90 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* the photograph covers everything to the right of the divider */
+.photo {
+  z-index: 2;
+  clip-path: inset(0 0 0 var(--pos));
+}
+
+.divider {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(20 33 90 / 0.25);
+  pointer-events: none;
+}
+.handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--maroon);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 6px 18px rgb(11 20 56 / 0.35);
+  transition: transform 160ms ease;
+}
+.frame:hover .handle {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.label {
+  position: absolute;
+  z-index: 4;
+  top: 16px;
+  padding: 6px 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+.label[data-side="drawing"] {
+  left: 16px;
+  border-left: 3px solid var(--ink);
+}
+.label[data-side="built"] {
+  right: 16px;
+  border-left: 3px solid var(--maroon);
+}
+
+.range {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+.range:focus-visible ~ .hint {
+  opacity: 1;
+}
+.frame:has(.range:focus-visible) {
+  outline: 3px solid var(--maroon);
+  outline-offset: 4px;
+}
+
+.hint {
+  position: absolute;
+  z-index: 4;
+  bottom: 14px;
+  left: 50%;
+  padding: 6px 12px;
+  background: rgb(11 20 56 / 0.78);
+  color: #fff;
+  font-size: 0.8125rem;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+.frame[data-phase="ready"] .hint {
+  animation: hint 3.2s ease 0.4s 1 both;
+}
+
+/* ---------- the opening sequence ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* 1. the drawing sketches in from top-left to bottom-right */
+  .frame[data-phase="sketch"] .drawing {
+    animation: sketch 1.4s cubic-bezier(0.6, 0, 0.2, 1) both;
+  }
+  /* 2. the photograph sweeps across to the divider's resting place */
+  .frame[data-phase="reveal"] .photo {
+    transition: clip-path 1.4s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .frame[data-phase="reveal"] .divider {
+    transition: left 1.4s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .frame[data-phase="sketch"] .divider,
+  .frame[data-phase="sketch"] .label[data-side="built"] {
+    opacity: 0;
+  }
+}
+
+@keyframes sketch {
+  from {
+    clip-path: polygon(0 0, 0 0, 0 0);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: polygon(0 0, 200% 0, 0 200%);
+    opacity: 1;
+  }
+}
+@keyframes hint {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,4 @@
+.placeholder {
+  background: var(--highlight);
+  padding: 0 4px;
+}

@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./DrawingToReality.module.css";
 
+type Img = { src: string; width: number; height: number };
+
 type Props = {
-  drawing: string;
-  photo: string;
-  width: number;
-  height: number;
+  drawing: Img;
+  /** The render or photograph revealed over the drawing. */
+  image: Img;
   alt: string;
-  labels: { drawing: string; built: string; slider: string; hint: string };
+  labels: { drawing: string; image: string; slider: string; hint: string };
 };
 
 /** Where the divider rests once the opening sequence ends (percent from the left). */
@@ -22,7 +23,8 @@ const REST = 50;
  * Afterwards the visitor can drag the divider (or use the arrow keys) to compare the two.
  * With reduced motion the sequence is skipped and the divider simply rests in the middle.
  */
-export function DrawingToReality({ drawing, photo, width, height, alt, labels }: Props) {
+export function DrawingToReality({ drawing, image, alt, labels }: Props) {
+  const { width, height } = image;
   const [pos, setPos] = useState(100);
   const [phase, setPhase] = useState<"sketch" | "reveal" | "ready">("sketch");
   const frameRef = useRef<HTMLDivElement>(null);
@@ -69,14 +71,14 @@ export function DrawingToReality({ drawing, photo, width, height, alt, labels }:
       onPointerUp={() => (dragging.current = false)}
       onPointerCancel={() => (dragging.current = false)}
     >
-      <Image className={styles.drawing} src={drawing} alt="" width={width} height={height} sizes="(max-width: 860px) 100vw, 60vw" preload />
-      <Image className={styles.photo} src={photo} alt={alt} width={width} height={height} sizes="(max-width: 860px) 100vw, 60vw" preload />
+      <Image className={styles.drawing} src={drawing.src} alt="" width={drawing.width} height={drawing.height} sizes="(max-width: 860px) 100vw, 66vw" quality={85} preload />
+      <Image className={styles.photo} src={image.src} alt={alt} width={width} height={height} sizes="(max-width: 860px) 100vw, 66vw" quality={85} preload />
 
       <span className={styles.label} data-side="drawing" aria-hidden="true">
         {labels.drawing}
       </span>
       <span className={styles.label} data-side="built" aria-hidden="true">
-        {labels.built}
+        {labels.image}
       </span>
 
       <span className={styles.divider} aria-hidden="true">

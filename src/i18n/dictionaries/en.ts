@@ -63,13 +63,12 @@ const en = {
     hero: {
       titleLines: ["Interior design,", "built by the people", "who draw it."],
       lede: "Qasr Al Andalus is now an interior design company. We design complete interiors for villas, offices, hotels and public buildings, then build them with the same ceiling, partition and fit-out teams that have finished Qatar's towers and palaces since 1996.",
-      imageAlt:
-        "A geometric coffered ceiling of timber-faced bulkheads and white gypsum strapwork, with a brass chandelier, in an executive suite at AKH Tower.",
-      caption: "Our drawing and our finished ceiling at AKH Tower, West Bay. Drag to compare.",
       compare: {
         drawing: "Drawn",
         built: "Built",
-        slider: "Compare the drawing with the finished ceiling",
+        visualised: "Visualised",
+        sliderBuilt: "Compare the drawing with the finished room",
+        sliderVisualised: "Compare the drawing with the 3D visualisation",
         hint: "Drag to compare",
       },
     },
@@ -87,13 +86,13 @@ const en = {
           title: "3D visualisation",
           body: "Before anything is built you see the room in photorealistic 3D: ceilings, lighting, finishes and furniture, so decisions are made on screen, not on site.",
           tag: "3D visualisation",
-          alt: "A 3D visualisation of a living room with a recessed feature ceiling, cove lighting and panelled walls.",
+          alt: "A 3D visualisation of a long corridor with stepped coffered ceilings, cove lighting and panelled walls.",
         },
         {
           title: "Materials and furniture",
           body: "We select finishes, lighting and furniture with you, and procure them, so the materials in the visualisation are the ones that arrive.",
           tag: "Finishes and detail",
-          alt: "A hand-painted ornamental gypsum ceiling in gold and cream.",
+          alt: "A 3D visualisation of a gypsum tray ceiling with continuous cove lighting meeting warm timber wall cladding.",
         },
         {
           title: "Built by our own teams",

@@ -1,15 +1,16 @@
 import type { CSSProperties } from "react";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { href, routes } from "@/i18n/routing";
-import { heroPhoto } from "@/content/hero";
+import { getHero } from "@/lib/content";
+import { pick } from "@/content/localized";
 import { ButtonLink, ButtonRow } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { DrawingToReality } from "./DrawingToReality";
 import styles from "./Hero.module.css";
 
-/** Home hero: the positioning statement beside our drawing-versus-built ceiling. */
+/** Home hero: the positioning statement above a drawing compared with its render or photograph. */
 export async function Hero() {
-  const [{ home, common }, locale] = await Promise.all([getDictionary(), getLocale()]);
+  const [{ home, common }, locale, banner] = await Promise.all([getDictionary(), getLocale(), getHero()]);
   const { hero } = home;
 
   return (
@@ -33,14 +34,17 @@ export async function Hero() {
 
       <figure className={styles.figure}>
         <DrawingToReality
-          drawing={heroPhoto.drawing}
-          photo={heroPhoto.src}
-          width={heroPhoto.width}
-          height={heroPhoto.height}
-          alt={hero.imageAlt}
-          labels={hero.compare}
+          drawing={banner.drawing}
+          image={banner.image}
+          alt={pick(banner.alt, locale)}
+          labels={{
+            drawing: hero.compare.drawing,
+            image: banner.kind === "built" ? hero.compare.built : hero.compare.visualised,
+            slider: banner.kind === "built" ? hero.compare.sliderBuilt : hero.compare.sliderVisualised,
+            hint: hero.compare.hint,
+          }}
         />
-        <figcaption className={styles.caption}>{hero.caption}</figcaption>
+        <figcaption className={styles.caption}>{pick(banner.caption, locale)}</figcaption>
       </figure>
     </Container>
   );

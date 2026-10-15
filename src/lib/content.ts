@@ -5,6 +5,7 @@ import { register as localRegister, type RegisterEntry, type ScopeKey } from "@/
 import { towers as localTowers, towerDrawings, type Tower } from "@/content/skyline";
 import { brands as localBrands } from "@/content/credentials";
 import { defaultSettings, type Settings } from "@/content/site";
+import { defaultHero, type HeroImages } from "@/content/hero";
 import type { L } from "@/content/localized";
 import type { SectorKey } from "@/content/sectors";
 
@@ -119,6 +120,24 @@ export async function getBrands(): Promise<BrandLogo[]> {
     return data.map((b) => ({ id: b._id, name: b.name, ...resolveImage(b.logo, 600) }));
   }
   return localBrands.map((b) => ({ id: b.id, name: b.name, src: `/images/brands/${b.id}.png`, width: b.w, height: b.h }));
+}
+
+/* ---------- Home page banner ---------- */
+
+type SanityHero = { image?: SanityImage; drawing?: SanityImage; kind?: HeroImages["kind"]; alt?: L; caption?: L };
+
+const heroQuery = `*[_id == "homeHero"][0]{ image{ ${imageFields} }, drawing{ ${imageFields} }, kind, alt, caption }`;
+
+export async function getHero(): Promise<HeroImages> {
+  const h = await sanityFetch<SanityHero | null>(heroQuery);
+  if (!h?.image?.asset || !h.drawing?.asset || !h.alt || !h.caption) return defaultHero;
+  return {
+    image: resolveImage(h.image, 2000),
+    drawing: resolveImage(h.drawing, 2000),
+    kind: h.kind ?? "visualised",
+    alt: h.alt,
+    caption: h.caption,
+  };
 }
 
 /* ---------- Contact details ---------- */

@@ -16,7 +16,7 @@
 .frame {
   display: block;
   overflow: hidden;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 3;
   background: var(--gypsum-2);
 }
 .frame img {
@@ -51,11 +51,16 @@
   color: var(--muted);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1100px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
   .grid > li {
     grid-column: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }

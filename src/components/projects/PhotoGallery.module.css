@@ -44,12 +44,20 @@
   animation: in 200ms ease-out;
 }
 
+/* Shown no larger than the photo's own size, so low-resolution scans aren't blown up. */
 .image {
-  width: 100%;
+  display: block;
+  width: auto;
   height: auto;
+  max-width: 100%;
   max-height: calc(100vh - 180px);
-  object-fit: contain;
+  margin-inline: auto;
+}
+.lightbox {
   background: var(--ink-deep);
+}
+.bar {
+  background: var(--paper);
 }
 
 .bar {

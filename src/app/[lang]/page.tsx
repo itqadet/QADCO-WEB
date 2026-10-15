@@ -24,8 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
 /** The image for each design stage, in order: plan, visualisation, materials, built. */
 const storyImages: Omit<StoryStep["image"], "alt">[] = [
   { src: "/images/drawings/plan-interior.svg", width: 480, height: 360, kind: "drawing" },
-  { src: "/images/visualisations/living-feature.jpg", width: 1024, height: 1024, kind: "photo" },
-  { src: "/images/work/akh-ornamental-ceiling.jpg", width: 504, height: 768, kind: "photo" },
+  { src: "/images/visualisations/corridor-coffers.jpg", width: 1024, height: 1024, kind: "photo" },
+  { src: "/images/visualisations/tray-timber.jpg", width: 1024, height: 1024, kind: "photo" },
   { src: "/images/work/cid-auditorium-stage.jpg", width: 1034, height: 675, kind: "photo" },
 ];
 

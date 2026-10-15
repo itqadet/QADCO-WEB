@@ -438,9 +438,16 @@ const en = {
         phone: "Enter a phone number with at least 8 digits.",
         fix: "Check the highlighted fields, then send again.",
       },
+      sending: "Sending…",
+      sent: {
+        title: "Thank you, your request has been sent",
+        body: "It's with our team now. We'll call you to arrange a visit.",
+        urgent: "Need us sooner? Call",
+        another: "Send another request",
+      },
       ready: {
         title: "Your request is ready to send",
-        body: "Choose how to send it. If your email app doesn't open, copy your request and email it to us from Gmail, Outlook or any email you use, or simply call us.",
+        body: "We couldn't send it automatically just now. Choose another way: open it in your email app, copy it into Gmail, Outlook or any email you use, or simply call us.",
         openEmail: "Open in my email app",
         copy: "Copy my request",
         copied: "Copied. Paste it into an email to us.",

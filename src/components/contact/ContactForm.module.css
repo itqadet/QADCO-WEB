@@ -68,6 +68,20 @@
   display: none;
 }
 
+/* off-screen honeypot field for bots */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form button[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
 /* ---------- after sending: the request, ready to send three ways ---------- */
 .ready {
   padding: clamp(20px, 3vw, 32px);

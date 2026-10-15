@@ -29,18 +29,25 @@ type ContactFormProps = {
 };
 
 /**
- * Validates the request, then shows it written out with three ways to send it:
- * open it in the visitor's email app, copy it, or call. Nothing is lost if the
- * visitor has no email app set up (common on office PCs that use webmail).
- * There is no server endpoint yet; when one is chosen, replace `prepare` with a real send.
+ * Validates the request and sends it to QADCO by email (POST /api/contact, via Resend).
+ * If sending isn't available or fails, it falls back to showing the request written out
+ * with three ways to send it: the visitor's email app, copy and paste, or a phone call,
+ * so a request is never lost.
  */
 export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const readyRef = useRef<HTMLHeadingElement>(null);
+  const openedAt = useRef(0);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState("");
   const [draft, setDraft] = useState<{ text: string; mailto: string } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    openedAt.current = Date.now();
+  }, []);
 
   const order: FieldName[] = ["name", "company", "phone", "email", "type", "location", "message"];
   const fieldLabel: Record<FieldName, string> = {
@@ -67,11 +74,12 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
 
   // Move focus to the result so keyboard and screen-reader users land on it.
   useEffect(() => {
-    if (draft) readyRef.current?.focus();
-  }, [draft]);
+    if (draft || sent) readyRef.current?.focus();
+  }, [draft, sent]);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sending) return;
     const data = new FormData(e.currentTarget);
     const next = validate(data, labels.errors);
     setErrors(next);
@@ -82,8 +90,27 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
       formRef.current?.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
       return;
     }
-    setStatus("");
-    prepare(data);
+
+    setStatus(labels.sending);
+    setSending(true);
+    try {
+      const payload = Object.fromEntries(data.entries());
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, lang: document.documentElement.lang, elapsed: Date.now() - openedAt.current }),
+      });
+      const result = (await res.json().catch(() => ({ ok: false }))) as { ok: boolean };
+      if (!result.ok) throw new Error("not sent");
+      setStatus("");
+      setSent(true);
+    } catch {
+      // Sending isn't set up or failed: show the request so the visitor can still send it.
+      setStatus("");
+      prepare(data);
+    } finally {
+      setSending(false);
+    }
   }
 
   async function copy() {
@@ -164,11 +191,42 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
       </section>
   ) : null;
 
+  const sentView = sent ? (
+    <section className={styles.ready} aria-labelledby="ready-h">
+      <h2 id="ready-h" ref={readyRef} tabIndex={-1} className={styles.readyTitle}>
+        {labels.sent.title}
+      </h2>
+      <p>{labels.sent.body}</p>
+      <p className={styles.sendTo}>
+        {labels.sent.urgent}{" "}
+        <a href={phone.href} dir="ltr">
+          {phone.display}
+        </a>
+      </p>
+      <button
+        type="button"
+        className={styles.editLink}
+        onClick={() => {
+          formRef.current?.reset();
+          setSent(false);
+        }}
+      >
+        {labels.sent.another}
+      </button>
+    </section>
+  ) : null;
+
   return (
     <>
     {readyView}
+    {sentView}
     {/* Kept mounted (just hidden) so "Change details" brings back what the visitor typed. */}
-    <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} onBlur={onBlur} hidden={!!draft}>
+    <form ref={formRef} className={styles.form} noValidate onSubmit={onSubmit} onBlur={onBlur} hidden={!!draft || sent}>
+      {/* Spam trap: invisible to people, so anything typed here comes from a bot. */}
+      <div className={styles.trap} aria-hidden="true">
+        <label htmlFor="f-website">Website</label>
+        <input id="f-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className={styles.field}>
         <label htmlFor="f-name">{labels.name}</label>
         <input id="f-name" name="name" type="text" autoComplete="name" required
@@ -224,7 +282,9 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
       </p>
 
       <div className={styles.full}>
-        <Button type="submit">{labels.submit}</Button>
+        <Button type="submit" disabled={sending} aria-busy={sending}>
+          {sending ? labels.sending : labels.submit}
+        </Button>
       </div>
     </form>
     </>

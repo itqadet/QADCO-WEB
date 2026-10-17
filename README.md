@@ -77,6 +77,11 @@ Environment variables are set in the Vercel project: `NEXT_PUBLIC_SANITY_PROJECT
 `NEXT_PUBLIC_SANITY_DATASET=production`, `NEXT_PUBLIC_SITE_URL=https://qadco-web.vercel.app`.
 When a custom domain is added, update `NEXT_PUBLIC_SITE_URL` and add the domain to Sanity's CORS origins.
 
+**Contact form email (Resend):** `RESEND_API_KEY` sends each request by email. `CONTACT_TO` sets the recipient
+(currently itqadet@gmail.com, because Resend only delivers to the account owner's address until a domain is verified).
+After verifying qasralandalusco.com in Resend, set `CONTACT_FROM=QADCO Website <website@qasralandalusco.com>` and
+`CONTACT_TO=qadco-1@qatar.net.qa`, then redeploy. Without a key, the form shows the request with copy, email and call options.
+
 ## Before launch
 
 - Replace the placeholder phone, WhatsApp, email and office hours in `src/content/site.ts` and the dictionaries.

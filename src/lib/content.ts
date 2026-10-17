@@ -6,6 +6,7 @@ import { towers as localTowers, towerDrawings, type Tower } from "@/content/skyl
 import { brands as localBrands } from "@/content/credentials";
 import { defaultSettings, type Settings } from "@/content/site";
 import { defaultHero, type HeroImages } from "@/content/hero";
+import { products as localProducts, suppliers, type Product, type SupplierId } from "@/content/products";
 import type { L } from "@/content/localized";
 import type { SectorKey } from "@/content/sectors";
 
@@ -120,6 +121,24 @@ export async function getBrands(): Promise<BrandLogo[]> {
     return data.map((b) => ({ id: b._id, name: b.name, ...resolveImage(b.logo, 600) }));
   }
   return localBrands.map((b) => ({ id: b.id, name: b.name, src: `/images/brands/${b.id}.png`, width: b.w, height: b.h }));
+}
+
+/* ---------- Products ---------- */
+
+type SanityProduct = Omit<Product, "image" | "brands"> & { image?: SanityImage; brands?: string[] };
+
+const productsQuery = `*[_type == "product" && defined(category)] | order(order asc, _createdAt asc){
+  "id": _id, category, role, name, summary, brands, image{ ${imageFields} }
+}`;
+
+export async function getProducts(): Promise<Product[]> {
+  const data = await sanityFetch<SanityProduct[]>(productsQuery);
+  if (!data?.length) return localProducts;
+  return data.map((p) => ({
+    ...p,
+    image: p.image?.asset ? resolveImage(p.image, 1200) : undefined,
+    brands: p.brands?.filter((b): b is SupplierId => b in suppliers),
+  }));
 }
 
 /* ---------- Home page banner ---------- */

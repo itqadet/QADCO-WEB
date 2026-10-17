@@ -47,6 +47,10 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
 
   useEffect(() => {
     openedAt.current = Date.now();
+    // "Ask about this" on the Products page arrives with ?message=..., which starts the message.
+    const preset = new URLSearchParams(window.location.search).get("message");
+    const field = formRef.current?.querySelector<HTMLTextAreaElement>("#f-message");
+    if (preset && field && !field.value) field.value = `${preset.slice(0, 200)}\n`;
   }, []);
 
   const order: FieldName[] = ["name", "company", "phone", "email", "type", "location", "message"];

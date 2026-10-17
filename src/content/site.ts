@@ -10,6 +10,8 @@ export const site = {
   commercialRegistration: "25310",
   website: "www.qasralandalusco.com",
   mapUrl: "https://www.google.com/maps/search/?api=1&query=Qasr+Al+Andalus+Co+Street+12+Doha+Industrial+Area+Qatar",
+  /** Where the map on the Contact page puts its pin: an address, or "latitude,longitude" for an exact spot. */
+  mapQuery: "Street 12, Doha Industrial Area, Qatar",
 } as const;
 
 export type Settings = {
@@ -41,5 +43,5 @@ export const facts = {
   founded: 1996,
   incorporated: 2002,
   technicians: "300+",
-  projects: "200+",
+  projects: "1000+",
 } as const;

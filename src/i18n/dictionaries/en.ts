@@ -25,7 +25,7 @@ const en = {
     cr: "Commercial Registration",
   },
 
-  nav: { about: "About", services: "Services", projects: "Projects", process: "How we work", contact: "Contact" },
+  nav: { about: "About", services: "Services", products: "Products", projects: "Projects", process: "How we work", contact: "Contact" },
 
   facts: {
     label: "Company facts",
@@ -364,6 +364,48 @@ const en = {
     },
   },
 
+  products: {
+    meta: {
+      title: "Ornamental gypsum, ceiling tiles, partitions and boards | QADCO Qatar",
+      description:
+        "Ornamental gypsum made in QADCO's Doha workshop, plus acoustic ceilings, office partitions and boards from leading manufacturers, supplied and installed across Qatar.",
+    },
+    title: "Products we make, supply and install",
+    lede: "Ornamental gypsum from our own workshop, and ceiling, partition and board systems from manufacturers we have worked with for years. Our own teams install everything.",
+    jumpLabel: "Product groups",
+    roles: { made: "Made by QADCO", supplied: "Supplied and installed" },
+    ask: "Ask about this",
+    askAbout: "I'd like to ask about",
+    brandsLabel: "Brands",
+    categories: {
+      ornamental: {
+        title: "Ornamental gypsum",
+        intro: "Medallions, domes, relief ceilings, cornices and pilasters, cast and finished in our workshop and fixed by our own plasterers.",
+      },
+      acoustic: {
+        title: "Acoustic ceiling tiles",
+        intro: "Tile systems that quieten offices, schools and hospitals, with the grid and access panels to match.",
+      },
+      partitions: {
+        title: "Office partitions",
+        intro: "Glazed, frosted and timber partitions with doors and hardware, installed by our partition team.",
+      },
+      boards: {
+        title: "Boards and materials",
+        intro: "The boards, insulation and metal framing behind every ceiling and partition we build. We also supply them on their own.",
+      },
+    },
+    samplesNote: "Photos show sample designs. Every piece is made or ordered to your drawings, sizes and finish.",
+    suppliers: {
+      title: "Our suppliers and manufacturers",
+      intro: "We buy from these manufacturers and their distributors, so every system comes with its warranty and technical support.",
+    },
+    cta: {
+      title: "Need a price, a quantity or a sample?",
+      body: "Send your drawings or room sizes and we'll come back with options and a price.",
+    },
+  },
+
   contact: {
     meta: {
       title: "Contact QADCO | Book a consultation",
@@ -374,6 +416,13 @@ const en = {
     sectionLabel: "Contact form and details",
     directTitle: "Talk to us directly",
     drawingsNote: "Sending drawings? Email PDFs or DWGs with the project name in the subject line.",
+    map: {
+      title: "Find us",
+      frameTitle: "Map of the QADCO office in Doha Industrial Area",
+      activate: "Click to move the map",
+      open: "Open in Google Maps",
+      directions: "Get directions",
+    },
     form: {
       name: "Your name (required)",
       company: "Company",

@@ -20,6 +20,7 @@ export async function SiteFooter() {
       title: common.footer.company,
       links: [
         { href: href(locale, routes.about), label: nav.about },
+        { href: href(locale, routes.products), label: nav.products },
         { href: href(locale, routes.projects), label: nav.projects },
         { href: href(locale, routes.process), label: nav.process },
         { href: href(locale, routes.contact), label: nav.contact },

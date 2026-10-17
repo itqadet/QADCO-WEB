@@ -51,6 +51,11 @@
   gap: 20px;
 }
 
+/* the call-to-action button stays on one line beside the links */
+.nav > :last-child {
+  white-space: nowrap;
+}
+
 .track {
   position: relative;
 }
@@ -68,6 +73,7 @@
   padding: 12px 14px;
   color: var(--nav-fg-soft);
   font-weight: 500;
+  white-space: nowrap;
   text-decoration: none;
   transition: color 200ms ease;
 }
@@ -139,7 +145,7 @@
   font-family: var(--font-latin);
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .toggle {
     display: inline-flex;
     align-items: center;

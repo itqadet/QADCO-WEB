@@ -1,0 +1,47 @@
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) auto;
+  align-items: center;
+  gap: 12px 32px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.name {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+
+.summary {
+  margin: 0;
+  color: var(--muted);
+}
+
+.ask {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--maroon);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.ask:hover {
+  text-decoration-thickness: 2px;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .ask {
+    justify-self: start;
+  }
+}

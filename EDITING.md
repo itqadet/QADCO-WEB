@@ -26,6 +26,16 @@ Tips:
 
 **Skyline towers** → Create. Fill in the name, location and our work in both languages, then pick a **Drawing**. Use one of the *Generic* outlines for a tower that has no drawing of its own yet; a developer can draw a specific one later.
 
+## Products
+
+The Products page lists what we make in our workshop and what we supply and install.
+
+- Until the first product is published in the Studio, the page shows the built-in list (sample designs cut from the "gypsum designs" collages).
+- Once you publish any product, the page shows only the products in the Studio, so add the full set before publishing.
+- For each product: name in both languages, group, *Made by QADCO* or *Supplied and installed*, a one-line description, a sharp photo (at least 800 px wide; optional for boards and materials) and the brands.
+- The suppliers wall at the bottom of the page is fixed in the site code (from "Our Suppliers & Manufacturers"); ask the developer to change it.
+- The map pin on the Contact page is set in the site code (`mapQuery` in `src/content/site.ts`).
+
 ## Brands and contact details
 
 - **Brands:** upload a logo (PNG or SVG on a white or transparent background) and publish.

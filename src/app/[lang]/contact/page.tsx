@@ -6,6 +6,9 @@ import { getSettings } from "@/lib/content";
 import { PageIntro } from "@/components/sections/PageIntro";
 import { ContactList } from "@/components/sections/ContactList";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactMap } from "@/components/contact/ContactMap";
+import { site } from "@/content/site";
+import { pick } from "@/content/localized";
 import { Container } from "@/components/ui/Container";
 import { Split } from "@/components/ui/Split";
 
@@ -15,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const [{ contact, nav }, settings] = await Promise.all([getDictionary(), getSettings()]);
+  const [{ contact, nav }, settings, locale] = await Promise.all([getDictionary(), getSettings(), getLocale()]);
 
   return (
     <>
@@ -30,6 +33,11 @@ export default async function ContactPage() {
             <p style={{ marginTop: "1.5rem", color: "var(--muted)" }}>{contact.drawingsNote}</p>
           </div>
         </Split>
+      </Container>
+
+      <Container as="section" aria-labelledby="map-h" style={{ paddingBottom: "var(--section)" }}>
+        <h2 id="map-h">{contact.map.title}</h2>
+        <ContactMap query={site.mapQuery} locale={locale} address={pick(settings.office, locale)} labels={contact.map} />
       </Container>
     </>
   );

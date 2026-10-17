@@ -1,0 +1,40 @@
+.wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  min-height: 112px;
+  padding: 20px;
+  background: #fff;
+}
+
+.logo {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 56px;
+  filter: grayscale(1);
+  opacity: 0.8;
+  transition: filter 300ms ease, opacity 300ms ease;
+}
+@media (hover: hover) {
+  .tile:hover .logo {
+    filter: none;
+    opacity: 1;
+  }
+}
+@media (hover: none) {
+  .logo {
+    filter: none;
+    opacity: 1;
+  }
+}

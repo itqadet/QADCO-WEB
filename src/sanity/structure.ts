@@ -9,6 +9,7 @@ export const structure: StructureResolver = (S) =>
         .title("Home page banner")
         .id("homeHero")
         .child(S.document().schemaType("homeHero").documentId("homeHero").title("Home page banner")),
+      S.documentTypeListItem("workPhoto").title("Work photos (home page reel)"),
       S.divider(),
       S.documentTypeListItem("project").title("Projects with photos"),
       S.documentTypeListItem("registerEntry").title("Project register"),

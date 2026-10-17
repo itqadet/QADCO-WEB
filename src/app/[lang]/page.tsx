@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
-import { href, routes } from "@/i18n/routing";
+import { routes } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
-import { getFeaturedCaseStudies } from "@/lib/content";
 import { Hero } from "@/components/home/Hero";
 import { DesignStory, type StoryStep } from "@/components/home/DesignStory";
 import { TradeTiles } from "@/components/home/TradeTiles";
 import { HeritageBand } from "@/components/home/HeritageBand";
+import { WorksShowcase } from "@/components/home/WorksShowcase";
 import { TrustMarquee } from "@/components/home/TrustMarquee";
-import { CaseStudyGrid } from "@/components/projects/CaseStudyGrid";
 import { FactsBlock } from "@/components/sections/FactsBlock";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Container } from "@/components/ui/Container";
 import { Section, SectionHead } from "@/components/ui/Section";
-import { TextLink } from "@/components/ui/TextLink";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [dict, locale] = await Promise.all([getDictionary(), getLocale()]);
@@ -33,7 +31,7 @@ const storyImages: Omit<StoryStep["image"], "alt">[] = [
  * and motion carry the story. Detail lives on Services, Projects and About.
  */
 export default async function HomePage() {
-  const [{ home }, locale, featured] = await Promise.all([getDictionary(), getLocale(), getFeaturedCaseStudies()]);
+  const { home } = await getDictionary();
 
   const steps: StoryStep[] = home.story.steps.map((s, i) => ({
     title: s.title,
@@ -55,20 +53,14 @@ export default async function HomePage() {
         <DesignStory steps={steps} />
       </Section>
 
+      <WorksShowcase />
+
       <Section aria-labelledby="tiles-h">
         <SectionHead id="tiles-h" title={home.tilesTitle} intro={home.tilesIntro} />
         <TradeTiles />
       </Section>
 
       <HeritageBand />
-
-      <Section aria-labelledby="work-h">
-        <SectionHead id="work-h" title={home.featured.title} />
-        <CaseStudyGrid items={featured} featured />
-        <p>
-          <TextLink href={href(locale, routes.projects)}>{home.featured.more}</TextLink>
-        </p>
-      </Section>
 
       <Section aria-labelledby="trust-h" bare>
         <Container>

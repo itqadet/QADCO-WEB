@@ -1,0 +1,369 @@
+/*
+ * The reel bleeds off the reading-end edge of the screen but starts exactly on the page's
+ * content edge, so the first photo lines up with the heading above it.
+ */
+.reel {
+  --edge: max(var(--gutter), calc((100vw - var(--wrap)) / 2));
+  --h: clamp(320px, 44vw, 540px);
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+/* ---------- filters, counter and arrows ---------- */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: clamp(20px, 3vw, 32px);
+  padding-inline: var(--edge);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  min-height: 44px;
+  padding: 0 18px;
+  background: transparent;
+  border: 1.5px solid rgb(255 255 255 / 0.28);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.86);
+  font: 500 0.9375rem var(--font-body);
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.chip:hover {
+  border-color: #fff;
+  color: #fff;
+}
+.chip[aria-pressed="true"] {
+  background: var(--cove);
+  border-color: var(--cove);
+  color: var(--ink-deep);
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.counter {
+  margin: 0 8px 0 0;
+  color: rgb(255 255 255 / 0.6);
+  font-family: var(--font-latin);
+  font-stretch: 112%;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+:global([dir="rtl"]) .counter {
+  margin: 0 0 0 8px;
+}
+.now {
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: transparent;
+  border: 1.5px solid rgb(255 255 255 / 0.5);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease, border-color 200ms ease;
+}
+.arrow:hover:not(:disabled) {
+  background: #fff;
+  border-color: #fff;
+  color: var(--ink-deep);
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* a chevron drawn with two borders; mirrored in Arabic */
+.chev {
+  width: 11px;
+  height: 11px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+.chev[data-dir="next"] {
+  transform: translateX(-2px) rotate(45deg);
+}
+.chev[data-dir="prev"] {
+  transform: translateX(2px) rotate(-135deg);
+}
+:global([dir="rtl"]) .chev[data-dir="next"] {
+  transform: translateX(2px) rotate(-135deg);
+}
+:global([dir="rtl"]) .chev[data-dir="prev"] {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+/* ---------- the reel ---------- */
+.track {
+  display: flex;
+  gap: clamp(12px, 1.6vw, 20px);
+  margin: 0;
+  padding: 4px var(--edge) 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--edge);
+  list-style: none;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.track[data-dragging] {
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+.track[data-dragging] .open {
+  pointer-events: none;
+}
+
+.card {
+  flex: none;
+  height: var(--h);
+  aspect-ratio: var(--ratio);
+  max-width: 82vw;
+  scroll-snap-align: start;
+}
+
+.open {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.06);
+  border: 0;
+  color: #fff;
+  text-align: start;
+  cursor: inherit;
+}
+.open:focus-visible {
+  outline: 3px solid var(--cove);
+  outline-offset: 3px;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* oversized so the drift never shows an edge; --drift is set from the reel's position */
+  transform: scale(1.16) translateX(var(--drift, 0));
+  transition: filter 400ms ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: grid;
+  gap: 4px;
+  padding: 64px 20px 18px;
+  background: linear-gradient(0deg, rgb(11 20 56 / 0.88) 0%, rgb(11 20 56 / 0.55) 55%, transparent 100%);
+}
+.group {
+  color: var(--cove);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* pointing at a photo lifts it a little and draws a warm line along its foot */
+.open::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--cove);
+  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--cove) 60%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 500ms var(--ease);
+}
+:global([dir="rtl"]) .open::after {
+  transform-origin: right center;
+}
+@media (hover: hover) {
+  .open:hover .photo {
+    filter: brightness(1.08) saturate(1.05);
+  }
+  .open:hover::after {
+    transform: scaleX(1);
+  }
+}
+.open:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ---------- progress ---------- */
+.progress {
+  height: 2px;
+  margin: clamp(20px, 3vw, 28px) var(--edge) 0;
+  background: rgb(255 255 255 / 0.14);
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--cove);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--cove) 60%, transparent);
+  transform-origin: left center;
+  transition: transform 160ms linear;
+}
+:global([dir="rtl"]) .progress span {
+  transform-origin: right center;
+}
+
+/* ---------- motion: one entrance, and a quick re-deal after filtering ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  :global(.reveal-ready) .reel:not([data-in]) .card {
+    opacity: 0;
+    transform: translateX(90px);
+  }
+  :global(.reveal-ready[dir="rtl"]) .reel:not([data-in]) .card {
+    transform: translateX(-90px);
+  }
+  .card {
+    transition:
+      opacity 700ms ease,
+      transform 1000ms var(--ease);
+    transition-delay: calc(var(--i) * 80ms);
+  }
+  .track[data-refiltered] .card {
+    animation: deal 650ms var(--ease) both;
+    animation-delay: calc(var(--i) * 55ms);
+  }
+}
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    transform: none;
+  }
+  .chip,
+  .arrow,
+  .open::after,
+  .progress span {
+    transition: none;
+  }
+}
+
+/* ---------- viewer ---------- */
+.viewer {
+  width: min(1200px, 94vw);
+  max-width: none;
+  max-height: 94vh;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #fff;
+}
+.viewer::backdrop {
+  background: rgb(6 10 30 / 0.92);
+  backdrop-filter: blur(4px);
+}
+.viewerFigure {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.viewerImage {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 76vh;
+  object-fit: contain;
+}
+.viewerCaption {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: 500;
+}
+.viewerCount {
+  color: rgb(255 255 255 / 0.65);
+  font-variant-numeric: tabular-nums;
+}
+.viewerNav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.closeBtn {
+  min-height: 52px;
+  padding: 0 22px;
+  background: #fff;
+  border: 0;
+  border-radius: 999px;
+  color: var(--ink-deep);
+  font: 600 1rem var(--font-body);
+  cursor: pointer;
+}
+.viewer :focus-visible {
+  outline: 3px solid var(--cove);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .reel {
+    --h: clamp(300px, 92vw, 440px);
+  }
+  .controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--edge));
+    padding-inline: var(--edge);
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+  .chip {
+    flex: none;
+  }
+}

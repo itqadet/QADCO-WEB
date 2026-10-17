@@ -1,0 +1,74 @@
+.band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--section);
+  background: var(--ink-deep);
+  color: #fff;
+}
+
+/* a faint drafting grid behind the reel, as in the banner */
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 20%, transparent 80%);
+  pointer-events: none;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: end;
+  gap: 12px var(--col-gap);
+  margin-bottom: clamp(24px, 3.5vw, 40px);
+}
+
+.title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.4rem, 1.2rem + 4vw, 5rem);
+  line-height: 1;
+}
+:lang(ar) .title {
+  line-height: 1.25;
+}
+
+.intro {
+  margin: 0;
+  max-width: 44ch;
+  color: #c9cedd;
+}
+
+.foot {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+.more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--cove);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+.more:hover {
+  color: var(--cove);
+}
+.band :focus-visible {
+  outline-color: var(--cove);
+}
+
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: 1fr;
+  }
+}

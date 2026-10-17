@@ -6,6 +6,7 @@ import { towers as localTowers, towerDrawings, type Tower } from "@/content/skyl
 import { brands as localBrands } from "@/content/credentials";
 import { defaultSettings, type Settings } from "@/content/site";
 import { defaultHero, type HeroImages } from "@/content/hero";
+import { works as localWorks, type WorkPhoto } from "@/content/works";
 import { products as localProducts, suppliers, type Product, type SupplierId } from "@/content/products";
 import type { L } from "@/content/localized";
 import type { SectorKey } from "@/content/sectors";
@@ -139,6 +140,18 @@ export async function getProducts(): Promise<Product[]> {
     image: p.image?.asset ? resolveImage(p.image, 1200) : undefined,
     brands: p.brands?.filter((b): b is SupplierId => b in suppliers),
   }));
+}
+
+/* ---------- Work photos (home page reel) ---------- */
+
+const worksQuery = `*[_type == "workPhoto" && defined(image.asset) && defined(category)] | order(order asc, _createdAt desc){
+  "id": _id, category, caption, image{ ${imageFields} }
+}`;
+
+export async function getWorks(): Promise<WorkPhoto[]> {
+  const data = await sanityFetch<(Omit<WorkPhoto, "src" | "width" | "height"> & { image: SanityImage })[]>(worksQuery);
+  if (!data?.length) return localWorks;
+  return data.map(({ image, ...rest }) => ({ ...rest, ...resolveImage(image, 1600) }));
 }
 
 /* ---------- Home page banner ---------- */

@@ -26,6 +26,14 @@ Tips:
 
 **Skyline towers** → Create. Fill in the name, location and our work in both languages, then pick a **Drawing**. Use one of the *Generic* outlines for a tower that has no drawing of its own yet; a developer can draw a specific one later.
 
+## Work photos (home page reel)
+
+The "Our work" reel on the home page shows photos from *Work photos (home page reel)* in the Studio.
+
+- Until the first one is published, it shows the built-in set of 25 photos.
+- Once you publish any, it shows only the ones in the Studio, so add the full set before publishing.
+- For each: the photo (our own work only, at least 1000 px on the long side, no other company's watermark), a caption in both languages, the group, and a display order.
+
 ## Products
 
 The Products page lists what we make in our workshop and what we supply and install.

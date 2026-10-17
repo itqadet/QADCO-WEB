@@ -166,7 +166,9 @@ export async function getSettings(): Promise<Settings> {
     email: { display: s.email, href: `mailto:${s.email}` },
     office: s.office ?? defaultSettings.office,
     poBox: s.poBox,
-    hours: s.hours,
-    hoursConfirmed: Boolean(s.hoursConfirmed),
+    // Hours left unconfirmed in the Studio are a placeholder; show the confirmed built-in hours instead.
+    ...(s.hoursConfirmed && s.hours
+      ? { hours: s.hours, hoursConfirmed: true }
+      : { hours: defaultSettings.hours, hoursConfirmed: defaultSettings.hoursConfirmed }),
   };
 }

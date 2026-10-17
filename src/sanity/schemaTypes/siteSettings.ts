@@ -21,7 +21,7 @@ export const siteSettings = defineType({
     defineField({
       name: "hoursConfirmed",
       title: "Office hours are correct",
-      description: "Until ticked, the hours show highlighted in yellow as a reminder.",
+      description: "Tick this for the hours above to appear on the site. Until then, the site shows the built-in hours (Saturday to Thursday, 7:00 am to 6:00 pm).",
       type: "boolean",
       initialValue: false,
     }),

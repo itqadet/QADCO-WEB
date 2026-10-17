@@ -29,7 +29,7 @@ Tips:
 ## Brands and contact details
 
 - **Brands:** upload a logo (PNG or SVG on a white or transparent background) and publish.
-- **Contact details:** phone, fax, email, address, P.O. box and office hours. Tick *Office hours are correct* to remove the yellow reminder highlight on the website.
+- **Contact details:** phone, fax, email, address, P.O. box and office hours. Tick *Office hours are correct* for the hours you typed to appear on the website; until then it shows the built-in hours (Saturday to Thursday, 7:00 am to 6:00 pm).
 
 ## What can't be edited here
 

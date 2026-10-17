@@ -18,26 +18,33 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata(locale, routes.home, dict.home.meta);
 }
 
-/** The image for each design stage, in order: plan, visualisation, materials, built. */
+/**
+ * One corridor through every stage: our sketch, the white model, the finished render, then a
+ * ceiling our teams built. The sketch and model are drawn from the render itself.
+ */
 const storyImages: Omit<StoryStep["image"], "alt">[] = [
-  { src: "/images/drawings/plan-interior.svg", width: 480, height: 360, kind: "drawing" },
-  { src: "/images/visualisations/corridor-coffers.jpg", width: 1024, height: 1024, kind: "photo" },
-  { src: "/images/visualisations/tray-timber.jpg", width: 1024, height: 1024, kind: "photo" },
-  { src: "/images/work/cid-auditorium-stage.jpg", width: 1034, height: 675, kind: "photo" },
+  { src: "/images/story/sketch.jpg", width: 1024, height: 1024 },
+  { src: "/images/story/clay.jpg", width: 1024, height: 1024 },
+  { src: "/images/story/render.jpg", width: 1024, height: 1024 },
+  { src: "/images/story/built.jpg", width: 1024, height: 1024 },
 ];
+
+/** Picked out of the render: stone, oak, walnut and the brass of the door pulls. */
+const storyPalette = ["#ded1be", "#c5b59e", "#9d8567", "#765a3f", "#b8925a"];
 
 /**
  * The home page is deliberately light on reading: a statement, a few numbers, and then images
  * and motion carry the story. Detail lives on Services, Projects and About.
  */
 export default async function HomePage() {
-  const { home } = await getDictionary();
+  const [{ home }, locale] = await Promise.all([getDictionary(), getLocale()]);
 
   const steps: StoryStep[] = home.story.steps.map((s, i) => ({
     title: s.title,
     body: s.body,
     tag: s.tag,
     image: { ...storyImages[i], alt: s.alt },
+    swatches: i === 2 ? storyPalette : undefined,
   }));
 
   return (
@@ -49,8 +56,7 @@ export default async function HomePage() {
       </Container>
 
       <Section aria-labelledby="story-h">
-        <SectionHead id="story-h" title={home.story.title} />
-        <DesignStory steps={steps} />
+        <DesignStory title={home.story.title} steps={steps} rtl={locale === "ar"} labels={home.story} />
       </Section>
 
       <WorksShowcase />

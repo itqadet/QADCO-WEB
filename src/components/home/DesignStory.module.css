@@ -1,147 +1,418 @@
-.story {
-  display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  gap: var(--col-gap);
-}
-
-/* ---------- pinned visual (wide screens) ---------- */
-.stage {
+/*
+ * Wide screens: a tall track whose inner "pin" sticks under the header while the page scrolls
+ * through it. Progress (--t) and each stage's reveal (--r1, --r2, ...) are written by the
+ * component; everything visual here is driven from those numbers.
+ */
+.track {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --pin-h: calc(100vh - var(--header-h));
   position: relative;
+  height: calc(var(--n) * 85vh + 15vh);
 }
-.pinned {
+
+.pin {
   position: sticky;
-  top: calc(var(--header-h) + 6vh);
-  aspect-ratio: 4 / 3;
+  top: var(--header-h);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: var(--col-gap);
+  height: var(--pin-h);
+  padding-block: clamp(16px, 3vh, 40px);
 }
 
-.visual {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  opacity: 0;
-  transform: scale(1.03);
-  transition: opacity 600ms ease, transform 900ms cubic-bezier(0.2, 0.7, 0.1, 1);
-}
-.visual[data-active] {
-  opacity: 1;
-  transform: none;
-}
-.visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.visual[data-kind="drawing"] img {
-  object-fit: contain;
-  padding: 6%;
-}
-
-.tag {
-  position: absolute;
-  bottom: 14px;
-  inset-inline-start: 14px;
-  padding: 6px 12px;
-  background: var(--paper);
-  border-inline-start: 3px solid var(--maroon);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.progress {
-  position: absolute;
-  bottom: -22px;
-  inset-inline: 0;
-  display: flex;
-  gap: 6px;
-}
-.progress span {
-  flex: 1;
-  height: 3px;
-  background: var(--rule);
-  transition: background-color 400ms ease;
-}
-.progress span[data-done] {
-  background: var(--maroon);
-}
-
-/* ---------- steps ---------- */
-.steps {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.step {
+/* ---------- copy column ---------- */
+.copy {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: min(56vh, 520px);
-  padding-block: 2rem;
-  opacity: 0.35;
-  transition: opacity 400ms ease;
-}
-.step[data-active] {
-  opacity: 1;
-}
-.step:first-child {
-  justify-content: flex-start;
-  padding-top: clamp(1rem, 6vh, 4rem);
+  gap: clamp(16px, 3vh, 32px);
 }
 
-.number {
-  font: 700 1rem/1 var(--font-latin);
-  color: var(--maroon);
-  letter-spacing: 0.04em;
+.heading {
+  margin: 0;
+  max-width: 12ch;
+  font-size: clamp(2.2rem, 1.2rem + 2.6vw, 3.8rem);
+  line-height: 1.02;
+  text-wrap: balance;
 }
-.title {
-  margin: 0.6rem 0 0.4em;
-  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.6rem);
+:lang(ar) .heading {
+  line-height: 1.3;
 }
-.body {
-  max-width: 42ch;
-  font-size: var(--fs-lede);
+
+/* the stage number, drawn in outline like a drafted figure */
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 0.8;
+}
+.big {
+  font-family: var(--font-latin);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(3.6rem, 2rem + 4.5vw, 7rem);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.of {
+  color: var(--muted);
+  font: 600 1rem var(--font-latin);
+}
+
+/* the steps hang off a drafted line that fills as you go */
+.steps {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 30px;
+  list-style: none;
+}
+.steps::before,
+.steps::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  inset-inline-start: 6px;
+  width: 2px;
+  background: var(--rule);
+}
+.steps::after {
+  background: var(--maroon);
+  transform-origin: top;
+  transform: scaleY(var(--t, 0));
+}
+
+.step {
+  position: relative;
+}
+
+.stepHead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 0;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: color 300ms ease;
+}
+.stepHead:hover {
   color: var(--ink);
 }
 
-.inlineVisual {
+.dot {
+  position: absolute;
+  top: 17px;
+  inset-inline-start: -30px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--rule);
+  border-radius: 50%;
+  background: var(--gypsum);
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 400ms ease;
+  z-index: 1;
+}
+.step[data-done] .dot {
+  background: var(--maroon);
+  border-color: var(--maroon);
+}
+.step[data-active] .dot {
+  background: var(--maroon);
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--cove) 55%, transparent);
+}
+
+.num {
+  flex: none;
+  color: var(--maroon);
+  font: 700 0.875rem var(--font-latin);
+  letter-spacing: 0.04em;
+}
+.title {
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 620;
+  font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.45rem);
+  line-height: 1.25;
+}
+:lang(ar) .title {
+  font-stretch: normal;
+}
+.step[data-active] .stepHead {
+  color: var(--ink);
+}
+
+/* only the current step opens its line of text */
+.bodyWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms var(--ease);
+}
+.step[data-active] .bodyWrap {
+  grid-template-rows: 1fr;
+}
+.body {
+  overflow: hidden;
+  max-width: 40ch;
+  margin: 0;
+  padding-inline-start: calc(0.875rem * 1.6 + 12px);
+  color: var(--muted);
+  font-size: var(--fs-lede);
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+.step[data-active] .body {
+  opacity: 1;
+  padding-bottom: 8px;
+  transition-delay: 150ms;
+}
+
+/* ---------- the drawing sheet ---------- */
+.visual {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.sheet {
+  position: relative;
+  width: min(100%, calc(var(--pin-h) - 120px));
+  padding: 14px;
+}
+/* registration marks at the four corners, as on a printed drawing */
+.sheet::before,
+.sheet::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--ink);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+}
+.sheet::before {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.sheet::after {
+  right: 0;
+  /* level with the drawing's bottom edge: strip (44px) + rail (12px) below it */
+  bottom: 56px;
+  border-right-width: 1.5px;
+  border-bottom-width: 1.5px;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: var(--paper);
+  box-shadow: 0 30px 60px -36px rgb(11 20 56 / 0.45);
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+.layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* a slow push-in across the whole story */
+  transform: scale(calc(1.1 - var(--t, 0) * 0.1));
+  will-change: transform;
+}
+.layer:not([data-layer="0"]) {
+  clip-path: inset(0 calc((1 - var(--r)) * 100%) 0 0);
+}
+.track[data-rtl] .layer:not([data-layer="0"]) {
+  clip-path: inset(0 0 0 calc((1 - var(--r)) * 100%));
+}
+
+/* the line of cove light that rides the wipe */
+.scan {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--edge, 0) * 100%);
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--cove);
+  box-shadow:
+    0 0 18px 4px color-mix(in srgb, var(--cove) 80%, transparent),
+    0 0 60px 18px color-mix(in srgb, var(--cove) 35%, transparent);
+  opacity: var(--edge-on, 0);
+  pointer-events: none;
+}
+.track[data-rtl] .scan {
+  left: auto;
+  right: calc(var(--edge, 0) * 100%);
+  margin: 0 -1.5px 0 0;
+}
+
+/* materials stage: the room's palette, picked out of the render */
+.swatches {
+  position: absolute;
+  bottom: 18px;
+  inset-inline-start: 18px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: 0 10px 30px -12px rgb(11 20 56 / 0.5);
+}
+.swatches span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 300ms ease, transform 500ms var(--ease);
+  transition-delay: calc(var(--k) * 70ms);
+}
+.swatches:not([data-show]) {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+.swatches[data-show] span {
+  opacity: 1;
+  transform: none;
+}
+
+/* title strip under the drawing */
+.strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 30px;
+  margin-top: 14px;
+}
+.stripTag {
+  padding-inline-start: 10px;
+  border-inline-start: 3px solid var(--maroon);
+  color: var(--ink);
+  font-weight: 600;
+  animation: tagIn 500ms var(--ease) both;
+}
+@keyframes tagIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.stripCount {
+  color: var(--muted);
+  font: 600 0.875rem var(--font-latin);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail {
+  height: 2px;
+  margin-top: 10px;
+  background: var(--rule);
+}
+.rail span {
+  display: block;
+  height: 100%;
+  background: var(--maroon);
+  transform-origin: left center;
+  transform: scaleX(var(--t, 0));
+}
+.track[data-rtl] .rail span {
+  transform-origin: right center;
+}
+
+.inline {
   display: none;
 }
 
+/* ---------- phones and small tablets: a simple stacked story ---------- */
 @media (max-width: 860px) {
-  .story {
-    grid-template-columns: 1fr;
+  .track {
+    height: auto;
   }
-  .stage {
+  .pin {
+    position: static;
+    display: block;
+    height: auto;
+    padding: 0;
+  }
+  .visual,
+  .counter {
     display: none;
   }
-  .step {
-    min-height: 0;
-    padding-block: 1.5rem 2.5rem;
+  .heading {
+    margin-bottom: 1rem;
+  }
+  .steps::after {
+    transform: none;
+  }
+  .stepHead {
+    color: var(--ink);
+    cursor: default;
+  }
+  .step .dot {
+    background: var(--maroon);
+    border-color: var(--maroon);
+  }
+  .bodyWrap {
+    grid-template-rows: 1fr;
+  }
+  .body {
     opacity: 1;
+    padding-bottom: 12px;
   }
-  .inlineVisual {
+  .inline {
+    position: relative;
     display: block;
-    margin-bottom: 1.25rem;
     overflow: hidden;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 1;
+    margin-bottom: 2rem;
     background: var(--paper);
-    border: 1px solid var(--rule);
   }
-  .inlineVisual img {
+  .inline img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .inlineVisual[data-kind="drawing"] img {
-    object-fit: contain;
-    padding: 6%;
+  .inlineTag {
+    position: absolute;
+    bottom: 12px;
+    inset-inline-start: 12px;
+    padding: 6px 12px;
+    background: var(--paper);
+    border-inline-start: 3px solid var(--maroon);
+    font-size: 0.875rem;
+    font-weight: 600;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .visual,
-  .step {
+  .layer img {
+    transform: none;
+  }
+  .stepHead,
+  .dot,
+  .bodyWrap,
+  .body,
+  .swatches span,
+  .swatches:not([data-show]) {
     transition: none;
+  }
+  .stripTag {
+    animation: none;
   }
 }

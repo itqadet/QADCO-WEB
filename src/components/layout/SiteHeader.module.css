@@ -1,10 +1,44 @@
+/*
+ * Two looks, switched with custom properties so MainNav follows along:
+ *  - solid: gypsum with blur (every page, and the home page once scrolled or with the menu open)
+ *  - clear: over the dark home banner, white type and a warm cove-light accent
+ */
 .header {
+  --nav-fg: var(--ink);
+  --nav-fg-soft: color-mix(in srgb, var(--ink) 78%, transparent);
+  --nav-accent: var(--maroon);
+  --nav-glow: color-mix(in srgb, var(--cove) 70%, transparent);
+  --nav-line: var(--rule);
+  --nav-on-fg: #fff;
+
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--gypsum) 94%, transparent);
-  backdrop-filter: saturate(1.2) blur(8px);
+  color: var(--nav-fg);
+  background: color-mix(in srgb, var(--gypsum) 92%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
   border-bottom: 1px solid var(--rule);
+  transition:
+    background-color 350ms ease,
+    border-color 350ms ease,
+    box-shadow 350ms ease,
+    color 350ms ease;
+}
+.header[data-scrolled] {
+  box-shadow: 0 8px 24px -16px rgb(11 20 56 / 0.35);
+}
+
+.header[data-over-hero]:not([data-scrolled]):not(:has([aria-expanded="true"])) {
+  --nav-fg: #fff;
+  --nav-fg-soft: rgb(255 255 255 / 0.8);
+  --nav-accent: var(--cove);
+  --nav-glow: color-mix(in srgb, var(--cove) 55%, transparent);
+  --nav-line: rgb(255 255 255 / 0.45);
+  --nav-on-fg: var(--ink-deep);
+
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: rgb(255 255 255 / 0.12);
 }
 
 .inner {
@@ -20,7 +54,17 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  color: inherit;
   text-decoration: none;
+}
+
+.mark {
+  transition: filter 350ms ease, transform 500ms cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+@media (hover: hover) {
+  .brand:hover .mark {
+    transform: rotate(-8deg) scale(1.05);
+  }
 }
 
 .brandText {
@@ -36,16 +80,42 @@
   font-size: 1.25rem;
   letter-spacing: 0.06em;
   color: var(--maroon);
+  transition: color 350ms ease;
 }
 
 .brandFull {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--muted);
+  transition: color 350ms ease;
+}
+
+/* over the banner the maroon mark and name would sink into the navy, so they turn white */
+.header[data-over-hero]:not([data-scrolled]):not(:has([aria-expanded="true"])) .mark {
+  filter: brightness(0) invert(1);
+}
+.header[data-over-hero]:not([data-scrolled]):not(:has([aria-expanded="true"])) .brandName {
+  color: #fff;
+}
+.header[data-over-hero]:not([data-scrolled]):not(:has([aria-expanded="true"])) .brandFull {
+  color: rgb(255 255 255 / 0.75);
 }
 
 @media (max-width: 1100px) {
   .brandFull {
     display: none;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .mark,
+  .brandName,
+  .brandFull {
+    transition: none;
+  }
+}
+
+.header :focus-visible {
+  outline-color: var(--nav-accent);
 }

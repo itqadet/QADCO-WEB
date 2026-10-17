@@ -3,6 +3,8 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* slides up under the sticky header, which is clear until the page scrolls */
+  margin-top: calc(-1 * var(--header-h));
   background: var(--ink-deep);
   color: #fff;
 }
@@ -99,7 +101,7 @@
   grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
   align-items: end;
   gap: clamp(1.5rem, 3vw, 2.5rem) var(--col-gap);
-  padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(3rem, 2rem + 3vw, 5rem);
+  padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) clamp(3rem, 2rem + 3vw, 5rem);
 }
 
 /* the headline runs the full width above the comparison, one line per phrase */

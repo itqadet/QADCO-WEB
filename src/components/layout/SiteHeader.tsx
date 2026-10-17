@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { href, routes } from "@/i18n/routing";
 import { Container } from "@/components/ui/Container";
+import { HeaderShell } from "./HeaderShell";
 import { MainNav } from "./MainNav";
 import styles from "./SiteHeader.module.css";
 
@@ -19,10 +20,10 @@ export async function SiteHeader() {
   ];
 
   return (
-    <header className={styles.header}>
+    <HeaderShell home={href(locale)} className={styles.header}>
       <Container className={styles.inner}>
         <Link className={styles.brand} href={href(locale)} aria-label={common.brandHomeLabel}>
-          <Image src="/images/brand/qadco-mark.png" alt="" width={44} height={34} style={{ width: 44, height: "auto" }} preload />
+          <Image className={styles.mark} src="/images/brand/qadco-mark.png" alt="" width={44} height={34} style={{ width: 44, height: "auto" }} preload />
           <span className={styles.brandText}>
             <span className={styles.brandName} lang="en">
               {common.brandShort}
@@ -37,6 +38,6 @@ export async function SiteHeader() {
           labels={{ menu: common.menu, close: common.close, nav: common.mainNav }}
         />
       </Container>
-    </header>
+    </HeaderShell>
   );
 }

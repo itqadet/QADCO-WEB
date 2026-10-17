@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 import styles from "./Button.module.css";
 
-type Variant = "primary" | "quiet";
+type Variant = "primary" | "quiet" | "onDark";
 
 function cx(variant: Variant, className?: string) {
   return [styles.button, styles[variant], className].filter(Boolean).join(" ");

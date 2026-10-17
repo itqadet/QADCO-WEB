@@ -34,7 +34,7 @@ export async function TradeTiles() {
                 alt=""
                 width={tilePhotos[t].width}
                 height={tilePhotos[t].height}
-                sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 25vw"
+                sizes={i === 0 ? "(max-width: 1100px) 100vw, 50vw" : "(max-width: 560px) 100vw, (max-width: 1100px) 50vw, 50vw"}
               />
             </span>
             <span className={styles.caption}>

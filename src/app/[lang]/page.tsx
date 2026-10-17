@@ -46,7 +46,7 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      <Container>
+      <Container style={{ marginTop: "clamp(2rem, 4vw, 3.5rem)" }}>
         <FactsBlock />
       </Container>
 

@@ -1,23 +1,43 @@
+/*
+ * Asymmetric layout: interior design (the lead service) is the large tile, the three building
+ * trades sit beside it.
+ *
+ *   ┌────────────┬────────────┐
+ *   │            │  ceilings  │
+ *   │   design   ├─────┬──────┤
+ *   │            │part.│fitout│
+ *   └────────────┴─────┴──────┘
+ */
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(220px, 20vw, 300px);
   gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+.tile:nth-child(1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.tile:nth-child(2) {
+  grid-column: span 2;
+}
 
 .link {
+  position: relative;
   display: block;
+  height: 100%;
   color: inherit;
   text-decoration: none;
 }
 
 .frame {
-  position: relative;
+  position: absolute;
+  inset: 0;
   display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
   background: var(--paper);
   border: 1px solid var(--rule);
 }
@@ -31,22 +51,75 @@
 }
 .drawing {
   object-fit: contain;
-  padding: 12%;
+  padding: 10% 10% 22%;
 }
 .photo {
   object-fit: cover;
   /* hidden until the tile scrolls into view (RevealObserver adds .is-in) */
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1100ms cubic-bezier(0.7, 0, 0.2, 1), transform 1200ms cubic-bezier(0.2, 0.7, 0.1, 1);
-  transition-delay: calc(400ms + var(--reveal-i, 0) * 220ms);
   transform: scale(1.08);
+  transition: clip-path 1100ms cubic-bezier(0.7, 0, 0.2, 1), transform 1400ms cubic-bezier(0.2, 0.7, 0.1, 1);
+  transition-delay: calc(400ms + var(--reveal-i, 0) * 220ms);
 }
 .tile:global(.is-in) .photo {
   clip-path: inset(0 0 0 0);
   transform: none;
 }
 
-/* pointing at a tile shows the drawing again */
+/* ---------- caption on the image ---------- */
+.caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 72px clamp(16px, 2vw, 24px) clamp(16px, 2vw, 22px);
+  color: var(--ink);
+  transition: color 400ms ease;
+}
+/* the shade under the caption fades in with the photo */
+.caption::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, rgb(11 20 56 / 0.92) 0%, rgb(11 20 56 / 0.7) 45%, rgb(11 20 56 / 0) 100%);
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.link {
+  isolation: isolate;
+}
+.tile:global(.is-in) .caption {
+  text-shadow: 0 1px 12px rgb(11 20 56 / 0.6);
+  color: #fff;
+  transition-delay: calc(900ms + var(--reveal-i, 0) * 220ms);
+}
+.tile:global(.is-in) .caption::before {
+  opacity: 1;
+  transition-delay: calc(700ms + var(--reveal-i, 0) * 220ms);
+}
+
+.title {
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 620;
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.2;
+}
+.tile:nth-child(1) .title {
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+}
+:lang(ar) .title {
+  font-stretch: normal;
+}
+.sub {
+  font-size: var(--fs-small);
+  opacity: 0.85;
+}
+
+/* pointing at a tile shows the drawing again, and the caption returns to ink */
 @media (hover: hover) {
   .link:hover .photo,
   .link:focus-visible .photo {
@@ -54,54 +127,59 @@
     transition-delay: 0ms;
     transition-duration: 600ms;
   }
+  .link:hover .caption,
+  .link:focus-visible .caption {
+    color: var(--ink);
+    text-shadow: none;
+    transition-delay: 0ms;
+  }
+  .link:hover .caption::before,
+  .link:focus-visible .caption::before {
+    opacity: 0;
+    transition-delay: 0ms;
+  }
+  .link:hover .title {
+    text-decoration: underline;
+    text-decoration-color: var(--maroon);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
 }
 
-.caption {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding-top: 12px;
-}
-.title {
-  font-family: var(--font-head);
-  font-stretch: 112%;
-  font-weight: 620;
-  font-size: 1.25rem;
-  line-height: 1.2;
-}
-:lang(ar) .title {
-  font-stretch: normal;
-}
-.sub {
-  font-size: var(--fs-small);
-  color: var(--muted);
-}
-.link:hover .title {
-  text-decoration: underline;
-  text-decoration-color: var(--maroon);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
-}
-
-/* no motion: just show the finished rooms */
+/* no motion: just show the finished rooms with their captions */
 @media (prefers-reduced-motion: reduce) {
   .photo {
     clip-path: none;
     transform: none;
     transition: none;
   }
+  .caption {
+    color: #fff;
+  }
+  .caption::before {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 1100px) {
   .tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: clamp(200px, 32vw, 280px);
+  }
+  .tile:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  .tile:nth-child(2) {
+    grid-column: span 1;
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .tiles {
     grid-template-columns: 1fr;
+    grid-auto-rows: 240px;
   }
-  .frame {
-    aspect-ratio: 4 / 3;
+  .tile:nth-child(1) {
+    grid-column: auto;
   }
 }

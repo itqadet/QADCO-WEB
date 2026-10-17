@@ -37,3 +37,15 @@
   gap: 12px;
   margin-top: 2rem;
 }
+
+/* outline button for dark backgrounds (the home banner) */
+.onDark {
+  border-color: rgb(255 255 255 / 0.7);
+  background: transparent;
+  color: #fff;
+}
+.onDark:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--ink);
+}

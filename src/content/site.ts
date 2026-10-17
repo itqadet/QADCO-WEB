@@ -32,8 +32,8 @@ export const defaultSettings: Settings = {
     ar: "بوابة 59، شارع 12، المنطقة الصناعية، الدوحة، قطر",
   },
   poBox: "11218",
-  hours: { en: "Sunday to Thursday, 7:30 to 17:00", ar: "من الأحد إلى الخميس، 7:30 حتى 17:00" },
-  hoursConfirmed: false,
+  hours: { en: "Saturday to Thursday, 7:00 am to 6:00 pm", ar: "من السبت إلى الخميس، 7:00 صباحًا حتى 6:00 مساءً" },
+  hoursConfirmed: true,
 };
 
 /** Facts from the profile, shown in the title-block strip. */

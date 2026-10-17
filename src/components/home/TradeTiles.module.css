@@ -77,6 +77,12 @@
   padding: 72px clamp(16px, 2vw, 24px) clamp(16px, 2vw, 22px);
   color: var(--ink);
   transition: color 400ms ease;
+  /* its own layer above the photo, so the shade behind the text isn't painted under the image */
+  z-index: 1;
+  isolation: isolate;
+}
+.tile:nth-child(1) .caption {
+  padding-top: 140px;
 }
 /* the shade under the caption fades in with the photo */
 .caption::before {

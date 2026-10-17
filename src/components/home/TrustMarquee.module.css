@@ -1,0 +1,103 @@
+.marquee {
+  display: grid;
+  gap: 18px;
+  overflow: hidden;
+  padding-block: 6px;
+  /* fade the edges so items glide in and out */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.row {
+  display: flex;
+  width: max-content;
+  outline-offset: 6px;
+}
+/* marquees always run left to right, also on Arabic pages */
+:global([dir="rtl"]) .row {
+  direction: ltr;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  margin: 0;
+  padding: 0 28px;
+  list-style: none;
+}
+
+.name {
+  white-space: nowrap;
+  font-family: var(--font-latin);
+  font-stretch: 112%;
+  font-weight: 600;
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.875rem);
+  color: var(--ink);
+}
+.name::after {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-inline-start: 56px;
+  background: var(--maroon);
+  transform: rotate(45deg) translateY(-3px);
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 84px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid var(--rule);
+}
+.logo img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 52px;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .row {
+    animation: scroll 60s linear infinite;
+  }
+  .reverse {
+    animation-duration: 48s;
+    animation-direction: reverse;
+  }
+  .row:hover,
+  .row:focus-within,
+  .row:focus {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* without motion, the rows wrap instead of scrolling */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .row {
+    width: auto;
+  }
+  .row > .track:last-child {
+    display: none;
+  }
+  .track {
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    padding: 0;
+  }
+}

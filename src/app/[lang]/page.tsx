@@ -3,14 +3,13 @@ import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { href, routes } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
 import { getFeaturedCaseStudies } from "@/lib/content";
-import { buildTrades } from "@/content/drawings";
 import { Hero } from "@/components/home/Hero";
 import { DesignStory, type StoryStep } from "@/components/home/DesignStory";
-import { TradeRow } from "@/components/home/TradeRow";
+import { TradeTiles } from "@/components/home/TradeTiles";
 import { HeritageBand } from "@/components/home/HeritageBand";
+import { TrustMarquee } from "@/components/home/TrustMarquee";
 import { CaseStudyGrid } from "@/components/projects/CaseStudyGrid";
 import { FactsBlock } from "@/components/sections/FactsBlock";
-import { ApprovalsList, BrandGrid } from "@/components/sections/Credentials";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Container } from "@/components/ui/Container";
 import { Section, SectionHead } from "@/components/ui/Section";
@@ -29,6 +28,10 @@ const storyImages: Omit<StoryStep["image"], "alt">[] = [
   { src: "/images/work/cid-auditorium-stage.jpg", width: 1034, height: 675, kind: "photo" },
 ];
 
+/**
+ * The home page is deliberately light on reading: a statement, a few numbers, and then images
+ * and motion carry the story. Detail lives on Services, Projects and About.
+ */
 export default async function HomePage() {
   const [{ home }, locale, featured] = await Promise.all([getDictionary(), getLocale(), getFeaturedCaseStudies()]);
 
@@ -48,35 +51,30 @@ export default async function HomePage() {
       </Container>
 
       <Section aria-labelledby="story-h">
-        <SectionHead id="story-h" title={home.story.title} intro={home.story.intro} />
+        <SectionHead id="story-h" title={home.story.title} />
         <DesignStory steps={steps} />
       </Section>
 
-      <Section aria-labelledby="trades-h">
-        <SectionHead id="trades-h" title={home.trades.title} intro={home.trades.intro} />
-        {buildTrades.map((trade) => (
-          <TradeRow key={trade} trade={trade} />
-        ))}
+      <Section aria-labelledby="tiles-h">
+        <SectionHead id="tiles-h" title={home.tilesTitle} intro={home.tilesIntro} />
+        <TradeTiles />
       </Section>
 
       <HeritageBand />
 
       <Section aria-labelledby="work-h">
-        <SectionHead id="work-h" title={home.featured.title} intro={home.featured.intro} />
+        <SectionHead id="work-h" title={home.featured.title} />
         <CaseStudyGrid items={featured} featured />
         <p>
           <TextLink href={href(locale, routes.projects)}>{home.featured.more}</TextLink>
         </p>
       </Section>
 
-      <Section aria-labelledby="approvals-h">
-        <SectionHead id="approvals-h" title={home.approvals.title} intro={home.approvals.intro} />
-        <ApprovalsList label={home.approvals.title} />
-      </Section>
-
-      <Section aria-labelledby="brands-h">
-        <SectionHead id="brands-h" title={home.brands.title} intro={home.brands.intro} />
-        <BrandGrid label={home.brands.title} />
+      <Section aria-labelledby="trust-h" bare>
+        <Container>
+          <SectionHead id="trust-h" title={home.trust.title} />
+        </Container>
+        <TrustMarquee approvalsLabel={home.approvals.title} brandsLabel={home.brands.title} />
       </Section>
 
       <CtaBand title={home.cta.title} body={home.cta.body} />

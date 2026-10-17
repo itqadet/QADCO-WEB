@@ -1,7 +1,7 @@
 .band {
   position: relative;
   overflow: hidden;
-  padding-block: var(--section);
+  padding-block: clamp(5rem, 4rem + 6vw, 9rem);
   background-color: var(--ink-deep);
   color: #e9ebf2;
 }
@@ -10,49 +10,69 @@
 .band::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -90px 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34.64' height='60' viewBox='0 0 34.64 60'%3E%3Cg fill='%23ffffff'%3E%3Cpath fill-opacity='.045' d='M0 10 17.32 20v20L0 30zM17.32 40l17.32 10v20L17.32 60zM17.32-20l17.32 10v20L17.32 0z'/%3E%3Cpath fill-opacity='.09' d='M34.64 10v20L17.32 40V20zM17.32 40v20L0 70V50zM17.32-20V0L0 10V-10z'/%3E%3C/g%3E%3C/svg%3E");
   background-size: 52px 90px;
-  -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 70%);
-  mask-image: linear-gradient(to left, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 20%, #000 75%);
+  mask-image: radial-gradient(ellipse at center, transparent 20%, #000 75%);
 }
-:global([dir="rtl"]) .band::before {
-  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 70%);
-  mask-image: linear-gradient(to right, #000 0%, transparent 70%);
+@media (prefers-reduced-motion: no-preference) {
+  /* the pattern drifts upward, one tile every few seconds, like light moving across a ceiling */
+  .band::before {
+    animation: drift 18s linear infinite;
+  }
+}
+@keyframes drift {
+  to {
+    transform: translateY(-90px);
+  }
 }
 
-.grid {
+.inner {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: var(--col-gap);
-}
-
-.title {
-  max-width: 16ch;
-  color: #fff;
-}
-
-.band p {
-  color: #c9cedd;
-}
-.band a {
-  color: var(--cove);
-}
-.band :focus-visible {
-  outline-color: var(--cove);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .coveLine {
-  width: min(320px, 60%);
+  width: min(320px, 50%);
   height: 3px;
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
   background: var(--cove);
-  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--cove) 55%, transparent);
+  box-shadow: 0 0 22px 3px color-mix(in srgb, var(--cove) 55%, transparent);
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :global(.reveal-ready) .coveLine {
+    transform: scaleX(0);
+    transition: transform 1200ms cubic-bezier(0.7, 0, 0.2, 1) 200ms;
+  }
+  :global(.is-in) .coveLine {
+    transform: scaleX(1);
+  }
 }
 
-@media (max-width: 860px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.title {
+  max-width: 18ch;
+  margin: 0 0 0.5em;
+  color: #fff;
+  font-size: clamp(2.2rem, 1.4rem + 3.2vw, 4rem);
+}
+
+.line {
+  max-width: 48ch;
+  color: #c9cedd;
+  font-size: var(--fs-lede);
+}
+
+.link {
+  margin-top: 0.75rem;
+  padding: 10px 0;
+  color: var(--cove);
+  font-weight: 600;
+}
+.band :focus-visible {
+  outline-color: var(--cove);
 }

@@ -1,0 +1,107 @@
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+
+.drawing,
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.drawing {
+  object-fit: contain;
+  padding: 12%;
+}
+.photo {
+  object-fit: cover;
+  /* hidden until the tile scrolls into view (RevealObserver adds .is-in) */
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1100ms cubic-bezier(0.7, 0, 0.2, 1), transform 1200ms cubic-bezier(0.2, 0.7, 0.1, 1);
+  transition-delay: calc(400ms + var(--reveal-i, 0) * 220ms);
+  transform: scale(1.08);
+}
+.tile:global(.is-in) .photo {
+  clip-path: inset(0 0 0 0);
+  transform: none;
+}
+
+/* pointing at a tile shows the drawing again */
+@media (hover: hover) {
+  .link:hover .photo,
+  .link:focus-visible .photo {
+    clip-path: inset(0 0 100% 0);
+    transition-delay: 0ms;
+    transition-duration: 600ms;
+  }
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 12px;
+}
+.title {
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 620;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+:lang(ar) .title {
+  font-stretch: normal;
+}
+.sub {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+.link:hover .title {
+  text-decoration: underline;
+  text-decoration-color: var(--maroon);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+/* no motion: just show the finished rooms */
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+  .frame {
+    aspect-ratio: 4 / 3;
+  }
+}

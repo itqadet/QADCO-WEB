@@ -62,7 +62,7 @@ const en = {
     },
     hero: {
       titleLines: ["Interior design,", "built by the people", "who draw it."],
-      lede: "Qasr Al Andalus is now an interior design company. We design complete interiors for villas, offices, hotels and public buildings, then build them with the same ceiling, partition and fit-out teams that have finished Qatar's towers and palaces since 1996.",
+      lede: "Interior design and build in Qatar since 1996. One team, from the first sketch to the finished room.",
       compare: {
         drawing: "Drawn",
         built: "Built",
@@ -74,97 +74,60 @@ const en = {
     },
     story: {
       title: "From first sketch to finished room",
-      intro: "One team takes your space through four stages. Scroll to follow a project from plan to handover.",
       steps: [
         {
           title: "Concept and space planning",
-          body: "We start with how you'll use the space: layouts, zoning, circulation and a design concept you can react to, drawn to scale from a survey of the site.",
+          body: "Layouts and a concept, drawn to scale from your site.",
           tag: "Space plan",
           alt: "A furnished floor plan of a majlis with seating, a rug, a dining table and planting.",
         },
         {
           title: "3D visualisation",
-          body: "Before anything is built you see the room in photorealistic 3D: ceilings, lighting, finishes and furniture, so decisions are made on screen, not on site.",
+          body: "See every room in 3D before anything is built.",
           tag: "3D visualisation",
           alt: "A 3D visualisation of a long corridor with stepped coffered ceilings, cove lighting and panelled walls.",
         },
         {
           title: "Materials and furniture",
-          body: "We select finishes, lighting and furniture with you, and procure them, so the materials in the visualisation are the ones that arrive.",
+          body: "Finishes, lighting and furniture, chosen with you and sourced by us.",
           tag: "Finishes and detail",
           alt: "A 3D visualisation of a gypsum tray ceiling with continuous cove lighting meeting warm timber wall cladding.",
         },
         {
           title: "Built by our own teams",
-          body: "Our own ceiling, partition and fit-out teams build the design, coordinated with lighting and air-conditioning, through to handover.",
+          body: "Our own ceiling, partition and fit-out teams, through to handover.",
           tag: "Built: Criminal Investigation Department",
           alt: "An auditorium with curved gypsum bulkheads and recessed downlights, built by QADCO.",
         },
       ],
     },
-    trades: {
-      title: "Built by our own teams",
-      intro:
-        "The trades behind every design, coordinated with lighting and air-conditioning so what you approve is what gets built.",
-      ceilings: {
-        body: "Gypsum ceilings with bulkheads, coffers and cove lighting, grid ceilings for offices, schools and hospitals, and decorative GRG for palaces and majlis rooms.",
-        systems: [
-          "Gypsum board and bulkheads",
-          "Mineral fibre tile grids",
-          "Metal clip-in and lay-in",
-          "GRG and decorative cornices",
-          "Acoustic and wood wool",
-          "Moisture and fire-rated boards",
-        ],
-        link: "Ceiling systems we install",
-      },
-      partitions: {
-        body: "Drywall, demountable and glass partitions built to the sound and fire rating each room needs, with doors and frames to suit.",
-        systems: [
-          "Metal stud drywall",
-          "Acoustic and fire-rated walls",
-          "Demountable partitions",
-          "Glass partitions",
-          "Shaft walls and enclosures",
-          "Doors and frames",
-        ],
-        link: "Partition systems we install",
-      },
-      fitOut: {
-        body: "Joinery, wall cladding, flooring and finishes that complete the room the ceiling started, from a single office to a full building.",
-        systems: [
-          "Carpentry and joinery",
-          "Wall panelling and cladding",
-          "Raised floors and carpet tiles",
-          "Painting and special finishes",
-        ],
-        link: "Fit-out services",
-      },
-    },
     heritage: {
       title: "Named for a palace of ceilings",
-      paragraphs: [
-        "Qasr Al Andalus means the palace of Andalusia. Its palaces are remembered for what is overhead: carved timber ceilings, muqarnas domes and geometric plaster that still holds its line after centuries.",
-        "We work in modern systems, gypsum, mineral fibre, metal and glass, but the standard is the same. Straight lines, closed joints, and a ceiling you notice for the right reasons.",
-      ],
+      line: "Qasr Al Andalus means the palace of Andalusia, remembered for what is overhead. We still hold our work to that standard.",
       link: "Our story since 1996",
     },
+    tilesTitle: "What we do",
+    tilesIntro: "Drawn by our designers, built by our own teams.",
+    tiles: {
+      design: "Concept, 3D, materials",
+      ceilings: "Gypsum, metal, acoustic, GRG",
+      partitions: "Drywall, glass, demountable",
+      fitOut: "Joinery, cladding, finishes",
+    },
+    trust: { title: "Trusted on Qatar's landmark projects" },
     featured: {
       title: "Recent work",
-      intro: "Photographs from our own sites: government buildings, office towers, hotels, schools and clinics.",
       more: "See all projects",
     },
     approvals: {
       title: "Approved by Qatar's consultants and authorities",
-      intro: "QADCO has been pre-qualified and approved as the ceiling and partition subcontractor by:",
     },
     brands: {
       title: "Systems we install",
-      intro: "We install branded systems from leading manufacturers, and any brand your specification nominates.",
     },
     cta: {
-      title: "Send us your drawings",
-      body: "Whether it's a tender package or one room in a villa, we'll review it, visit the site and send a priced proposal.",
+      title: "Let's design your space",
+      body: "One room or a whole building, tell us about your space.",
     },
   },
 

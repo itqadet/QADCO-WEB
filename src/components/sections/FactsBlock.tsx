@@ -1,5 +1,6 @@
 import { getDictionary } from "@/i18n/get-dictionary";
 import { facts } from "@/content/site";
+import { CountUp } from "./CountUp";
 import styles from "./FactsBlock.module.css";
 
 /**
@@ -10,10 +11,10 @@ export async function FactsBlock() {
   const { facts: t } = await getDictionary();
 
   const cells = [
-    { label: t.founded, value: String(facts.founded) },
-    { label: t.technicians, value: facts.technicians },
-    { label: t.projects, value: facts.projects },
-    { label: t.quality, value: t.qualityValue },
+    { label: t.founded, value: String(facts.founded), count: false },
+    { label: t.technicians, value: facts.technicians, count: true },
+    { label: t.projects, value: facts.projects, count: true },
+    { label: t.quality, value: t.qualityValue, count: false },
   ];
 
   return (
@@ -21,7 +22,7 @@ export async function FactsBlock() {
       {cells.map((c) => (
         <div key={c.label} className={styles.cell}>
           <dt>{c.label}</dt>
-          <dd dir="ltr">{c.value}</dd>
+          <dd dir="ltr">{c.count ? <CountUp value={c.value} /> : c.value}</dd>
         </div>
       ))}
     </dl>

@@ -29,8 +29,8 @@ type DesignStoryProps = {
   };
 };
 
-const HOLD = 3600; // ms each stage rests before autoplay moves on
-const MOVE = 1100; // ms for one stage to wipe into the next
+const HOLD = 2200; // ms each stage rests before autoplay moves on
+const MOVE = 800; // ms for one stage to wipe into the next
 const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -53,7 +53,6 @@ export function DesignStory({ title, steps, rtl, labels }: DesignStoryProps) {
   const activeRef = useRef(0);
   const tween = useRef(0);
   const visible = useRef(false);
-  const hovering = useRef(false);
   const swipe = useRef<{ x: number; y: number } | null>(null);
 
   /** Paint position v: every stage's reveal, the light line, the scrubber and the active stage. */
@@ -129,14 +128,14 @@ export function DesignStory({ title, steps, rtl, labels }: DesignStoryProps) {
       const dt = now - last;
       last = now;
       const settled = Math.abs(vRef.current - Math.round(vRef.current)) < 0.001;
-      if (visible.current && !hovering.current && settled) {
+      if (visible.current && settled) {
         rested += dt;
         rootRef.current?.style.setProperty("--hold", clamp(rested / HOLD).toFixed(4));
         if (rested >= HOLD) {
           rested = 0;
           rootRef.current?.style.setProperty("--hold", "0");
           const next = Math.round(vRef.current) + 1;
-          glide(next >= n ? 0 : next, next >= n ? 900 : MOVE);
+          glide(next >= n ? 0 : next, next >= n ? 700 : MOVE);
         }
       }
       frame = requestAnimationFrame(tick);
@@ -149,7 +148,7 @@ export function DesignStory({ title, steps, rtl, labels }: DesignStoryProps) {
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => (visible.current = e.isIntersecting), { threshold: 0.35 });
+    const io = new IntersectionObserver(([e]) => (visible.current = e.isIntersecting), { threshold: 0.2 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -192,8 +191,6 @@ export function DesignStory({ title, steps, rtl, labels }: DesignStoryProps) {
       className={styles.story}
       data-rtl={rtl || undefined}
       style={{ "--n": n } as CSSProperties}
-      onMouseEnter={() => (hovering.current = true)}
-      onMouseLeave={() => (hovering.current = false)}
     >
       <h2 id="story-h" className={styles.heading}>
         {title}

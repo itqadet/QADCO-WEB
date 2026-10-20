@@ -36,6 +36,8 @@
   --col-gap: clamp(24px, 4vw, 64px);
   --radius: 2px;
   --header-h: 72px;
+  /* how far the home facts sheet rides up over the foot of the banner */
+  --facts-overlap: clamp(44px, 5vw, 76px);
 
   color-scheme: light;
 }

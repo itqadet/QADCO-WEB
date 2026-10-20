@@ -34,6 +34,12 @@ const en = {
     projects: "Projects in Qatar",
     quality: "Quality system",
     qualityValue: "ISO 9001",
+    notes: {
+      founded: "Began as Al Sulaimi Decoration",
+      technicians: "Our own ceiling, partition and fit-out teams",
+      projects: "Towers, ministries, hospitals and palaces",
+    },
+    stamp: "Certified quality management",
   },
 
   trades: {
@@ -75,6 +81,12 @@ const en = {
     story: {
       stepsLabel: "Design stages",
       goTo: "Show stage",
+      prev: "Previous stage",
+      next: "Next stage",
+      play: "Play",
+      pause: "Pause",
+      scrub: "Scrub through the stages",
+      hint: "Drag to build the room",
       title: "From first sketch to finished room",
       steps: [
         {

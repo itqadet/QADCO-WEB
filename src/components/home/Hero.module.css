@@ -101,7 +101,8 @@
   grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
   align-items: end;
   gap: clamp(1.5rem, 3vw, 2.5rem) var(--col-gap);
-  padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) clamp(3rem, 2rem + 3vw, 5rem);
+  /* bottom leaves room for the facts sheet that rides up over the banner (--facts-overlap) */
+  padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) calc(var(--facts-overlap) + clamp(2rem, 1.5rem + 2vw, 3.5rem));
 }
 
 /* the headline runs the full width above the comparison, one line per phrase */

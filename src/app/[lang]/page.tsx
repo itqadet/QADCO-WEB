@@ -51,8 +51,8 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      <Container style={{ marginTop: "clamp(2rem, 4vw, 3.5rem)" }}>
-        <FactsBlock />
+      <Container>
+        <FactsBlock overlap />
       </Container>
 
       <Section aria-labelledby="story-h">

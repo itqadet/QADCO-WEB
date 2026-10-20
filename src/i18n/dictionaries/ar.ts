@@ -35,6 +35,12 @@ const ar: Dictionary = {
     projects: "مشروع في قطر",
     quality: "نظام الجودة",
     qualityValue: "ISO 9001",
+    notes: {
+      founded: "بدأت باسم السليمي للديكور",
+      technicians: "فرقنا الخاصة للأسقف والقواطع والتشطيبات",
+      projects: "أبراج ووزارات ومستشفيات وقصور",
+    },
+    stamp: "نظام إدارة جودة معتمد",
   },
 
   trades: {
@@ -72,6 +78,12 @@ const ar: Dictionary = {
     story: {
       stepsLabel: "مراحل التصميم",
       goTo: "اعرض المرحلة",
+      prev: "المرحلة السابقة",
+      next: "المرحلة التالية",
+      play: "تشغيل",
+      pause: "إيقاف مؤقت",
+      scrub: "تنقّل بين المراحل",
+      hint: "اسحب لبناء الغرفة",
       title: "من أول رسم إلى غرفة مكتملة",
       steps: [
         {

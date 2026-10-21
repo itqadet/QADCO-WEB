@@ -33,16 +33,7 @@ type SanityProject = {
   photos: (SanityImage & { caption: L })[];
 };
 
-const imageFields = `asset->{_id, url, originalFilename, metadata{dimensions{width, height}}}, crop, hotspot`;
-
-/**
- * The enhanced copies of the original project photos, by filename (public/images/projects).
- * A Studio photo uploaded under one of these names shows the enhanced copy; a photo staff
- * upload under any other name shows as uploaded.
- */
-const enhancedPhotos = new Map(
-  localCaseStudies.flatMap((c) => c.photos).map((ph) => [ph.src.split("/").pop()!, ph] as const),
-);
+const imageFields = `asset->{_id, url, metadata{dimensions{width, height}}}, crop, hotspot`;
 
 const projectsQuery = `*[_type == "project" && defined(slug.current)] | order(order asc, _createdAt desc){
   title, "slug": slug.current, sector, location, building, contractor, consultant, summary, scope, featured,
@@ -52,11 +43,7 @@ const projectsQuery = `*[_type == "project" && defined(slug.current)] | order(or
 function fromSanityProject(p: SanityProject): CaseStudy {
   const photos: Photo[] = (p.photos ?? [])
     .filter((ph) => ph?.asset)
-    .map((ph) => {
-      const local = enhancedPhotos.get(ph.asset.originalFilename ?? "");
-      const image = local ? { src: local.src, width: local.width, height: local.height } : resolveImage(ph);
-      return { ...image, caption: ph.caption };
-    });
+    .map((ph) => ({ ...resolveImage(ph), caption: ph.caption }));
   return {
     slug: p.slug,
     title: p.title,

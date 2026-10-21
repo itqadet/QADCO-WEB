@@ -1,6 +1,7 @@
 /*
- * Asymmetric layout: interior design (the lead service) is the large tile, the three building
- * trades sit beside it.
+ * "Built from the floor up". TileBuilder writes --p (0 to 1) on each tile from its position on
+ * screen; the photo rises over the drawing by that much, a line of cove light rides the edge.
+ * Without JavaScript --p is unset, so the finished photos simply show.
  *
  *   ┌────────────┬────────────┐
  *   │            │  ceilings  │
@@ -11,11 +12,15 @@
 .tiles {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: clamp(220px, 20vw, 300px);
+  grid-auto-rows: clamp(230px, 21vw, 310px);
   gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.tile {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  position: relative;
 }
 .tile:nth-child(1) {
   grid-column: span 2;
@@ -29,19 +34,30 @@
   position: relative;
   display: block;
   height: 100%;
+  overflow: hidden;
+  isolation: isolate;
   color: inherit;
   text-decoration: none;
 }
+.link:focus-visible {
+  outline: 3px solid var(--maroon);
+  outline-offset: 3px;
+}
 
+/* ---------- drawing and photo ---------- */
 .frame {
   position: absolute;
   inset: 0;
   display: block;
   overflow: hidden;
-  background: var(--paper);
+  /* drafting paper behind the drawing */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(rgb(20 33 90 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(20 33 90 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
   border: 1px solid var(--rule);
 }
-
 .drawing,
 .photo {
   position: absolute;
@@ -51,62 +67,147 @@
 }
 .drawing {
   object-fit: contain;
-  padding: 10% 10% 22%;
+  padding: 10% 10% 26%;
+  transform: scale(calc(1.04 - var(--p, 1) * 0.04));
 }
 .photo {
   object-fit: cover;
-  /* hidden until the tile scrolls into view (RevealObserver adds .is-in) */
-  clip-path: inset(100% 0 0 0);
-  transform: scale(1.08);
-  transition: clip-path 1100ms cubic-bezier(0.7, 0, 0.2, 1), transform 1400ms cubic-bezier(0.2, 0.7, 0.1, 1);
-  transition-delay: calc(400ms + var(--reveal-i, 0) * 220ms);
-}
-.tile:global(.is-in) .photo {
-  clip-path: inset(0 0 0 0);
-  transform: none;
+  /* rises from the floor: the hidden top shrinks as --p grows */
+  clip-path: inset(calc((1 - var(--p, 1)) * 100%) 0 0 0);
+  transform: scale(calc(1.12 - var(--p, 1) * 0.12));
+  transition: clip-path 160ms linear, transform 160ms linear;
 }
 
-/* ---------- caption on the image ---------- */
+/* the line of cove light at the rising edge */
+.scan {
+  position: absolute;
+  inset-inline: 0;
+  top: calc((1 - var(--p, 1)) * 100%);
+  height: 3px;
+  margin-top: -1.5px;
+  background: var(--cove);
+  box-shadow:
+    0 0 16px 3px color-mix(in srgb, var(--cove) 80%, transparent),
+    0 0 50px 14px color-mix(in srgb, var(--cove) 30%, transparent);
+  opacity: 0;
+  transition: opacity 200ms ease, top 160ms linear;
+  pointer-events: none;
+}
+.tile[data-moving] .scan {
+  opacity: 1;
+}
+
+/* held on the drawing: by the flip button, or by pointing at the tile */
+.tile[data-flip] .photo {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 650ms var(--ease), transform 650ms var(--ease);
+}
+@media (hover: hover) {
+  .link:hover .photo,
+  .link:focus-visible .photo {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 650ms var(--ease), transform 650ms var(--ease);
+  }
+}
+
+/* ---------- stage label: Drawn / Built ---------- */
+.stage {
+  position: absolute;
+  top: 14px;
+  inset-inline-start: 14px;
+  z-index: 2;
+  padding: 6px 11px;
+  background: rgb(255 255 255 / 0.92);
+  border-inline-start: 3px solid var(--ink);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px -12px rgb(11 20 56 / 0.5);
+  transition: border-color 300ms ease;
+}
+.stage [data-when="built"],
+.tile[data-built] .stage [data-when="drawn"] {
+  display: none;
+}
+.tile[data-built] .stage [data-when="built"] {
+  display: inline;
+}
+.tile[data-built] .stage {
+  border-inline-start-color: var(--maroon);
+}
+/* while held on the drawing, it says so */
+.tile[data-flip] .stage [data-when="built"] {
+  display: none;
+}
+.tile[data-flip] .stage [data-when="drawn"] {
+  display: inline;
+}
+.tile[data-flip] .stage {
+  border-inline-start-color: var(--ink);
+}
+@media (hover: hover) {
+  .tile:hover .stage [data-when="built"] {
+    display: none;
+  }
+  .tile:hover .stage [data-when="drawn"] {
+    display: inline;
+  }
+}
+
+/* ---------- caption ---------- */
 .caption {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  display: flex;
-  flex-direction: column;
+  z-index: 1;
+  isolation: isolate;
+  display: grid;
   gap: 2px;
   padding: 72px clamp(16px, 2vw, 24px) clamp(16px, 2vw, 22px);
   color: var(--ink);
-  transition: color 400ms ease;
-  /* its own layer above the photo, so the shade behind the text isn't painted under the image */
-  z-index: 1;
-  isolation: isolate;
+  transition: color 350ms ease;
 }
 .tile:nth-child(1) .caption {
   padding-top: 140px;
 }
-/* the shade under the caption fades in with the photo */
+/* the navy shade rises with the photo */
 .caption::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   background: linear-gradient(0deg, rgb(11 20 56 / 0.92) 0%, rgb(11 20 56 / 0.7) 45%, rgb(11 20 56 / 0) 100%);
-  opacity: 0;
-  transition: opacity 600ms ease;
+  opacity: var(--p, 1);
+  transition: opacity 160ms linear;
 }
-.link {
-  isolation: isolate;
-}
-.tile:global(.is-in) .caption {
-  text-shadow: 0 1px 12px rgb(11 20 56 / 0.6);
+.tile[data-built] .caption {
   color: #fff;
-  transition-delay: calc(900ms + var(--reveal-i, 0) * 220ms);
+  text-shadow: 0 1px 12px rgb(11 20 56 / 0.6);
 }
-.tile:global(.is-in) .caption::before {
-  opacity: 1;
-  transition-delay: calc(700ms + var(--reveal-i, 0) * 220ms);
+.tile[data-flip] .caption {
+  color: var(--ink);
+  text-shadow: none;
+}
+.tile[data-flip] .caption::before {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+@media (hover: hover) {
+  .link:hover .caption {
+    color: var(--ink);
+    text-shadow: none;
+  }
+  .link:hover .caption::before {
+    opacity: 0;
+    transition: opacity 400ms ease;
+  }
 }
 
+.num {
+  font: 700 0.8125rem var(--font-latin);
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
 .title {
   font-family: var(--font-head);
   font-stretch: 112%;
@@ -125,52 +226,76 @@
   opacity: 0.85;
 }
 
-/* pointing at a tile shows the drawing again, and the caption returns to ink */
-@media (hover: hover) {
-  .link:hover .photo,
-  .link:focus-visible .photo {
-    clip-path: inset(0 0 100% 0);
-    transition-delay: 0ms;
-    transition-duration: 600ms;
-  }
-  .link:hover .caption,
-  .link:focus-visible .caption {
-    color: var(--ink);
-    text-shadow: none;
-    transition-delay: 0ms;
-  }
-  .link:hover .caption::before,
-  .link:focus-visible .caption::before {
-    opacity: 0;
-    transition-delay: 0ms;
-  }
-  .link:hover .title {
-    text-decoration: underline;
-    text-decoration-color: var(--maroon);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.2em;
-  }
+/* ---------- flip button (works by tap, click or keyboard) ---------- */
+.flip {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: rgb(255 255 255 / 0.92);
+  border: 0;
+  border-radius: 999px;
+  color: var(--ink);
+  font: 600 0.8125rem var(--font-body);
+  cursor: pointer;
+  box-shadow: 0 8px 18px -12px rgb(11 20 56 / 0.55);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+.flip:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.flip:focus-visible {
+  outline: 3px solid var(--maroon);
+  outline-offset: 2px;
+}
+.flip [data-when="drawing"],
+.tile[data-flip] .flip [data-when="photo"] {
+  display: none;
+}
+.tile[data-flip] .flip [data-when="drawing"] {
+  display: inline;
+}
+/* a pencil-and-frame glyph drawn in CSS: a square with a diagonal */
+.flipIcon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+}
+.flipIcon::after {
+  content: "";
+  position: absolute;
+  inset: 50% -2px auto;
+  height: 1.5px;
+  background: currentColor;
+  transform: rotate(-45deg);
 }
 
-/* no motion: just show the finished rooms with their captions */
+/* ---------- reduced motion: finished photos, instant flips ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .photo {
-    clip-path: none;
-    transform: none;
+  .photo,
+  .drawing,
+  .scan,
+  .caption,
+  .caption::before,
+  .tile[data-flip] .photo {
     transition: none;
-  }
-  .caption {
-    color: #fff;
-  }
-  .caption::before {
-    opacity: 1;
+    transform: none;
   }
 }
 
+/* ---------- layout on smaller screens ---------- */
 @media (max-width: 1100px) {
   .tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: clamp(200px, 32vw, 280px);
+    grid-auto-rows: clamp(220px, 34vw, 300px);
   }
   .tile:nth-child(1) {
     grid-column: span 2;
@@ -183,9 +308,15 @@
 @media (max-width: 560px) {
   .tiles {
     grid-template-columns: 1fr;
-    grid-auto-rows: 240px;
+    grid-auto-rows: 260px;
   }
   .tile:nth-child(1) {
     grid-column: auto;
+  }
+  .tile:nth-child(1) .caption {
+    padding-top: 72px;
+  }
+  .flip {
+    padding: 0 12px;
   }
 }

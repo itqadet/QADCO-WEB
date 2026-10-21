@@ -122,6 +122,8 @@ const en = {
     },
     tilesTitle: "What we do",
     tilesIntro: "Drawn by our designers, built by our own teams.",
+    tileStage: { drawn: "Drawn", built: "Built" },
+    tileFlip: { toDrawing: "See the drawing", toBuilt: "See it built" },
     tiles: {
       design: "Concept, 3D, materials",
       ceilings: "Gypsum, metal, acoustic, GRG",

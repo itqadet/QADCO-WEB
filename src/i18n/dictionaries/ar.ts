@@ -119,6 +119,8 @@ const ar: Dictionary = {
     },
     tilesTitle: "ما نقدّمه",
     tilesIntro: "يرسمه مصممونا، وتنفّذه فرقنا الخاصة.",
+    tileStage: { drawn: "مرسوم", built: "منفّذ" },
+    tileFlip: { toDrawing: "اعرض الرسم", toBuilt: "اعرض التنفيذ" },
     tiles: {
       design: "الفكرة والتصوّر والمواد",
       ceilings: "جبس ومعدن وصوتي وGRG",

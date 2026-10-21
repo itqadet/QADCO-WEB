@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
-import { localeLabel, otherLocale } from "@/i18n/config";
+import { otherLocale } from "@/i18n/config";
 import { href, routes } from "@/i18n/routing";
 import { site } from "@/content/site";
 import { pick } from "@/content/localized";
 import { getSettings } from "@/lib/content";
 import { tradeAnchor, tradeKeys } from "@/content/drawings";
 import { Container } from "@/components/ui/Container";
+import { LocaleSwitch } from "./LocaleSwitch";
 import styles from "./SiteFooter.module.css";
 
 export async function SiteFooter() {
@@ -83,9 +84,7 @@ export async function SiteFooter() {
                 </li>
               ) : null}
               <li>
-                <Link href={href(other)} hrefLang={other} lang={other}>
-                  {localeLabel[other]}
-                </Link>
+                <LocaleSwitch to={other} />
               </li>
             </ul>
           </div>

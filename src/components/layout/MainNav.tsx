@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { localeLabel, otherLocale, type Locale } from "@/i18n/config";
-import { switchLocalePath } from "@/i18n/routing";
+import { otherLocale, type Locale } from "@/i18n/config";
 import { ButtonLink } from "@/components/ui/Button";
+import { LocaleSwitch } from "./LocaleSwitch";
 import styles from "./MainNav.module.css";
 
 type MainNavProps = {
@@ -111,9 +111,7 @@ export function MainNav({ locale, items, cta, labels }: MainNavProps) {
           </ul>
           <span className={styles.cove} aria-hidden="true" />
         </div>
-        <Link className={styles.lang} href={switchLocalePath(pathname, target)} hrefLang={target} lang={target}>
-          {localeLabel[target]}
-        </Link>
+        <LocaleSwitch to={target} className={styles.lang} />
         <ButtonLink href={cta.href}>{cta.label}</ButtonLink>
       </nav>
     </>

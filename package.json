@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "import-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-content.mts"
+    "import-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-content.mts",
+    "replace-project-photos": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/replace-project-photos.mts"
   },
   "dependencies": {
     "@sanity/client": "^8.9.0",

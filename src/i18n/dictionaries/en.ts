@@ -361,7 +361,7 @@ const en = {
     stats: { projects: "projects in our register", towers: "towers on this skyline", since: "finishing interiors since" },
     caseStudies: {
       title: "Projects in photographs",
-      intro: "Taken on our own sites.",
+      intro: "From our own projects, digitally enhanced.",
       view: "View project",
     },
     register: {
@@ -390,7 +390,7 @@ const en = {
     back: "All projects",
     next: "Next project",
     scopeCount: "{n} items",
-    gallery: "Photographs from site",
+    gallery: "Project photographs",
     nextHint: "Up next",
     openPhoto: "Open photo",
     lightbox: { label: "Project photo", prev: "Prev", next: "Next", prevLabel: "Previous photo", nextLabel: "Next photo", close: "Close", position: "{n} of {total}" },

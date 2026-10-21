@@ -356,7 +356,7 @@ const ar: Dictionary = {
     stats: { projects: "مشروعًا في سجلّنا", towers: "برجًا في هذا الأفق", since: "نشطّب المساحات الداخلية منذ" },
     caseStudies: {
       title: "مشاريع بالصور",
-      intro: "التُقطت في مواقعنا.",
+      intro: "من مشاريعنا، بعد تحسينها رقميًا.",
       view: "عرض المشروع",
     },
     register: {
@@ -385,7 +385,7 @@ const ar: Dictionary = {
     back: "كل المشاريع",
     next: "المشروع التالي",
     scopeCount: "{n} بنود",
-    gallery: "صور من الموقع",
+    gallery: "صور المشروع",
     nextHint: "التالي",
     openPhoto: "افتح الصورة",
     lightbox: { label: "صورة المشروع", prev: "السابق", next: "التالي", prevLabel: "الصورة السابقة", nextLabel: "الصورة التالية", close: "إغلاق", position: "{n} من {total}" },

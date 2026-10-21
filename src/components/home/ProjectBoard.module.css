@@ -1,0 +1,373 @@
+/* The project board: a navy drawing board with the network on the left and plain words on the right. */
+.board {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  overflow: hidden;
+  background-color: var(--ink-deep);
+  background-image: radial-gradient(rgb(255 255 255 / 0.09) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  color: #fff;
+  box-shadow: 0 40px 80px -50px rgb(11 20 56 / 0.7);
+  /* the approval and brand logo rows follow below */
+  margin-bottom: clamp(32px, 4vw, 56px);
+}
+/* cove light along the top edge, as on the banner */
+.board::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--cove) 20%, var(--cove) 80%, transparent);
+  box-shadow: 0 0 24px 4px color-mix(in srgb, var(--cove) 40%, transparent);
+}
+
+/* ---------- the diagram ---------- */
+.diagram {
+  display: flex;
+  align-items: center;
+  padding: clamp(10px, 1.6vw, 20px);
+}
+.svg {
+  /* label anchors are placed for left-to-right geometry (the diagram itself is mirrored in
+     Arabic); Arabic words still read right to left inside each label */
+  direction: ltr;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.heads text {
+  fill: var(--cove);
+  font: 700 17px var(--font-body);
+  letter-spacing: 0.02em;
+}
+
+.spoke {
+  stroke: rgb(255 255 255 / 0.14);
+  stroke-width: 1;
+  transition: stroke 400ms ease, stroke-width 400ms ease;
+}
+.spoke[data-on] {
+  stroke: var(--cove);
+  stroke-width: 2;
+}
+
+.wires path {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.06);
+  stroke-width: 1;
+  transition: stroke 400ms ease, stroke-width 400ms ease;
+}
+.wires[data-on] path {
+  stroke: var(--cove);
+  stroke-width: 2;
+  stroke-dasharray: 6 9;
+  filter: drop-shadow(0 0 4px rgb(242 212 155 / 0.7));
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* signal flowing out from the project along its wires */
+  .wires[data-on] path {
+    animation: flow 900ms linear infinite;
+  }
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -30;
+  }
+}
+
+/* consultants (diamonds) and trades (circles) */
+.side rect,
+.side circle {
+  fill: var(--ink-deep);
+  stroke: rgb(255 255 255 / 0.4);
+  stroke-width: 1.5;
+  transition: fill 400ms ease, stroke 400ms ease;
+}
+.side text {
+  fill: rgb(255 255 255 / 0.62);
+  font: 500 15px var(--font-body);
+  transition: fill 400ms ease;
+}
+.side[data-on] rect,
+.side[data-on] circle {
+  fill: var(--cove);
+  stroke: var(--cove);
+}
+.side[data-on] text {
+  fill: #fff;
+  font-weight: 700;
+}
+
+/* the hub */
+.halo {
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .halo {
+    animation: breathe 3.2s ease-in-out infinite;
+  }
+}
+@keyframes breathe {
+  50% {
+    opacity: 0.55;
+    transform: scale(0.88);
+  }
+}
+.hub {
+  fill: var(--maroon);
+  stroke: var(--cove);
+  stroke-width: 2;
+}
+.hubText {
+  fill: #fff;
+  font: 800 15px var(--font-latin);
+  font-stretch: 125%;
+  letter-spacing: 0.04em;
+}
+
+/* project nodes */
+.node {
+  cursor: pointer;
+}
+.hit {
+  fill: transparent;
+}
+.dot {
+  fill: var(--ink-deep);
+  stroke: #fff;
+  stroke-width: 2;
+  transition: r 350ms var(--ease), fill 300ms ease, stroke 300ms ease;
+}
+.node:hover .dot {
+  fill: rgb(255 255 255 / 0.25);
+}
+.node[data-on] .dot {
+  fill: var(--cove);
+  stroke: #fff;
+  filter: drop-shadow(0 0 10px rgb(242 212 155 / 0.9));
+}
+.node text {
+  fill: rgb(255 255 255 / 0.78);
+  font: 600 16px var(--font-body);
+  transition: fill 300ms ease;
+}
+.node:hover text,
+.node[data-on] text {
+  fill: #fff;
+}
+.node[data-on] text {
+  font-weight: 800;
+}
+
+/* ---------- the panel ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: clamp(22px, 2.6vw, 34px);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.02));
+  border-inline-start: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.card {
+  animation: cardIn 500ms var(--ease) both;
+}
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.count {
+  margin: 0 0 8px;
+  color: var(--cove);
+  font: 800 1.6rem var(--font-latin);
+  font-stretch: 125%;
+}
+.count span {
+  color: rgb(255 255 255 / 0.5);
+  font-size: 0.9rem;
+}
+.title {
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: clamp(1.3rem, 1rem + 0.8vw, 1.7rem);
+  line-height: 1.2;
+}
+.facts {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+.facts dt {
+  color: rgb(255 255 255 / 0.6);
+  font-size: var(--fs-small);
+}
+.facts dd {
+  margin: 0;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.facts [data-key="consultant"] dd {
+  color: var(--cove);
+}
+.scopeHead {
+  margin: 16px 0 8px;
+  color: rgb(255 255 255 / 0.6);
+  font-size: var(--fs-small);
+}
+.scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.scopes li {
+  padding: 5px 11px;
+  border: 1px solid var(--cove);
+  border-radius: 999px;
+  color: var(--cove);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.picker {
+  margin-top: auto;
+}
+.pickHead {
+  margin: 0 0 10px;
+  color: rgb(255 255 255 / 0.6);
+  font-size: var(--fs-small);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+.chips button {
+  min-height: 44px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.85);
+  font: 500 0.8125rem var(--font-body);
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+/* mouse and trackpad: compact chips; touch screens keep the full 44px */
+@media (hover: hover) and (pointer: fine) {
+  .chips button {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 0.75rem;
+  }
+}
+.chips button:hover {
+  border-color: #fff;
+  color: #fff;
+}
+.chips button[aria-pressed="true"] {
+  background: var(--cove);
+  border-color: var(--cove);
+  color: var(--ink-deep);
+  font-weight: 700;
+}
+.chips button:focus-visible,
+.tour:focus-visible {
+  outline: 2px solid var(--cove);
+  outline-offset: 2px;
+}
+
+.tour {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1.5px solid rgb(255 255 255 / 0.5);
+  border-radius: 999px;
+  color: #fff;
+  font: 600 0.875rem var(--font-body);
+  cursor: pointer;
+}
+.tour:hover {
+  background: #fff;
+  color: var(--ink-deep);
+}
+.tourIcon {
+  width: 0;
+  height: 0;
+  border-block: 5px solid transparent;
+  border-inline-start: 9px solid currentColor;
+}
+.tourIcon[data-on] {
+  width: 9px;
+  height: 11px;
+  border: 0;
+  border-inline: 3px solid currentColor;
+}
+
+/* ---------- smaller screens: diagram on top, words below ---------- */
+@media (max-width: 1000px) {
+  .board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panel {
+    border-inline-start: 0;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+}
+@media (max-width: 760px) {
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(-1 * clamp(22px, 2.6vw, 34px));
+    padding-inline: clamp(22px, 2.6vw, 34px);
+    scrollbar-width: none;
+  }
+  .chips li {
+    flex: none;
+  }
+  .chips button {
+    min-height: 44px;
+  }
+  .picker {
+    order: -1;
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+  .spoke,
+  .wires path,
+  .side rect,
+  .side circle,
+  .side text,
+  .dot {
+    transition: none;
+  }
+}

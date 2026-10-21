@@ -8,6 +8,7 @@ import { TradeTiles } from "@/components/home/TradeTiles";
 import { HeritageBand } from "@/components/home/HeritageBand";
 import { WorksShowcase } from "@/components/home/WorksShowcase";
 import { TrustMarquee } from "@/components/home/TrustMarquee";
+import { LandmarkBoard } from "@/components/home/LandmarkBoard";
 import { FactsBlock } from "@/components/sections/FactsBlock";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Container } from "@/components/ui/Container";
@@ -70,7 +71,8 @@ export default async function HomePage() {
 
       <Section aria-labelledby="trust-h" bare>
         <Container>
-          <SectionHead id="trust-h" title={home.trust.title} />
+          <SectionHead id="trust-h" title={home.trust.title} intro={home.board.intro} />
+          <LandmarkBoard />
         </Container>
         <TrustMarquee approvalsLabel={home.approvals.title} brandsLabel={home.brands.title} />
       </Section>

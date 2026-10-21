@@ -16,7 +16,13 @@ SRC = sys.argv[1]  # assets/works_done
 OUT = sys.argv[2]  # public/images/works
 files = sorted(glob.glob(os.path.join(SRC, "*.jpeg")))
 source = {"majlis-seating": 21, "bedroom-timber-ceiling": 24, "living-layered-ceiling": 37, "fitted-kitchen": 25,
-          "tv-wall-lit-shelves": 44, "tv-wall-marble-slats": 31, "fireplace-wall-slats": 51, "walk-in-wardrobe": 22}
+          "tv-wall-lit-shelves": 44, "tv-wall-marble-slats": 31, "fireplace-wall-slats": 51, "walk-in-wardrobe": 22,
+          # ceilings, columns and doors: also clients' buildings
+          "columns-capitals-cornice": 6, "dome-dentil-cornice": 10, "fluted-columns-site": 1, "column-base-panelling": 5,
+          "pilaster-cornice-corner": 11, "oval-cove-chandelier": 40, "tray-blue-cove": 52, "stepped-warm-cove": 48,
+          "round-fretwork-ceiling": 49, "tray-timber-beams": 27, "tray-blue-lit": 46, "sculpted-backlit-curves": 33,
+          "office-acoustic-ceiling": 53, "door-vertical-grooves": 17, "door-two-tone": 14, "door-inlay": 18,
+          "door-classic-panels": 19}
 
 
 def px(im, box):
@@ -32,6 +38,18 @@ def blur_box(im, box, radius):
     m = max(2, min(region.size) // 8)
     ImageDraw.Draw(mask).rectangle((m, m, region.size[0] - m, region.size[1] - m), fill=255)
     im.paste(region, b[:2], mask.filter(ImageFilter.GaussianBlur(m)))
+
+
+def patch(im, box, dx, dy):
+    """Cover a box with a clean piece of the same surface from (dx, dy) away, soft-edged."""
+    b = px(im, box)
+    w, h = im.size
+    sx, sy = int(dx * w), int(dy * h)
+    piece = im.crop((b[0] + sx, b[1] + sy, b[2] + sx, b[3] + sy))
+    mask = Image.new("L", piece.size, 0)
+    m = max(2, min(piece.size) // 12)
+    ImageDraw.Draw(mask).rectangle((m, m, piece.size[0] - m, piece.size[1] - m), fill=255)
+    im.paste(piece, b[:2], mask.filter(ImageFilter.GaussianBlur(m * 0.8)))
 
 
 def blur_poly(im, pts, radius, desaturate=0.0):
@@ -125,6 +143,25 @@ def process(name, im):
     elif name == "tv-wall-lit-shelves":
         blur_box(im, (0.40, 0.48, 0.68, 0.70), 6)
         im = crop(im, (0.02, 0.0, 0.98, 0.97))
+    elif name == "dome-dentil-cornice":
+        # the street window (left), a marker patch and scaffold poles (right) all sit at the
+        # edges: crop to the dome and cornice, and soften the last bit of pole
+        blur_box(im, (0.74, 0.40, 0.80, 0.58), 12)
+        im = crop(im, (0.18, 0.0, 0.79, 1.0))
+    elif name == "fluted-columns-site":
+        blur_box(im, (0.35, 0.40, 0.59, 1.0), 16)  # the opening between the columns shows outside
+        im = crop(im, (0.03, 0.0, 0.97, 0.97))
+    elif name == "office-acoustic-ceiling":
+        im = crop(im, (0.03, 0.0, 0.97, 0.78))  # loses the windows and the view beyond
+    elif name == "tray-timber-beams":
+        blur_box(im, (0.0, 0.80, 0.32, 1.0), 12)
+        im = crop(im, (0.02, 0.0, 0.98, 0.95))
+    elif name == "tray-blue-cove":
+        blur_box(im, (0.80, 0.76, 1.0, 1.0), 12)
+        im = crop(im, (0.02, 0.0, 0.98, 0.97))
+    elif name.startswith("door-"):
+        blur_box(im, (0.0, 0.86, 1.0, 1.0), 10)  # patterned floor of the client's home
+        im = crop(im, (0.03, 0.02, 0.97, 0.96))
     else:
         im = crop(im, (0.02, 0.02, 0.98, 0.98))
     return grade(ImageOps.mirror(im))

@@ -1,0 +1,289 @@
+.band {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: var(--header-h);
+  background:
+    radial-gradient(ellipse 60% 70% at 85% 0%, rgb(42 58 128 / 0.7), transparent 70%),
+    linear-gradient(180deg, #070d29 0%, var(--ink-deep) 60%, #0e1a4c 100%);
+  color: #fff;
+}
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%);
+  mask-image: linear-gradient(180deg, #000, transparent 70%);
+}
+.cove {
+  position: absolute;
+  top: var(--header-h);
+  inset-inline: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cove) 20%, var(--cove) 80%, transparent);
+  box-shadow: 0 0 24px 4px color-mix(in srgb, var(--cove) 40%, transparent);
+  opacity: 0.8;
+}
+
+.inner {
+  padding-block: clamp(2rem, 1rem + 3vw, 3.5rem) clamp(2.5rem, 4vw, 4rem);
+}
+.breadcrumb {
+  margin-bottom: 1.25rem;
+  color: rgb(255 255 255 / 0.65);
+  font-size: var(--fs-small);
+}
+.breadcrumb a {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  align-items: end;
+  gap: 20px var(--col-gap);
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+}
+.title {
+  max-width: 18ch;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2.1rem, 1rem + 3.2vw, 4rem);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+:lang(ar) .title {
+  line-height: 1.3;
+}
+.lede {
+  margin: 0;
+  color: #c9cedd;
+  font-size: var(--fs-lede);
+}
+
+/* ---------- the four panels ---------- */
+.panels {
+  display: flex;
+  gap: 12px;
+  height: clamp(320px, 34vw, 440px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.panel {
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 700ms var(--ease);
+}
+/* the first panel is open until another is pointed at or focused */
+.panel:first-child,
+.panels:hover .panel:hover,
+.panels:focus-within .panel:focus-within {
+  flex-grow: 3.2;
+}
+.panels:hover .panel:not(:hover),
+.panels:focus-within .panel:not(:focus-within) {
+  flex-grow: 1;
+}
+
+.link {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 24px 50px -30px rgb(0 0 0 / 0.8);
+}
+.link:focus-visible {
+  outline: 3px solid var(--cove);
+  outline-offset: 3px;
+}
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 900ms var(--ease), filter 500ms ease;
+  filter: saturate(0.85) brightness(0.85);
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(11 20 56 / 0.92) 0%, rgb(11 20 56 / 0.35) 55%, rgb(11 20 56 / 0.15) 100%);
+}
+.num {
+  position: absolute;
+  top: 16px;
+  inset-inline-start: 18px;
+  color: var(--cove);
+  font: 800 1rem var(--font-latin);
+  font-stretch: 125%;
+}
+.text {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: grid;
+  gap: 6px;
+  padding: 20px 20px 22px;
+}
+.name {
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 650;
+  font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.6rem);
+  line-height: 1.15;
+}
+:lang(ar) .name {
+  font-stretch: normal;
+}
+.sub,
+.cta {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease, transform 500ms var(--ease);
+  white-space: nowrap;
+}
+.sub {
+  color: #dfe3ee;
+  font-size: var(--fs-small);
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  color: var(--cove);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+.arrow {
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(135deg);
+}
+
+/* the open panel: photo in full colour, summary shown, a line of cove light along its foot */
+.panel:first-child .photo,
+.panels:hover .panel:hover .photo,
+.panels:focus-within .panel:focus-within .photo {
+  transform: scale(1);
+  filter: none;
+}
+.panel:first-child :is(.sub, .cta),
+.panels:hover .panel:hover :is(.sub, .cta),
+.panels:focus-within .panel:focus-within :is(.sub, .cta) {
+  opacity: 1;
+  transform: none;
+  transition-delay: 250ms;
+}
+.panels:hover .panel:not(:hover) .photo,
+.panels:focus-within .panel:not(:focus-within) .photo {
+  transform: scale(1.06);
+  filter: saturate(0.85) brightness(0.85);
+}
+.panels:hover .panel:not(:hover) :is(.sub, .cta),
+.panels:focus-within .panel:not(:focus-within) :is(.sub, .cta) {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-delay: 0ms;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--cove);
+  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--cove) 60%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease);
+}
+:global([dir="rtl"]) .link::after {
+  transform-origin: right center;
+}
+.panel:first-child .link::after,
+.panels:hover .panel:hover .link::after,
+.panels:focus-within .panel:focus-within .link::after {
+  transform: scaleX(1);
+}
+.panels:hover .panel:not(:hover) .link::after,
+.panels:focus-within .panel:not(:focus-within) .link::after {
+  transform: scaleX(0);
+}
+
+/* entrance: panels rise in turn */
+@media (prefers-reduced-motion: no-preference) {
+  .panel {
+    animation: rise 900ms var(--ease) both;
+    animation-delay: calc(150ms + var(--i) * 100ms);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* ---------- smaller screens: a 2 x 2 grid of cards, every summary visible ---------- */
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: auto;
+    gap: 10px;
+  }
+  .link {
+    aspect-ratio: 4 / 5;
+    height: auto;
+  }
+  .photo,
+  .panels .panel .photo {
+    transform: none;
+    filter: none;
+  }
+  .sub,
+  .panels .panel :is(.sub, .cta) {
+    opacity: 1;
+    transform: none;
+    white-space: normal;
+  }
+  .cta,
+  .panels .panel .cta {
+    display: none;
+  }
+  .text {
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .photo,
+  .sub,
+  .cta,
+  .link::after {
+    transition: none;
+    animation: none;
+  }
+}

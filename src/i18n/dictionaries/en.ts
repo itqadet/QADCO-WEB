@@ -271,6 +271,11 @@ const en = {
       or: "or",
     },
     tableHead: { system: "System", use: "Where we've used it" },
+    hero: {
+      lede: "We design interiors and build them with our own teams, from the first sketch to the last coat of paint. Choose a service to start.",
+      explore: "Explore",
+      tabsLabel: "Services on this page",
+    },
     design: {
       body: "We design complete interiors for villas, majlis, offices, hotels and public buildings, and because our own teams build them, every design is drawn to be built.",
       imageAlt: "A 3D visualisation of a corridor with stepped coffered ceilings, cove lighting and panelled walls.",

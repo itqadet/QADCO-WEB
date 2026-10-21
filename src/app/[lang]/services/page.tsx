@@ -3,8 +3,9 @@ import Link from "next/link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { href, routes } from "@/i18n/routing";
 import { buildMetadata } from "@/lib/metadata";
-import { tradeAnchor } from "@/content/drawings";
-import { PageIntro } from "@/components/sections/PageIntro";
+import { tradeAnchor, tradeKeys } from "@/content/drawings";
+import { ServicesHero } from "@/components/services/ServicesHero";
+import { GroupNav } from "@/components/products/GroupNav";
 import { SystemList } from "@/components/sections/SystemList";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { TradeDetail } from "@/components/services/TradeDetail";
@@ -18,23 +19,24 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata(locale, routes.services, dict.services.meta);
 }
 
+/** The photo each service shows, in the banner panels and in its own section. */
+const heroPhotos = {
+  design: { src: "/images/services/corridor-coffers.jpg", width: 1600, height: 1600 },
+  ceilings: { src: "/images/services/sys-star-coffer.jpg", width: 1760, height: 1232 },
+  partitions: { src: "/images/services/part-demountable-glazed.jpg", width: 1744, height: 1360 },
+  fitOut: { src: "/images/services/joinery-wall-unit.jpg", width: 1824, height: 1360 },
+};
+
 export default async function ServicesPage() {
-  const [{ services, nav }, locale] = await Promise.all([getDictionary(), getLocale()]);
-  const { lede } = services;
+  const [{ services, nav, trades }, locale] = await Promise.all([getDictionary(), getLocale()]);
 
   return (
     <>
-      <PageIntro
-        crumb={nav.services}
-        title={services.title}
-        lede={
-          <>
-            {lede.before} <a href={`#${tradeAnchor.design}`}>{lede.design}</a>,{" "}
-            <a href={`#${tradeAnchor.ceilings}`}>{lede.ceilings}</a>,{" "}
-            <a href={`#${tradeAnchor.partitions}`}>{lede.partitions}</a> {lede.or}{" "}
-            <a href={`#${tradeAnchor.fitOut}`}>{lede.fitOut}</a>.
-          </>
-        }
+      <ServicesHero crumb={nav.services} photos={heroPhotos} />
+
+      <GroupNav
+        label={services.hero.tabsLabel}
+        groups={tradeKeys.map((t) => ({ id: tradeAnchor[t], title: trades[t].title }))}
       />
 
       <TradeDetail

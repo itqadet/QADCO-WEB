@@ -5,7 +5,7 @@ const builder = createImageUrlBuilder({ projectId, dataset });
 
 /** A Sanity image field as returned by our queries, with the asset's original size. */
 export type SanityImage = {
-  asset: { _ref?: string; _id?: string; url?: string; metadata?: { dimensions?: { width: number; height: number } } };
+  asset: { _ref?: string; _id?: string; url?: string; originalFilename?: string; metadata?: { dimensions?: { width: number; height: number } } };
   crop?: { top: number; bottom: number; left: number; right: number };
   hotspot?: { x: number; y: number; width: number; height: number };
 };

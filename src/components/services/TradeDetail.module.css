@@ -1,18 +1,120 @@
 .section {
   padding-block: var(--section);
+  /* leave room for the sticky header and service tabs when jumping here */
+  scroll-margin-top: calc(var(--header-h) + 64px);
 }
-.section + .section {
-  border-top: 1px solid var(--rule);
+/* alternate sections sit on white, so each trade reads as its own chapter */
+.section[data-flip] {
+  background: #fff;
 }
 
-.media {
+.grid {
   display: grid;
-  gap: 16px;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  grid-template-areas: "media text";
+  align-items: start;
+  gap: 40px var(--col-gap);
+}
+.section[data-flip] .grid {
+  grid-template-areas: "text media";
 }
 
+/* ---------- photo with the drawing pinned over its corner ---------- */
+.media {
+  grid-area: media;
+  position: relative;
+  padding-bottom: 18%;
+}
 .photo {
+  display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px -36px rgb(11 20 56 / 0.55);
+}
+.sheet {
+  position: absolute;
+  bottom: 0;
+  inset-inline-end: -4%;
+  width: 52%;
+  box-shadow: 0 24px 50px -24px rgb(11 20 56 / 0.5);
+  transform: rotate(-2deg);
+  transition: transform 500ms cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+.section[data-flip] .sheet {
+  inset-inline-end: auto;
+  inset-inline-start: -4%;
+  transform: rotate(2deg);
+}
+@media (hover: hover) {
+  .media:hover .sheet {
+    transform: rotate(0) translateY(-6px);
+  }
+}
+
+/* ---------- text ---------- */
+.text {
+  grid-area: text;
+}
+.num {
+  margin: 0 0 6px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+  font: 800 clamp(3rem, 2rem + 3vw, 5rem) / 0.9 var(--font-latin);
+  font-stretch: 125%;
+}
+.num span {
+  -webkit-text-stroke: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.title {
+  margin: 0 0 14px;
+}
+.intro {
+  max-width: 56ch;
+  margin: 0 0 24px;
+  font-size: var(--fs-lede);
+}
+/* the systems table in a clean card */
+.card {
+  padding: 6px 22px 10px;
+  background: var(--gypsum);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--maroon);
+  border-radius: 10px;
+}
+.section:not([data-flip]) .card {
+  background: #fff;
+}
+
+@media (max-width: 860px) {
+  .grid,
+  .section[data-flip] .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "text"
+      "media";
+  }
+  .media {
+    padding-bottom: 26%;
+  }
+  .sheet,
+  .section[data-flip] .sheet {
+    width: 62%;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+  }
+  .card {
+    padding: 4px 14px 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
 }

@@ -6,7 +6,7 @@ import styles from "./GroupNav.module.css";
 
 type GroupNavProps = {
   label: string;
-  groups: { id: string; title: string; count: number }[];
+  groups: { id: string; title: string; count?: number }[];
 };
 
 /** Sticky jump links to each product group; the group being read is marked as current. */
@@ -22,7 +22,8 @@ export function GroupNav({ label, groups }: GroupNavProps) {
       const line = window.innerHeight * 0.33;
       const passed = sections.filter((s) => s.getBoundingClientRect().top <= line);
       const last = passed[passed.length - 1];
-      setCurrent(last && last.getBoundingClientRect().bottom > 0 ? last.id : null);
+      // only while that group is still on screen past the line, so nothing stays lit below the last group
+      setCurrent(last && last.getBoundingClientRect().bottom > line ? last.id : null);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -44,7 +45,7 @@ export function GroupNav({ label, groups }: GroupNavProps) {
           <li key={g.id}>
             <a href={`#${g.id}`} className={styles.link} aria-current={current === g.id ? "location" : undefined}>
               {g.title}
-              <span className={styles.count}>{g.count}</span>
+              {g.count !== undefined ? <span className={styles.count}>{g.count}</span> : null}
             </a>
           </li>
         ))}

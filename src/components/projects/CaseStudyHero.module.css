@@ -93,6 +93,10 @@
   display: block;
   width: 100%;
   height: auto;
+  /* kept to a calm 4:3 frame, never taller than the text beside it */
+  aspect-ratio: 4 / 3;
+  max-height: 380px;
+  object-fit: cover;
   border: 1px solid rgb(255 255 255 / 0.2);
   box-shadow: 0 30px 60px -28px rgb(0 0 0 / 0.7);
 }

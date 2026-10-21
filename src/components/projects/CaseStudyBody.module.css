@@ -49,11 +49,11 @@
 }
 
 .gallery {
-  --gallery-cols: 3;
+  --gallery-cols: 4;
 }
 @media (max-width: 1000px) {
   .gallery {
-    --gallery-cols: 2;
+    --gallery-cols: 3;
   }
 }
 

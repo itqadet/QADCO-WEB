@@ -39,7 +39,7 @@ export function PhotoGallery({ photos, rtl, labels }: PhotoGalleryProps) {
               onClick={() => open(i)}
               aria-label={`${labels.openPhoto}: ${p.caption}`}
             >
-              <Image src={p.src} alt="" width={p.width} height={p.height} sizes="(max-width: 760px) 100vw, 50vw" />
+              <Image src={p.src} alt="" width={p.width} height={p.height} sizes="(max-width: 760px) 50vw, (max-width: 1000px) 33vw, 320px" />
             </button>
             <p className={styles.caption}>{p.caption}</p>
           </li>

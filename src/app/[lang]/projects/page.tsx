@@ -6,7 +6,8 @@ import { getCaseStudies, getRegister, getTowers } from "@/lib/content";
 import { scopes } from "@/content/register";
 import { sectorKeys, sectors } from "@/content/sectors";
 import { pick } from "@/content/localized";
-import { PageIntro } from "@/components/sections/PageIntro";
+import { ProjectsHero } from "@/components/projects/ProjectsHero";
+import { facts } from "@/content/site";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Skyline } from "@/components/projects/Skyline";
 import { CaseStudyGrid } from "@/components/projects/CaseStudyGrid";
@@ -47,24 +48,25 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <PageIntro crumb={nav.projects} title={copy.title} lede={copy.lede} />
-
-      <Section aria-labelledby="skyline-h" tight>
+      <ProjectsHero
+        crumb={nav.projects}
+        title={copy.title}
+        lede={copy.lede}
+        stats={[
+          { value: String(register.length), label: copy.stats.projects },
+          { value: String(towers.length), label: copy.stats.towers },
+          { value: String(facts.founded), label: copy.stats.since },
+        ]}
+      >
         <h2 id="skyline-h" className="visually-hidden">
           {copy.skyline.title}
         </h2>
         <Skyline
           towers={skyline}
           initial={skyline.find((t) => t.name.includes("AKH"))?.id ?? skyline[0]?.id}
-          labels={{
-            hint: copy.skyline.hint,
-            notToScale: copy.skyline.notToScale,
-            listLabel: copy.skyline.listLabel,
-            scopeLabel: copy.skyline.scopeLabel,
-            locationLabel: copy.skyline.locationLabel,
-          }}
+          labels={copy.skyline}
         />
-      </Section>
+      </ProjectsHero>
 
       <Section aria-labelledby="cases-h">
         <SectionHead id="cases-h" title={copy.caseStudies.title} intro={copy.caseStudies.intro} />

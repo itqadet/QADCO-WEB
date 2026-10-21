@@ -10,12 +10,12 @@
   font-weight: 600;
 }
 .search input {
-  width: min(100%, 420px);
-  min-height: 48px;
-  padding: 10px 12px;
-  background: var(--paper);
+  width: min(100%, 460px);
+  min-height: 50px;
+  padding: 10px 18px;
+  background: #fff;
   border: 1.5px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: 999px;
   color: var(--ink);
   font: 400 1rem var(--font-body);
 }
@@ -25,39 +25,82 @@
   outline-offset: 0;
 }
 
+/* sector tabs: one scrollable bar, the chosen sector filled, each with its count */
 .sectors {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
+  padding: 5px;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  scrollbar-width: none;
 }
-.sectors button,
-.reset {
+.sectors::-webkit-scrollbar {
+  display: none;
+}
+.sectors button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 8px 0 16px;
   background: transparent;
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius);
+  border: 0;
+  border-radius: 999px;
   color: var(--ink);
   font: 500 0.9375rem var(--font-body);
+  white-space: nowrap;
   cursor: pointer;
-  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+:global([dir="rtl"]) .sectors button {
+  padding: 0 16px 0 8px;
 }
 .sectors button span {
-  margin-inline-start: 4px;
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--gypsum);
   color: var(--muted);
   font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
-.sectors button:hover,
-.reset:hover {
-  border-color: var(--ink);
+.sectors button:hover {
+  background: var(--gypsum);
 }
 .sectors button[aria-pressed="true"] {
   background: var(--ink);
-  border-color: var(--ink);
   color: #fff;
+  font-weight: 700;
 }
 .sectors button[aria-pressed="true"] span {
-  color: #c9cedd;
+  background: var(--cove);
+  color: var(--ink-deep);
+}
+.sectors button:focus-visible {
+  outline: 2px solid var(--maroon);
+  outline-offset: -2px;
+}
+
+.reset {
+  min-height: 44px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font: 600 0.9375rem var(--font-body);
+  cursor: pointer;
+}
+.reset:hover {
+  background: var(--ink);
+  color: #fff;
 }
 
 .status {

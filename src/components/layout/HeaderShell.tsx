@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 
 type HeaderShellProps = {
-  /** The home page path; there the header starts clear over the dark banner. */
-  home: string;
+  /** Pages that open on a dark banner; there the header starts clear over it. "/x/*" covers pages under /x. */
+  clearOn: string[];
   className: string;
   children: ReactNode;
 };
@@ -14,7 +14,7 @@ type HeaderShellProps = {
  * The sticky header element. Marks whether it sits over the home banner and whether the page
  * has scrolled, so the styles can switch from clear-over-the-room to solid gypsum.
  */
-export function HeaderShell({ home, className, children }: HeaderShellProps) {
+export function HeaderShell({ clearOn, className, children }: HeaderShellProps) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
 
@@ -26,7 +26,7 @@ export function HeaderShell({ home, className, children }: HeaderShellProps) {
   }, []);
 
   return (
-    <header className={className} data-over-hero={pathname === home || undefined} data-scrolled={scrolled || undefined}>
+    <header className={className} data-over-hero={clearOn.some((p) => (p.endsWith("/*") ? pathname.startsWith(p.slice(0, -1)) : pathname === p)) || undefined} data-scrolled={scrolled || undefined}>
       {children}
     </header>
   );

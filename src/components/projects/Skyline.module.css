@@ -1,35 +1,41 @@
+/* Night skyline. Sits inside the dark Projects banner (ProjectsHero), so colours are for navy. */
 .wrap {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 320px);
   grid-template-areas:
-    "figure panel"
-    "list list";
-  gap: 24px var(--col-gap);
+    "figure card"
+    "nav nav"
+    "caption caption";
+  gap: 18px var(--col-gap);
   align-items: end;
 }
 
 .figure {
   grid-area: figure;
   margin: 0;
-  padding: 18px 18px 0;
-  background: var(--paper);
-  border: 1px solid var(--rule);
 }
-
 .svg {
+  display: block;
   width: 100%;
   height: auto;
   overflow: visible;
 }
 
 .ground {
-  stroke: var(--ink);
-  stroke-width: 2;
+  stroke: var(--cove);
+  stroke-width: 1.5;
+  stroke-opacity: 0.6;
+  filter: drop-shadow(0 0 4px rgb(242 212 155 / 0.6));
 }
-.tick {
-  stroke: var(--ink);
-  stroke-opacity: 0.35;
-  stroke-width: 1;
+
+.water path {
+  fill: #2a3a80;
+  transition: fill 400ms ease;
+}
+.water [data-active] path {
+  fill: #f2d49b;
 }
 
 .tower {
@@ -39,114 +45,263 @@
   fill: transparent;
 }
 .body {
-  fill: var(--paper);
-  stroke: var(--ink);
-  stroke-opacity: 0.55;
-  stroke-width: 1.5;
+  fill: url(#sk-body);
+}
+.edge {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.55);
+  stroke-width: 1.2;
   stroke-linejoin: round;
-  transition: fill 200ms ease, stroke 200ms ease, stroke-opacity 200ms ease;
+  transition: stroke 300ms ease, stroke-width 300ms ease;
 }
 .detail {
   fill: none;
-  stroke: var(--ink);
-  stroke-opacity: 0.25;
+  stroke: rgb(255 255 255 / 0.22);
   stroke-width: 1;
-  transition: stroke 200ms ease, stroke-opacity 200ms ease;
+}
+.tower:hover .edge {
+  stroke: #fff;
 }
 
-.tower[data-active] .body {
-  fill: color-mix(in srgb, var(--maroon) 12%, var(--paper));
-  stroke: var(--maroon);
-  stroke-opacity: 1;
+/* lit floors: hidden until the tower is chosen, then rise from the ground */
+.floors {
+  opacity: 0.85;
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 900ms var(--ease);
+}
+.tower[data-active] .floors {
+  transform: scaleY(1);
+}
+.tower[data-active] .edge {
+  stroke: var(--cove);
   stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgb(242 212 155 / 0.8));
 }
 .tower[data-active] .detail {
-  stroke: var(--maroon);
-  stroke-opacity: 0.55;
+  stroke: rgb(11 20 56 / 0.5);
+}
+
+/* the towers rise in turn when the page opens */
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: rise 1100ms var(--ease) both;
+    animation-delay: calc(150ms + var(--i) * 70ms);
+  }
+}
+@keyframes rise {
+  from {
+    transform: scaleY(0);
+  }
 }
 
 .pin {
-  transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 450ms var(--ease);
 }
 .pin path {
-  stroke: var(--maroon);
+  stroke: var(--cove);
   stroke-width: 1.5;
 }
 .pin circle {
-  fill: var(--maroon);
+  fill: var(--cove);
+}
+.pin .glow {
+  fill: rgb(242 212 155 / 0.25);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pin .glow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: beacon 2.4s ease-in-out infinite;
+  }
+}
+@keyframes beacon {
+  50% {
+    transform: scale(1.6);
+    opacity: 0.2;
+  }
 }
 
-.caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 12px -18px 0;
-  padding: 8px 14px;
-  border-top: 1px solid var(--rule);
-  font-stretch: 75%;
-  font-size: 0.8125rem;
-  color: var(--muted);
+/* ---------- the card ---------- */
+.card {
+  grid-area: card;
+  align-self: end;
+  padding: 22px 24px;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-top: 3px solid var(--cove);
+  backdrop-filter: blur(6px);
+  animation: cardIn 450ms var(--ease) both;
 }
-:lang(ar) .caption {
-  font-stretch: normal;
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
-
-.panel {
-  grid-area: panel;
-  padding-bottom: 8px;
-  border-top: 2px solid var(--ink);
+.count {
+  margin: 0 0 6px;
+  color: var(--cove);
+  font: 800 1.4rem var(--font-latin);
+  font-stretch: 125%;
+}
+.count span {
+  color: rgb(255 255 255 / 0.5);
+  font-size: 0.85rem;
 }
 .name {
-  margin: 14px 0 12px;
-  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem);
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: clamp(1.4rem, 1.1rem + 0.9vw, 1.9rem);
+  line-height: 1.15;
 }
 .facts {
   margin: 0;
 }
 .facts div {
   padding: 10px 0;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid rgb(255 255 255 / 0.12);
 }
 .facts dt {
+  color: rgb(255 255 255 / 0.6);
   font-size: var(--fs-small);
-  color: var(--muted);
 }
 .facts dd {
   margin: 2px 0 0;
+  color: #fff;
+  font-weight: 500;
 }
 
-.list {
-  grid-area: list;
+/* ---------- tower tabs ---------- */
+.nav {
+  grid-area: nav;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
-.list button {
+.strip {
+  position: relative;
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  padding: 4px;
+  overflow-x: auto;
+  background: rgb(255 255 255 / 0.05);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 999px;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+.strip::-webkit-scrollbar {
+  display: none;
+}
+.tab {
+  flex: none;
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 16px;
   background: transparent;
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius);
-  color: var(--ink);
+  border: 0;
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.75);
   font: 500 0.9375rem var(--font-body);
+  white-space: nowrap;
   cursor: pointer;
-  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+  transition: background-color 250ms ease, color 250ms ease;
 }
-.list button:hover {
-  border-color: var(--ink);
+.tab:first-child {
+  margin-inline-start: 14px;
 }
-.list button[aria-pressed="true"] {
-  background: var(--ink);
-  border-color: var(--ink);
+.tab:last-child {
+  margin-inline-end: 14px;
+}
+.tab:hover {
+  background: rgb(255 255 255 / 0.1);
   color: #fff;
+}
+.tab[aria-selected="true"] {
+  background: var(--cove);
+  color: var(--ink-deep);
+  font-weight: 700;
+}
+.tab:focus-visible,
+.arrow:focus-visible {
+  outline: 2px solid var(--cove);
+  outline-offset: 2px;
+}
+
+.arrow {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  background: transparent;
+  border: 1.5px solid rgb(255 255 255 / 0.45);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+.arrow:hover {
+  background: #fff;
+  color: var(--ink-deep);
+}
+.chev {
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+.chev[data-dir="next"] {
+  transform: translateX(-2px) rotate(45deg);
+}
+.chev[data-dir="prev"] {
+  transform: translateX(2px) rotate(-135deg);
+}
+:global([dir="rtl"]) .chev[data-dir="next"] {
+  transform: translateX(2px) rotate(-135deg);
+}
+:global([dir="rtl"]) .chev[data-dir="prev"] {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.caption {
+  grid-area: caption;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  color: rgb(255 255 255 / 0.55);
+  font-size: 0.8125rem;
 }
 
 @media (max-width: 860px) {
   .wrap {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "figure"
-      "list"
-      "panel";
+      "nav"
+      "card"
+      "caption";
+  }
+  .caption {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floors,
+  .edge,
+  .pin,
+  .tab {
+    transition: none;
+  }
+  .card {
+    animation: none;
   }
 }

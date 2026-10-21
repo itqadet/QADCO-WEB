@@ -1,0 +1,160 @@
+/* "What we installed" as a numbered checklist of cards */
+.scopeHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(18px, 2.5vw, 28px);
+}
+.scopeHead h2 {
+  margin: 0;
+}
+.scopeCount {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+.scope {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: scope;
+}
+.scope li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 20px 22px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--maroon);
+  counter-increment: scope;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.scope li::before {
+  content: counter(scope, decimal-leading-zero);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--cove);
+  font: 800 0.8125rem var(--font-latin);
+}
+
+.gallery {
+  --gallery-cols: 3;
+}
+@media (max-width: 1000px) {
+  .gallery {
+    --gallery-cols: 2;
+  }
+}
+
+/* next project */
+.pager {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 16px;
+  padding-bottom: var(--section);
+}
+.back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 16px;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+.back:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.next {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 12px;
+  padding-inline-end: 24px;
+  background: var(--ink-deep);
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 250ms ease;
+}
+.next:hover {
+  background: var(--ink);
+}
+.next img {
+  display: block;
+  width: 160px;
+  height: 100px;
+  object-fit: cover;
+}
+.nextHint {
+  display: block;
+  color: var(--cove);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.nextTitle {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 650;
+  font-size: clamp(1.1rem, 0.9rem + 0.6vw, 1.4rem);
+}
+:lang(ar) .nextTitle {
+  font-stretch: normal;
+}
+.arrow {
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid var(--cove);
+  border-right: 2px solid var(--cove);
+  transform: rotate(45deg);
+  transition: transform 250ms ease;
+}
+:global([dir="rtl"]) .arrow {
+  transform: rotate(-135deg);
+}
+.next:hover .arrow {
+  transform: translateX(4px) rotate(45deg);
+}
+:global([dir="rtl"]) .next:hover .arrow {
+  transform: translateX(-4px) rotate(-135deg);
+}
+.back:focus-visible,
+.next:focus-visible {
+  outline: 3px solid var(--maroon);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .back {
+    order: 2;
+  }
+  .next {
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    gap: 14px;
+  }
+  .next img {
+    width: 96px;
+    height: 72px;
+  }
+}

@@ -7,14 +7,14 @@ import { buildMetadata } from "@/lib/metadata";
 import { getCaseStudies } from "@/lib/content";
 import { sectors } from "@/content/sectors";
 import { pick } from "@/content/localized";
-import { PageIntro } from "@/components/sections/PageIntro";
+import Image from "next/image";
+import Link from "next/link";
+import { CaseStudyHero } from "@/components/projects/CaseStudyHero";
+import body from "@/components/projects/CaseStudyBody.module.css";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { PhotoGallery } from "@/components/projects/PhotoGallery";
-import { CaseStudyFacts } from "@/components/projects/CaseStudyFacts";
 import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
-import { Split } from "@/components/ui/Split";
-import { TextLink } from "@/components/ui/TextLink";
+import { Section, SectionHead } from "@/components/ui/Section";
 
 /** Projects published after the build get their page on first visit, then stay cached. */
 export const dynamicParams = true;
@@ -52,43 +52,49 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/proje
 
   return (
     <>
-      <PageIntro
-        crumb={pick(study.title, locale)}
-        parent={{ href: href(locale, routes.projects), label: nav.projects }}
+      <CaseStudyHero
         title={pick(study.title, locale)}
-        lede={pick(study.summary, locale)}
+        summary={pick(study.summary, locale)}
+        sector={pick(sectors[study.sector], locale)}
+        cover={study.cover}
+        facts={facts.filter((f) => f.label !== t.facts.sector)}
       />
 
-      <Container>
-        <CaseStudyFacts facts={facts} />
-      </Container>
-
       <Section aria-labelledby="scope-h">
-        <Split>
-          <div>
-            <h2 id="scope-h">{t.scopeTitle}</h2>
-            <ul className="ruled-list">
-              {study.scope.map((s) => (
-                <li key={s.en}>{pick(s, locale)}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="visually-hidden">{t.photosTitle}</h2>
-            <PhotoGallery
-              photos={study.photos.map((p) => ({ ...p, caption: pick(p.caption, locale) }))}
-              rtl={localeDirection[locale] === "rtl"}
-              labels={{ ...t.lightbox, openPhoto: t.openPhoto }}
-            />
-          </div>
-        </Split>
+        <div className={body.scopeHead}>
+          <h2 id="scope-h">{t.scopeTitle}</h2>
+          <span className={body.scopeCount}>{t.scopeCount.replace("{n}", String(study.scope.length))}</span>
+        </div>
+        <ol className={body.scope}>
+          {study.scope.map((s) => (
+            <li key={s.en}>{pick(s, locale)}</li>
+          ))}
+        </ol>
       </Section>
 
-      <Container as="nav" aria-label={nav.projects} className="pager">
-        <TextLink href={href(locale, routes.projects)}>{t.back}</TextLink>
-        <TextLink href={href(locale, `${routes.projects}/${next.slug}`)}>
-          {t.next}: {pick(next.title, locale)}
-        </TextLink>
+      <Section aria-labelledby="photos-h">
+        <SectionHead id="photos-h" title={t.gallery} />
+        <div className={body.gallery}>
+          <PhotoGallery
+            photos={study.photos.map((p) => ({ ...p, caption: pick(p.caption, locale) }))}
+            rtl={localeDirection[locale] === "rtl"}
+            labels={{ ...t.lightbox, openPhoto: t.openPhoto }}
+          />
+        </div>
+      </Section>
+
+      <Container as="nav" aria-label={nav.projects} className={body.pager}>
+        <Link href={href(locale, routes.projects)} className={body.back}>
+          {t.back}
+        </Link>
+        <Link href={href(locale, `${routes.projects}/${next.slug}`)} className={body.next}>
+          <Image src={next.cover.src} alt="" width={next.cover.width} height={next.cover.height} sizes="160px" />
+          <span>
+            <span className={body.nextHint}>{t.nextHint}</span>
+            <span className={body.nextTitle}>{pick(next.title, locale)}</span>
+          </span>
+          <span className={body.arrow} aria-hidden="true" />
+        </Link>
       </Container>
 
       <CtaBand title={projects.cta.title} body={projects.cta.body} />

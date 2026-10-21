@@ -10,7 +10,7 @@ import { DrawingToReality } from "./DrawingToReality";
 import styles from "./Hero.module.css";
 
 /** The full-bleed room behind the banner: a lit, coffered corridor from our visualisations. */
-const backdrop = { src: "/images/visualisations/corridor-coffers.jpg", width: 1024, height: 1024 };
+const backdrop = { src: "/images/services/corridor-coffers.jpg", width: 1600, height: 1600 };
 
 /**
  * Home hero. A full-bleed render of a lit coffered corridor sits behind everything, darkened

@@ -40,7 +40,7 @@ export default async function ServicesPage() {
       <TradeDetail
         trade="design"
         intro={services.design.body}
-        photo={{ src: "/images/visualisations/corridor-coffers.jpg", width: 1024, height: 1024, alt: services.design.imageAlt }}
+        photo={{ src: "/images/services/corridor-coffers.jpg", width: 1600, height: 1600, alt: services.design.imageAlt }}
       >
         <SpecTable caption={services.design.tableCaption} head={services.design.tableHead} rows={services.design.rows} />
       </TradeDetail>
@@ -48,7 +48,7 @@ export default async function ServicesPage() {
       <TradeDetail
         trade="ceilings"
         intro={services.ceilings.body}
-        photo={{ src: "/images/work/sys-star-coffer.jpg", width: 972, height: 679, alt: services.ceilings.imageAlt }}
+        photo={{ src: "/images/services/sys-star-coffer.jpg", width: 1760, height: 1232, alt: services.ceilings.imageAlt }}
       >
         <SpecTable caption={services.ceilings.tableCaption} head={services.tableHead} rows={services.ceilings.rows} />
       </TradeDetail>
@@ -56,7 +56,7 @@ export default async function ServicesPage() {
       <TradeDetail
         trade="partitions"
         intro={services.partitions.body}
-        photo={{ src: "/images/work/part-demountable-glazed.jpg", width: 944, height: 750, alt: services.partitions.imageAlt }}
+        photo={{ src: "/images/services/part-demountable-glazed.jpg", width: 1744, height: 1360, alt: services.partitions.imageAlt }}
       >
         <SpecTable caption={services.partitions.tableCaption} head={services.tableHead} rows={services.partitions.rows} />
       </TradeDetail>
@@ -64,7 +64,7 @@ export default async function ServicesPage() {
       <TradeDetail
         trade="fitOut"
         intro={services.fitOut.body}
-        photo={{ src: "/images/work/joinery-wall-unit.jpg", width: 947, height: 714, alt: services.fitOut.imageAlt }}
+        photo={{ src: "/images/services/joinery-wall-unit.jpg", width: 1824, height: 1360, alt: services.fitOut.imageAlt }}
       >
         <SystemList items={services.fitOut.systems} />
       </TradeDetail>

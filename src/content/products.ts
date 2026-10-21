@@ -229,7 +229,7 @@ export const products: Product[] = [
       en: "Slim aluminium frames that keep offices open and bright.",
       ar: "إطارات ألمنيوم نحيفة تُبقي المكاتب مفتوحة ومضيئة.",
     },
-    image: img("/images/work/part-demountable-glazed.jpg", 944, 750),
+    image: img("/images/services/part-demountable-glazed.jpg", 1744, 1360),
   },
   {
     id: "timber-glass",

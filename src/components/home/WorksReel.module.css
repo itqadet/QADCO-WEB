@@ -4,7 +4,8 @@
  */
 .reel {
   --edge: max(var(--gutter), calc((100vw - var(--wrap)) / 2));
-  --h: clamp(320px, 44vw, 540px);
+  /* compact enough to see three or four photos at once on a laptop */
+  --h: clamp(250px, 28vw, 380px);
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 }
 
@@ -35,6 +36,18 @@
   font: 500 0.9375rem var(--font-body);
   cursor: pointer;
   transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.chipCount {
+  margin-inline-start: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.12);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.chip[aria-pressed="true"] .chipCount {
+  background: rgb(11 20 56 / 0.15);
 }
 .chip:hover {
   border-color: #fff;
@@ -142,7 +155,7 @@
   flex: none;
   height: var(--h);
   aspect-ratio: var(--ratio);
-  max-width: 82vw;
+  max-width: 72vw;
   scroll-snap-align: start;
 }
 
@@ -153,6 +166,7 @@
   height: 100%;
   padding: 0;
   overflow: hidden;
+  border-radius: 10px;
   background: rgb(255 255 255 / 0.06);
   border: 0;
   color: #fff;
@@ -174,7 +188,7 @@
   height: 100%;
   object-fit: cover;
   /* oversized so the drift never shows an edge; --drift is set from the reel's position */
-  transform: scale(1.16) translateX(var(--drift, 0));
+  transform: scale(1.06) translateX(var(--drift, 0));
   transition: filter 400ms ease;
   user-select: none;
   -webkit-user-drag: none;
@@ -186,7 +200,7 @@
   bottom: 0;
   display: grid;
   gap: 4px;
-  padding: 64px 20px 18px;
+  padding: 52px 16px 14px;
   background: linear-gradient(0deg, rgb(11 20 56 / 0.88) 0%, rgb(11 20 56 / 0.55) 55%, transparent 100%);
 }
 .group {
@@ -347,7 +361,7 @@
 
 @media (max-width: 700px) {
   .reel {
-    --h: clamp(300px, 92vw, 440px);
+    --h: clamp(240px, 70vw, 340px);
   }
   .controls {
     width: 100%;

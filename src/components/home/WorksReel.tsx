@@ -72,7 +72,7 @@ export function WorksReel({ photos, categories, rtl, labels }: WorksReelProps) {
       if (first < 0 && (rtl ? farEdge < start - r.width / 2 : farEdge > start + r.width / 2)) first = i;
       if (!still) {
         const offset = (r.left + r.width / 2 - window.innerWidth / 2) / window.innerWidth;
-        card.style.setProperty("--drift", `${(offset * -7).toFixed(2)}%`);
+        card.style.setProperty("--drift", `${(offset * -3).toFixed(2)}%`);
       }
     });
     // at the very end several photos share the screen; count the last one
@@ -158,6 +158,7 @@ export function WorksReel({ photos, categories, rtl, labels }: WorksReelProps) {
           {[{ id: "all", label: labels.all }, ...categories].map((c) => (
             <button key={c.id} type="button" className={styles.chip} aria-pressed={filter === c.id} onClick={() => choose(c.id)}>
               {c.label}
+              <span className={styles.chipCount}>{c.id === "all" ? photos.length : photos.filter((p) => p.category === c.id).length}</span>
             </button>
           ))}
         </div>
@@ -218,7 +219,7 @@ export function WorksReel({ photos, categories, rtl, labels }: WorksReelProps) {
                   alt=""
                   width={p.width}
                   height={p.height}
-                  sizes="(max-width: 700px) 80vw, 480px"
+                  sizes="(max-width: 700px) 70vw, 380px"
                   draggable={false}
                 />
               </span>

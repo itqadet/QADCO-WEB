@@ -1,4 +1,4 @@
-"""Usage: python scripts/anonymise-works.py ../assets/works_done public/images/works
+"""Usage: python scripts/anonymise-works.py ../assets/works_done public/images/reel
 
 Make client rooms in the "Our work" reel less recognisable, locally (nothing is uploaded).
 
@@ -118,6 +118,33 @@ def grade(im):
     return Image.merge("RGB", (r, g, b))
 
 
+# photos whose subject (a ceiling feature) sits at the top: crop from the bottom instead
+TOP_SUBJECT = {"bedroom-timber-ceiling", "living-layered-ceiling", "tray-timber-beams"}
+
+
+def stylise(im, name):
+    """The strong pass: tighter on the work, the room around it melted, real colours replaced.
+
+    1. crop 8% more from every side (or 16% from the bottom when the subject is at the top)
+    2. focus blur: sharp across most of the frame, softening into the corners
+    3. brand duotone: navy shadows, a warm stone middle, cream highlights
+    4. fine grain to break up surface detail
+    """
+    w, h = im.size
+    box = (0.08, 0.0, 0.92, 0.84) if name in TOP_SUBJECT else (0.08, 0.08, 0.92, 0.92)
+    im = im.crop((int(w * box[0]), int(h * box[1]), int(w * box[2]), int(h * box[3])))
+    w, h = im.size
+    soft = im.filter(ImageFilter.GaussianBlur(max(w, h) / 110))
+    focus = Image.new("L", (w, h), 0)
+    cy = 0.42 if name in TOP_SUBJECT else 0.5
+    ImageDraw.Draw(focus).ellipse((w * 0.06, h * (cy - 0.44), w * 0.94, h * (cy + 0.44)), fill=255)
+    im = Image.composite(im, soft, focus.filter(ImageFilter.GaussianBlur(max(w, h) / 12)))
+    grey = ImageOps.autocontrast(ImageOps.grayscale(im), cutoff=0.5)
+    im = ImageOps.colorize(grey, black=(11, 20, 56), mid=(150, 128, 104), white=(246, 238, 222), midpoint=100)
+    grain = Image.effect_noise((w, h), 22).convert("RGB")
+    return Image.blend(im, grain, 0.045)
+
+
 def crop(im, box):
     return im.crop(px(im, box))
 
@@ -164,7 +191,7 @@ def process(name, im):
         im = crop(im, (0.03, 0.02, 0.97, 0.96))
     else:
         im = crop(im, (0.02, 0.02, 0.98, 0.98))
-    return grade(ImageOps.mirror(im))
+    return stylise(grade(ImageOps.mirror(im)), name)
 
 
 for name, idx in source.items():

@@ -144,6 +144,10 @@ const ar: Dictionary = {
       tourPause: "إيقاف الجولة",
       tourPlay: "تشغيل الجولة",
       of: "من",
+      approvedBy: "اعتمده",
+      weBuilt: "ما نفّذناه",
+      sentenceApproved: "باعتماد",
+      sentenceBuilt: "نفّذنا",
     },
     works: {
       title: "من أعمالنا",

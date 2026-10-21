@@ -11,6 +11,7 @@ export async function LandmarkBoard() {
 
   return (
     <ProjectBoard
+      locale={locale}
       rtl={locale === "ar"}
       labels={home.board}
       projects={landmarks.map((l) => ({
@@ -23,6 +24,7 @@ export async function LandmarkBoard() {
         consultant: l.consultant || undefined,
         contractor: l.contractor || undefined,
         scopes: l.scope.map((k) => ({ key: k, label: pick(scopes[k], locale) })),
+        logo: l.logo,
       }))}
     />
   );

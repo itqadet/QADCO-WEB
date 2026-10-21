@@ -147,6 +147,10 @@ const en = {
       tourPause: "Pause tour",
       tourPlay: "Play tour",
       of: "of",
+      approvedBy: "Approved by",
+      weBuilt: "What we built",
+      sentenceApproved: "approved by",
+      sentenceBuilt: "We built",
     },
     works: {
       title: "Our work",

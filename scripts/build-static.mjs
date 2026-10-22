@@ -57,7 +57,10 @@ try {
       ...process.env,
       STATIC_EXPORT: "1",
       BASE_PATH: base,
-      NEXT_PUBLIC_CONTACT_ENDPOINT: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || `${base}/contact.php`,
+      // The form posts to the mail route on Vercel: Bluehost's bot check answers background
+      // requests to contact.php with a cookie page instead. Set this to `${base}/contact.php` to
+      // use the PHP mailer on a host without that check.
+      NEXT_PUBLIC_CONTACT_ENDPOINT: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "https://qadco-web.vercel.app/api/contact",
       // a sub-folder copy is a preview: keep it out of search results
       NEXT_PUBLIC_NOINDEX: base ? "1" : process.env.NEXT_PUBLIC_NOINDEX || "",
       NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://www.qasralandalusco.com",

@@ -9,6 +9,9 @@ import { getSettings } from "@/lib/content";
  *                   domain is verified in Resend. Defaults to Resend's shared test sender, which
  *                   can only deliver to the email address the Resend account was created with.
  *   CONTACT_TO      optional recipient; defaults to the email in the Studio's Contact details.
+ *   CONTACT_ORIGINS optional comma-separated list of other sites whose pages may post here.
+ *                   Defaults to qasralandalusco.com (the static copy on Bluehost sends its form
+ *                   here, because Bluehost's bot check blocks background requests to its own PHP).
  */
 
 type Payload = Record<"name" | "company" | "phone" | "email" | "type" | "location" | "message" | "lang", string> & {
@@ -31,9 +34,37 @@ function tooMany(ip: string) {
   return hits.length > 5;
 }
 
-const escape = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+const origins = (process.env.CONTACT_ORIGINS || "https://qasralandalusco.com,https://www.qasralandalusco.com")
+  .split(",")
+  .map((o) => o.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+
+/** Lets the listed sites read our answer; requests from anywhere else get no CORS headers. */
+function cors(request: Request): Record<string, string> {
+  const origin = request.headers.get("origin");
+  if (!origin || !origins.includes(origin)) return {};
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
+}
+
+export function OPTIONS(request: Request) {
+  return new Response(null, { status: 204, headers: cors(request) });
+}
 
 export async function POST(request: Request) {
+  const res = await send(request);
+  for (const [k, v] of Object.entries(cors(request))) res.headers.set(k, v);
+  return res;
+}
+
+const escape = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+async function send(request: Request): Promise<Response> {
   const key = process.env.RESEND_API_KEY?.trim();
   if (!key) return Response.json({ ok: false, reason: "not-configured" }, { status: 503 });
 
@@ -70,6 +101,7 @@ export async function POST(request: Request) {
   const to = process.env.CONTACT_TO?.trim() || settings.email.display;
   const from = process.env.CONTACT_FROM?.trim() || "QADCO Website <onboarding@resend.dev>";
   const language = body.lang === "ar" ? "Arabic" : "English";
+  const site = origins.includes(request.headers.get("origin") ?? "") ? new URL(request.headers.get("origin")!).host : "qadco-web.vercel.app";
 
   const rows: [string, string][] = [
     ["Name", data.name],
@@ -91,7 +123,7 @@ export async function POST(request: Request) {
         .join("")}
     </table>
     ${data.message ? `<p style="font-family:Arial,sans-serif;font-size:15px;white-space:pre-wrap;margin-top:16px">${escape(data.message)}</p>` : ""}
-    <p style="font-family:Arial,sans-serif;font-size:13px;color:#5A6378;margin-top:24px">Sent from the contact form on qadco-web.vercel.app. Reply to this email to answer the visitor${data.email ? "" : " (no email given: call them)"}.</p>`;
+    <p style="font-family:Arial,sans-serif;font-size:13px;color:#5A6378;margin-top:24px">Sent from the contact form on ${site}. Reply to this email to answer the visitor${data.email ? "" : " (no email given: call them)"}.</p>`;
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",

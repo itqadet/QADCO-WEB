@@ -1,0 +1,217 @@
+/* ---------- "Why the name": the photo under an Andalusian arch ---------- */
+.story {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: 40px var(--col-gap);
+}
+.arch {
+  position: relative;
+  margin: 0;
+}
+.archFrame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  /* a pointed arch: two arcs meeting at the crown */
+  border-radius: 50% 50% 12px 12px / 38% 38% 12px 12px;
+  box-shadow: 0 40px 70px -40px rgb(11 20 56 / 0.6);
+}
+.archFrame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* a thin gold line tracing the arch, set slightly inside it */
+.archFrame::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1.5px solid rgb(242 212 155 / 0.85);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.arch figcaption {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  text-align: center;
+}
+.meaning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 0 0 22px;
+  padding: 14px 18px;
+  background: #fff;
+  border-inline-start: 3px solid var(--maroon);
+  border-radius: 0 10px 10px 0;
+}
+:global([dir="rtl"]) .meaning {
+  border-radius: 10px 0 0 10px;
+}
+.meaningAr {
+  color: var(--maroon);
+  font: 700 clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem) var(--font-head);
+}
+.meaningEn {
+  color: var(--muted);
+  font-style: italic;
+}
+.storyText p {
+  max-width: 60ch;
+}
+.storyText p:first-of-type::first-letter {
+  float: inline-start;
+  margin-inline-end: 10px;
+  color: var(--maroon);
+  font: 800 3.4rem / 0.85 var(--font-head);
+}
+:lang(ar) .storyText p:first-of-type::first-letter {
+  float: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- people and safety: paired cards ---------- */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.pairCard {
+  position: relative;
+  padding: clamp(24px, 3vw, 36px);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+}
+.pairCard[data-tone="dark"] {
+  background: var(--ink-deep);
+  border-color: var(--ink-deep);
+  color: #fff;
+}
+.pairCard[data-tone="dark"] h2 {
+  color: #fff;
+}
+.pairCard[data-tone="dark"] p {
+  color: #dfe3ee;
+}
+.pairCard h2 {
+  margin: 14px 0 10px;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.1rem);
+}
+.pairCard p {
+  margin: 0;
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--gypsum);
+  color: var(--maroon);
+}
+.pairCard[data-tone="dark"] .icon {
+  background: rgb(242 212 155 / 0.15);
+  color: var(--cove);
+}
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ---------- areas we cover ---------- */
+.audiences {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.audiences li {
+  padding: 20px 22px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+  border-radius: 10px;
+}
+.audiences h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+.audiences p {
+  margin: 0;
+  color: var(--muted);
+}
+.areasHead {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+/* ---------- credentials ---------- */
+.iso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 36px;
+  padding: clamp(20px, 3vw, 30px);
+  background: var(--ink-deep);
+  border-radius: 14px;
+  color: #fff;
+}
+.isoBadge {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  aspect-ratio: 1;
+  border: 2px solid var(--cove);
+  border-radius: 50%;
+  outline: 1px dashed rgb(242 212 155 / 0.6);
+  outline-offset: -10px;
+  color: var(--cove);
+  font: 800 1.15rem / 1.05 var(--font-latin);
+  font-stretch: 125%;
+  text-align: center;
+  transform: rotate(-8deg);
+}
+.iso p {
+  margin: 0;
+  color: #dfe3ee;
+}
+.iso p + p {
+  margin-top: 8px;
+  color: var(--cove);
+  font-weight: 600;
+}
+.credHead {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 860px) {
+  .story,
+  .pair,
+  .audiences {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .arch {
+    max-width: 420px;
+    margin-inline: auto;
+  }
+}
+@media (max-width: 520px) {
+  .iso {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+  .isoBadge {
+    width: 84px;
+    font-size: 0.95rem;
+  }
+}

@@ -198,6 +198,20 @@ const en = {
     },
     title: "An interior design company that builds what it draws",
     lede: "Qasr Al Andalus Co. W.L.L. began in 1996 as Al Sulaimi Decoration and was incorporated in 2002. For over two decades we built the ceilings, partitions and finishes of Qatar's towers, ministries, hospitals and palaces. Today we design complete interiors too, and build them with the same teams.",
+    timeline: {
+      label: "Our story in three dates",
+      items: [
+        { year: "1996", text: "Founded as Al Sulaimi Decoration" },
+        { year: "2002", text: "Incorporated as Qasr Al Andalus Co. W.L.L." },
+        { year: "Today", text: "Designing complete interiors, built by our own teams" },
+      ],
+    },
+    meaning: { ar: "قصر الأندلس", en: "The palace of Andalusia" },
+    clientTypes: [
+      { title: "Owners and developers", body: "One team to design and build your interiors." },
+      { title: "Consultants and architects", body: "Your designs built exactly as drawn." },
+      { title: "Main contractors", body: "A reliable ceiling, partition and fit-out subcontractor." },
+    ],
     story: {
       title: "Why the name",
       imageAlt: "A geometric coffered ceiling of timber-faced bulkheads and white gypsum strapwork at AKH Tower.",

@@ -5,10 +5,13 @@
 
 .head {
   margin: 0;
-  padding: 10px 20px;
-  background: var(--ink);
+  padding: 12px 26px;
+  background: var(--ink-deep);
+  border: 2px solid var(--cove);
+  border-radius: 999px;
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 0 0 6px rgb(242 212 155 / 0.18);
 }
 
 /* one horizontal bus with a drop to each department */
@@ -41,10 +44,11 @@
 
 .group {
   position: relative;
-  padding: 14px 16px;
-  background: var(--paper);
+  padding: 18px 18px 14px;
+  background: #fff;
   border: 1px solid var(--rule);
   border-top: 3px solid var(--maroon);
+  border-radius: 12px;
 }
 .group::before {
   content: "";
@@ -64,10 +68,25 @@
   list-style: none;
 }
 .group li {
-  padding: 5px 0;
+  position: relative;
+  padding: 6px 0 6px 16px;
   border-top: 1px solid var(--rule);
   font-size: 0.9375rem;
   color: var(--muted);
+}
+:global([dir="rtl"]) .group li {
+  padding: 6px 16px 6px 0;
+}
+.group li::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--cove);
 }
 
 @media (max-width: 860px) {

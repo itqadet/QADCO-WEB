@@ -8,7 +8,6 @@ import { ProductsHero } from "@/components/products/ProductsHero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { GroupNav } from "@/components/products/GroupNav";
 import { ProductGrid } from "@/components/products/ProductGrid";
-import { BoardsList } from "@/components/products/BoardsList";
 import { SupplierWall } from "@/components/products/SupplierWall";
 import { Section, SectionHead } from "@/components/ui/Section";
 
@@ -45,7 +44,7 @@ export default async function ProductsPage() {
         {groups.map((g, i) => (
           <Section key={g.id} id={g.id} aria-labelledby={`${g.id}-h`} tight={i === 0} style={jumpOffset}>
             <SectionHead id={`${g.id}-h`} title={g.title} intro={g.intro} />
-            {g.id === "boards" ? <BoardsList items={g.items} /> : <ProductGrid items={g.items} />}
+            <ProductGrid items={g.items} />
             {g.id === "ornamental" ? <p style={{ marginTop: "1.5rem", color: "var(--muted)" }}>{t.samplesNote}</p> : null}
           </Section>
         ))}

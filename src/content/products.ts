@@ -243,7 +243,10 @@ export const products: Product[] = [
     image: img("/images/work/part-demountable-timber.jpg", 926, 750),
   },
 
-  /* ---------- boards and materials, supplied ---------- */
+  /* ---------- boards and materials, supplied ----------
+   * Illustrative stock photography from Unsplash (Unsplash License, free for commercial use):
+   * gypsum board and metal profiles by Olek Buzunov, cement board by Annie Spratt, insulation by
+   * Erik Mclean. Swap in photos of our own stock when available. */
   {
     id: "gypsum-board",
     category: "boards",
@@ -253,6 +256,7 @@ export const products: Product[] = [
       en: "Standard, moisture-resistant and fire-rated boards for ceilings and walls.",
       ar: "ألواح عادية ومقاومة للرطوبة ومقاومة للحريق للأسقف والجدران.",
     },
+    image: img("/images/products/board-gypsum.jpg", 1200, 900),
     brands: ["qgyps", "gyproc", "knauf", "usg"],
   },
   {
@@ -264,6 +268,7 @@ export const products: Product[] = [
       en: "For wet areas, external soffits and walls that take knocks.",
       ar: "للمناطق الرطبة والأسقف الخارجية والجدران المعرّضة للصدمات.",
     },
+    image: img("/images/products/board-cement.jpg", 1200, 900),
     brands: ["ramco", "shera"],
   },
   {
@@ -275,6 +280,7 @@ export const products: Product[] = [
       en: "Glass wool and rock wool for thermal and acoustic insulation.",
       ar: "صوف زجاجي وصخري للعزل الحراري والصوتي.",
     },
+    image: img("/images/products/board-insulation.jpg", 1200, 900),
     brands: ["kimmco"],
   },
   {
@@ -286,6 +292,7 @@ export const products: Product[] = [
       en: "Studs, channels and ceiling grids, cut to length.",
       ar: "قوائم ومجارٍ وشبكات أسقف بالأطوال المطلوبة.",
     },
+    image: img("/images/products/board-profiles.jpg", 1200, 900),
     brands: ["decotech", "knauf", "usg-me"],
   },
 ];

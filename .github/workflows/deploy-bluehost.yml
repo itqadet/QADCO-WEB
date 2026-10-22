@@ -4,7 +4,8 @@
 # within the hour), and by hand from the Actions tab ("Run workflow").
 #
 # Needs these repository secrets (GitHub -> Settings -> Secrets and variables -> Actions):
-#   FTP_SERVER    e.g. ftp.qasralandalusco.com (Bluehost: cPanel -> FTP Accounts)
+#   FTP_SERVER    box5108.bluehost.com (the server's own name: its certificate does not cover
+#                 ftp.qasralandalusco.com, so FTPS fails with that name)
 #   FTP_USERNAME  the FTP account's username
 #   FTP_PASSWORD  the FTP account's password
 # Optional repository variables:

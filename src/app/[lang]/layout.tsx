@@ -25,6 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(site.url),
     title: { default: meta.siteName, template: `%s` },
     description: meta.defaultDescription,
+    // a preview copy (e.g. /preview on Bluehost) must stay out of search results
+    ...(process.env.NEXT_PUBLIC_NOINDEX === "1" ? { robots: { index: false, follow: false } } : {}),
   };
 }
 

@@ -3,8 +3,8 @@
  * QADCO contact form mailer for Bluehost (the PHP twin of src/app/api/contact/route.ts).
  * Sends each request by email through Resend (resend.com).
  *
- * Settings live in qadco-config.php ONE LEVEL ABOVE public_html, so they are never
- * downloadable. Copy deploy/bluehost/qadco-config.example.php there and fill it in:
+ * Settings live in qadco-config.php in the HOME folder (above public_html), so they are
+ * never downloadable. Copy deploy/bluehost/qadco-config.example.php there and fill it in:
  *   RESEND_API_KEY  required
  *   CONTACT_TO      who receives requests
  *   CONTACT_FROM    sender; must be on a domain verified in Resend (or Resend's test sender)
@@ -21,8 +21,13 @@ function reply($status, $data) {
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') reply(405, ['ok' => false, 'reason' => 'method']);
 
-$config = __DIR__ . '/../qadco-config.php';
-if (!is_file($config)) reply(503, ['ok' => false, 'reason' => 'not-configured']);
+// Look for the settings file in the folders above this one (home folder first in practice:
+// public_html/contact.php -> ~/qadco-config.php, public_html/preview/contact.php -> ~/qadco-config.php).
+$config = null;
+foreach ([dirname(__DIR__), dirname(__DIR__, 2), dirname(__DIR__, 3)] as $dir) {
+    if (is_file($dir . '/qadco-config.php')) { $config = $dir . '/qadco-config.php'; break; }
+}
+if ($config === null) reply(503, ['ok' => false, 'reason' => 'not-configured']);
 require $config;
 $key = defined('RESEND_API_KEY') ? trim(RESEND_API_KEY) : '';
 if ($key === '') reply(503, ['ok' => false, 'reason' => 'not-configured']);

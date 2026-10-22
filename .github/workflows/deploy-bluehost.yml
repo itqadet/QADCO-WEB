@@ -7,8 +7,10 @@
 #   FTP_SERVER    e.g. ftp.qasralandalusco.com (Bluehost: cPanel -> FTP Accounts)
 #   FTP_USERNAME  the FTP account's username
 #   FTP_PASSWORD  the FTP account's password
-# Optional repository variable:
-#   FTP_DIR       folder to upload into, relative to the FTP account's home (default public_html/)
+# Optional repository variables:
+#   BASE_PATH     sub-folder the site lives in, e.g. /preview (leave unset for the domain root)
+#   FTP_DIR       folder to upload into, relative to the FTP account's home
+#                 (default public_html/, or public_html/preview/ when BASE_PATH is /preview)
 name: Deploy to Bluehost
 
 on:
@@ -39,6 +41,7 @@ jobs:
 
       - run: npm run build:static
         env:
+          BASE_PATH: ${{ vars.BASE_PATH }}
           NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://www.qasralandalusco.com' }}
 
       - name: Upload to Bluehost
@@ -49,4 +52,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           local-dir: ./out/
-          server-dir: ${{ vars.FTP_DIR || 'public_html/' }}
+          server-dir: ${{ vars.FTP_DIR || format('public_html{0}/', vars.BASE_PATH) }}

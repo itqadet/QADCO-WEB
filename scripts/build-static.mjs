@@ -1,7 +1,8 @@
 /**
  * Builds the site as plain files for shared hosting (Bluehost) into out/.
  *
- *   npm run build:static
+ *   npm run build:static                      site at the domain root
+ *   BASE_PATH=/preview npm run build:static   site in a sub-folder (marked noindex)
  *
  * A static site can't run the parts that need a Node.js server, so for the length of this
  * build they are set aside (and always put back, even if the build fails):
@@ -19,6 +20,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const p = (...parts) => path.join(root, ...parts);
 const aside = p(".static-aside");
+const base = (process.env.BASE_PATH ?? "").replace(/\/$/, "");
 
 const moves = [
   ["src/proxy.ts", "proxy.ts"],
@@ -53,7 +55,10 @@ try {
     env: {
       ...process.env,
       STATIC_EXPORT: "1",
-      NEXT_PUBLIC_CONTACT_ENDPOINT: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/contact.php",
+      BASE_PATH: base,
+      NEXT_PUBLIC_CONTACT_ENDPOINT: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || `${base}/contact.php`,
+      // a sub-folder copy is a preview: keep it out of search results
+      NEXT_PUBLIC_NOINDEX: base ? "1" : process.env.NEXT_PUBLIC_NOINDEX || "",
       NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://www.qasralandalusco.com",
     },
   });
@@ -67,14 +72,14 @@ if (failed) {
   process.exit(1);
 }
 
-cpSync(p("deploy/bluehost/.htaccess"), p("out/.htaccess"));
+writeFileSync(p("out/.htaccess"), readFileSync(p("deploy/bluehost/.htaccess"), "utf8").replaceAll("__BASE__", base));
 cpSync(p("deploy/bluehost/contact.php"), p("out/contact.php"));
 // the root page: .htaccess sends visitors to /en/ or /ar/; this covers a server without rewrites
 writeFileSync(
   p("out/index.html"),
   `<!doctype html><meta charset="utf-8"><title>QADCO</title><meta name="robots" content="noindex">
-<script>location.replace((navigator.language||"").toLowerCase().startsWith("ar")?"/ar/":"/en/")</script>
-<meta http-equiv="refresh" content="1;url=/en/"><a href="/en/">QADCO</a>`,
+<script>location.replace("${base}/"+((navigator.language||"").toLowerCase().startsWith("ar")?"ar":"en")+"/")</script>
+<meta http-equiv="refresh" content="1;url=${base}/en/"><a href="${base}/en/">QADCO</a>`,
 );
 
 rmSync(p("qadco-website-bluehost.zip"), { force: true });
@@ -83,4 +88,4 @@ if (process.platform === "win32") {
 } else {
   execSync("cd out && zip -qr ../qadco-website-bluehost.zip . -x '.DS_Store'", { cwd: root, stdio: "inherit", shell: "/bin/sh" });
 }
-console.log("\nDone: out/ and qadco-website-bluehost.zip are ready to upload to public_html.");
+console.log(`\nDone: out/ and qadco-website-bluehost.zip are ready to upload to public_html${base}/.`);

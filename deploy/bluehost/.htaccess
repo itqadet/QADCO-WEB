@@ -1,7 +1,8 @@
-# QADCO website on Bluehost (Apache). Generated pages live in folders: /en/about/index.html.
+# QADCO website on Bluehost (Apache). Generated pages live in folders: __BASE__/en/about/index.html.
+# The base path is filled in by scripts/build-static.mjs (empty at the domain root, /preview in a sub-folder).
 DirectoryIndex index.html index.php
 Options -Indexes
-ErrorDocument 404 /404.html
+ErrorDocument 404 __BASE__/404.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -13,14 +14,13 @@ ErrorDocument 404 /404.html
 
   # Home page: Arabic browsers go to /ar/, everyone else to /en/
   RewriteCond %{HTTP:Accept-Language} ^ar [NC]
-  RewriteRule ^$ /ar/ [L,R=302]
-  RewriteRule ^$ /en/ [L,R=302]
+  RewriteRule ^$ __BASE__/ar/ [L,R=302]
+  RewriteRule ^$ __BASE__/en/ [L,R=302]
 
   # Pages without a language (/about) go to the English version
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_URI} !^/(en|ar|_next|images|studio)(/|$)
-  RewriteRule ^(about|services|products|projects|process|contact)(/.*)?$ /en/$1$2 [L,R=302]
+  RewriteRule ^(about|services|products|projects|process|contact)(/.*)?$ __BASE__/en/$1$2 [L,R=302]
 </IfModule>
 
 # Keep the mailer settings unreachable, should a copy ever land in this folder
@@ -32,7 +32,7 @@ ErrorDocument 404 /404.html
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   # Built files have content hashes in their names, so they can be cached for a year
-  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
+  <If "%{REQUEST_URI} =~ m#/_next/static/#">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </If>
   <FilesMatch "\.(jpg|jpeg|png|svg|webp|ico)$">

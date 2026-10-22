@@ -1,8 +1,9 @@
 .list {
+  display: grid;
+  gap: 10px;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--rule);
 }
 
 .row {
@@ -10,8 +11,11 @@
   grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) auto;
   align-items: center;
   gap: 12px 32px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--rule);
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--ink);
+  border-radius: 12px;
 }
 
 .name {
@@ -27,14 +31,32 @@
 .ask {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1.5px solid var(--maroon);
+  border-radius: 999px;
   color: var(--maroon);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+.ask::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+:global([dir="rtl"]) .ask::after {
+  transform: rotate(-135deg);
 }
 .ask:hover {
-  text-decoration-thickness: 2px;
+  background: var(--maroon);
+  color: #fff;
 }
 
 @media (max-width: 860px) {

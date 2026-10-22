@@ -21,7 +21,7 @@ export async function SiteHeader() {
   ];
 
   return (
-    <HeaderShell clearOn={[href(locale), href(locale, routes.about), href(locale, routes.services), href(locale, routes.projects), `${href(locale, routes.projects)}/*`]} className={styles.header}>
+    <HeaderShell clearOn={[href(locale), href(locale, routes.about), href(locale, routes.services), href(locale, routes.products), href(locale, routes.projects), `${href(locale, routes.projects)}/*`]} className={styles.header}>
       <Container className={styles.inner}>
         <Link className={styles.brand} href={href(locale)} aria-label={common.brandHomeLabel}>
           <Image className={styles.mark} src="/images/brand/qadco-mark.png" alt="" width={44} height={34} style={{ width: 44, height: "auto" }} preload />

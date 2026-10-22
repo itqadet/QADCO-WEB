@@ -1,12 +1,10 @@
 .wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 1px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
-  background: var(--rule);
-  border: 1px solid var(--rule);
 }
 
 .tile {
@@ -15,6 +13,13 @@
   min-height: 112px;
   padding: 20px;
   background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  transition: border-color 250ms ease, transform 350ms ease;
+}
+.tile:hover {
+  border-color: var(--ink);
+  transform: translateY(-3px);
 }
 
 .logo {

@@ -10,7 +10,7 @@ export function BrandStrip({ ids, label }: { ids: SupplierId[]; label: string })
         const s = suppliers[id];
         return (
           <li key={id}>
-            <Image src={s.src} alt={s.name} title={s.name} width={s.w} height={s.h} className={styles.logo} unoptimized />
+            <Image src={s.src} alt={s.name} title={s.name} width={s.w} height={s.h} className={styles.logo} unoptimized loading="eager" />
           </li>
         );
       })}

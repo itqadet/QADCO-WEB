@@ -16,6 +16,7 @@ import { execSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { zipDir } from "./zip-dir.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const p = (...parts) => path.join(root, ...parts);
@@ -83,9 +84,6 @@ writeFileSync(
 );
 
 rmSync(p("qadco-website-bluehost.zip"), { force: true });
-if (process.platform === "win32") {
-  execSync(`powershell -NoProfile -Command "Compress-Archive -Path 'out/*','out/.htaccess' -DestinationPath 'qadco-website-bluehost.zip' -Force"`, { cwd: root, stdio: "inherit" });
-} else {
-  execSync("cd out && zip -qr ../qadco-website-bluehost.zip . -x '.DS_Store'", { cwd: root, stdio: "inherit", shell: "/bin/sh" });
-}
+// forward-slash paths and Unix permissions, so folders are readable after cPanel's Extract
+zipDir(p("out"), p("qadco-website-bluehost.zip"));
 console.log(`\nDone: out/ and qadco-website-bluehost.zip are ready to upload to public_html${base}/.`);

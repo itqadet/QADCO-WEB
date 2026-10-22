@@ -6,6 +6,7 @@ import { href, routes } from "@/i18n/routing";
 import { drawings, tradeAnchor, tradeKeys, type TradeKey } from "@/content/drawings";
 import { TileBuilder } from "./TileBuilder";
 import styles from "./TradeTiles.module.css";
+import { asset } from "@/lib/asset";
 
 /**
  * The photo each tile rises to. Illustrative stock photography from Unsplash (Unsplash License,
@@ -34,7 +35,7 @@ export async function TradeTiles() {
         <li key={t} className={styles.tile} style={{ "--i": i } as CSSProperties}>
           <Link href={href(locale, routes.services, tradeAnchor[t])} className={styles.link}>
             <span className={styles.frame}>
-              <Image className={styles.drawing} src={drawings[t].src} alt="" width={480} height={360} unoptimized />
+              <Image className={styles.drawing} src={asset(drawings[t].src)} alt="" width={480} height={360} unoptimized />
               <Image
                 className={styles.photo}
                 src={tilePhotos[t].src}

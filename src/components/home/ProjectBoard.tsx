@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import styles from "./ProjectBoard.module.css";
+import { asset } from "@/lib/asset";
 
 export type BoardLogo =
   | { kind: "image"; src: string; width: number; height: number; plate: "light" | "dark" }
@@ -151,7 +152,7 @@ export function ProjectBoard({ projects, locale, rtl, labels }: ProjectBoardProp
             >
               <span className={styles.plate} data-plate={x.logo.kind === "image" ? x.logo.plate : "letters"}>
                 {x.logo.kind === "image" ? (
-                  <Image src={x.logo.src} alt="" width={x.logo.width} height={x.logo.height} className={styles.logo} unoptimized />
+                  <Image src={asset(x.logo.src)} alt="" width={x.logo.width} height={x.logo.height} className={styles.logo} unoptimized />
                 ) : (
                   <span className={styles.letters} dir="ltr">
                     {x.logo.text}

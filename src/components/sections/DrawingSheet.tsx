@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { drawings, DRAWING_HEIGHT, DRAWING_WIDTH, type TradeKey } from "@/content/drawings";
 import styles from "./DrawingSheet.module.css";
+import { asset } from "@/lib/asset";
 
 /** A trade drawing presented as a sheet with an architectural title block. */
 export async function DrawingSheet({ trade }: { trade: TradeKey }) {
@@ -11,7 +12,7 @@ export async function DrawingSheet({ trade }: { trade: TradeKey }) {
   return (
     <figure className={styles.sheet}>
       <Image
-        src={drawing.src}
+        src={asset(drawing.src)}
         alt={drawingsAlt[trade]}
         width={DRAWING_WIDTH}
         height={DRAWING_HEIGHT}

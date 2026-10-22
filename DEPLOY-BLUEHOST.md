@@ -45,13 +45,23 @@ first (**Hosting → Backups**, or cPanel → **File Manager**, select `public_h
    `https://qasralandalusco.com/preview/`.
 5. In File Manager → **Settings**, tick **Show Hidden Files** and check `.htaccess` is there.
 
-## 3. Turn on the contact form
+## 3. The contact form
 
-1. In File Manager, go to your **home folder** (the folder that contains `public_html`).
-2. Create a file named `qadco-config.php` there, with the content of
-   `deploy/bluehost/qadco-config.example.php`, and put your **Resend API key** in it.
-   Never place this file inside `public_html`.
-3. Send a test request from the Contact page.
+The form on the Bluehost copy sends through the mail route on Vercel
+(`https://qadco-web.vercel.app/api/contact`), which uses the Resend key set in Vercel. Bluehost's
+bot check answers background requests to `contact.php` with a cookie page, so the PHP mailer is
+not used there. Nothing needs setting up on Bluehost; `contact.php` stays in the upload as a
+fallback for a host without that check.
+
+- Who receives requests, and the sender, are set in Vercel → Settings → Environment Variables
+  (`CONTACT_TO`, `CONTACT_FROM`). With Resend's test sender, mail only reaches the address the
+  Resend account was created with, until the domain is verified in Resend.
+- The route accepts requests from `qasralandalusco.com` and `www.qasralandalusco.com`. For
+  another domain, set `CONTACT_ORIGINS` in Vercel (comma-separated, e.g. `https://example.com`).
+
+To use `contact.php` instead, build with `NEXT_PUBLIC_CONTACT_ENDPOINT=/contact.php` (or
+`/preview/contact.php`) and put `qadco-config.php`, made from
+`deploy/bluehost/qadco-config.example.php`, in your home folder (never inside `public_html`).
 
 ## 4. SSL
 

@@ -17,7 +17,8 @@ type LocaleSwitchProps = {
  * filters in the address (?sector=…), the #section, and the scroll position.
  */
 export function LocaleSwitch({ to, className, children }: LocaleSwitchProps) {
-  const pathname = usePathname();
+  // the Bluehost build adds a trailing slash (/en/about/); compare paths without it
+  const pathname = usePathname().replace(/(.)\/$/, "$1");
   const router = useRouter();
   const target = switchLocalePath(pathname, to);
 

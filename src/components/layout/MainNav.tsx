@@ -16,7 +16,8 @@ type MainNavProps = {
 };
 
 export function MainNav({ locale, items, cta, labels }: MainNavProps) {
-  const pathname = usePathname();
+  // the Bluehost build adds a trailing slash (/en/about/); compare paths without it
+  const pathname = usePathname().replace(/(.)\/$/, "$1");
   const [open, setOpen] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const target = otherLocale(locale);

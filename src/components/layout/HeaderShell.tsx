@@ -15,7 +15,8 @@ type HeaderShellProps = {
  * has scrolled, so the styles can switch from clear-over-the-room to solid gypsum.
  */
 export function HeaderShell({ clearOn, className, children }: HeaderShellProps) {
-  const pathname = usePathname();
+  // the Bluehost build adds a trailing slash (/en/about/); compare paths without it
+  const pathname = usePathname().replace(/(.)\/$/, "$1");
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {

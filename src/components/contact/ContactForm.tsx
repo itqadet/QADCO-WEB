@@ -99,7 +99,8 @@ export function ContactForm({ labels, recipient, phone }: ContactFormProps) {
     setSending(true);
     try {
       const payload = Object.fromEntries(data.entries());
-      const res = await fetch("/api/contact", {
+      // Vercel runs /api/contact; the Bluehost build posts to contact.php (NEXT_PUBLIC_CONTACT_ENDPOINT).
+      const res = await fetch(process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...payload, lang: document.documentElement.lang, elapsed: Date.now() - openedAt.current }),

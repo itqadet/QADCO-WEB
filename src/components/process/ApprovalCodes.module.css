@@ -1,48 +1,64 @@
+/* four cards, each with its code pressed on like a rubber stamp; A and B are the go-aheads */
 .codes {
+  --tone: var(--maroon);
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
+  gap: 14px;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 2px solid var(--ink);
 }
 .codes li {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 16px 18px 0;
-  border-bottom: 1px solid var(--rule);
-  font-weight: 500;
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 22px 22px 24px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--tone);
+  border-radius: 12px;
 }
-.code {
-  flex: none;
+.codes li[data-tone="ok"] {
+  --tone: #1f7a4d;
+}
+.codes li[data-tone="warn"] {
+  --tone: #b07a10;
+}
+.codes li[data-tone="stop"] {
+  --tone: var(--maroon);
+}
+.stamp {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 2px solid currentColor;
-  border-radius: 4px;
-  font: 800 1.375rem/1 var(--font-latin);
+  width: 58px;
+  height: 58px;
+  margin-bottom: 12px;
+  border: 3px double var(--tone);
+  border-radius: 10px;
+  color: var(--tone);
+  font: 800 1.8rem / 1 var(--font-latin);
   font-stretch: 125%;
+  transform: rotate(-8deg);
+  opacity: 0.9;
 }
-.codes li[data-tone="ok"] .code {
-  color: var(--maroon);
+.label {
+  font-weight: 700;
+  font-size: 1.05rem;
 }
-.codes li[data-tone="warn"] .code {
-  color: #8a5a00;
-}
-.codes li[data-tone="stop"] .code {
+.note {
   color: var(--muted);
+  font-size: var(--fs-small);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .codes {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 480px) {
   .codes {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

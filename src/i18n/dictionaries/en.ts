@@ -438,6 +438,8 @@ const en = {
       title: "How consultants reply",
       intro: "Each submittal comes back with one of four codes. We plan for an A or B before any material is ordered.",
     },
+    route: { label: "The three stages", items: "items", start: "Start here" },
+    qualityPoints: ["One quality plan from order to final inspection", "Manufacturer warranties passed on to you", "Workmanship we stand behind"],
     quality: {
       title: "Quality assurance",
       body: "Our quality system controls every stage, from ordering material to the final inspection on site. Every product we supply carries its manufacturer's warranty, passed on to you directly, and we stand behind the workmanship on every project.",
@@ -507,6 +509,15 @@ const en = {
     title: "Book a consultation",
     lede: "Tell us about your space and we'll call you to arrange a visit. Fields marked required are the minimum we need to get back to you.",
     sectionLabel: "Contact form and details",
+    quick: {
+      call: "Call us",
+      email: "Email us",
+      visit: "Visit the office",
+      open: "Open now",
+      closed: "Closed now",
+      replyNote: "We reply within one working day.",
+      formTitle: "Tell us about your project",
+    },
     directTitle: "Talk to us directly",
     drawingsNote: "Sending drawings? Email PDFs or DWGs with the project name in the subject line.",
     map: {

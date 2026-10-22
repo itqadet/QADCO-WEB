@@ -1,0 +1,63 @@
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 28px var(--col-gap);
+  padding: clamp(26px, 4vw, 48px);
+  background: var(--ink-deep);
+  border-radius: 16px;
+  color: #fff;
+}
+.card h2 {
+  margin: 14px 0 12px;
+  color: #fff;
+}
+.card p {
+  margin: 0;
+  color: #c9cedd;
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: rgb(242 212 155 / 0.15);
+  color: var(--cove);
+}
+.icon svg {
+  width: 28px;
+  height: 28px;
+}
+.points {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.points li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 12px;
+  font-weight: 600;
+}
+.points li::before {
+  content: "";
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b1438' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center / 14px no-repeat,
+    var(--cove);
+}
+@media (max-width: 860px) {
+  .card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

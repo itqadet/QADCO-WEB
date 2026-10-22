@@ -1,0 +1,112 @@
+.aside {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 20px 22px;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 14px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+  font-weight: 700;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #9aa3b8;
+}
+.status[data-open] .dot {
+  background: #3ccf7e;
+  box-shadow: 0 0 0 0 rgb(60 207 126 / 0.6);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .status[data-open] .dot {
+    animation: pulse 2s ease-out infinite;
+  }
+}
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 10px rgb(60 207 126 / 0);
+  }
+}
+.hours {
+  margin: 0;
+  color: #dfe3ee;
+}
+
+/* three one-tap ways to reach us */
+.ways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.way {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  padding: 18px 20px;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 14px;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 250ms ease, border-color 250ms ease, transform 300ms ease;
+}
+.way:hover {
+  background: rgb(255 255 255 / 0.12);
+  border-color: var(--cove);
+  transform: translateY(-3px);
+}
+.way:focus-visible {
+  outline: 3px solid var(--cove);
+  outline-offset: 3px;
+}
+.icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--cove);
+  color: var(--ink-deep);
+}
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+.wayText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.wayLabel {
+  color: var(--cove);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.wayValue {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+:global([dir="rtl"]) .wayValue[dir="ltr"] {
+  text-align: right;
+}
+
+@media (max-width: 860px) {
+  .ways {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

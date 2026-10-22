@@ -1,0 +1,89 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: start;
+  gap: 28px var(--col-gap);
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) var(--section);
+}
+/* the form on a white card with a maroon edge */
+.formCard {
+  padding: clamp(22px, 3.5vw, 40px);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--maroon);
+  border-radius: 16px;
+  box-shadow: 0 30px 60px -44px rgb(11 20 56 / 0.55);
+}
+.formHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 18px;
+  margin-bottom: 24px;
+}
+.formHead h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+}
+.reply {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+.reply::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3ccf7e;
+}
+/* details beside the form, sticky on wide screens */
+.side {
+  position: sticky;
+  top: calc(var(--header-h) + 20px);
+  display: grid;
+  gap: 14px;
+}
+.detailsCard {
+  padding: 22px 24px 10px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+}
+.detailsCard h2 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+}
+.note {
+  display: flex;
+  gap: 14px;
+  margin: 0;
+  padding: 18px 20px;
+  background: var(--ink-deep);
+  border-radius: 14px;
+  color: #dfe3ee;
+}
+.note::before {
+  content: "";
+  flex: none;
+  width: 28px;
+  height: 28px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f2d49b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.map {
+  padding-bottom: var(--section);
+}
+.map h2 {
+  margin-bottom: 18px;
+}
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .side {
+    position: static;
+  }
+}

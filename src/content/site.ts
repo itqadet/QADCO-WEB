@@ -12,6 +12,12 @@ export const site = {
   mapUrl: "https://www.google.com/maps/search/?api=1&query=Qasr+Al+Andalus+Co+Street+12+Doha+Industrial+Area+Qatar",
   /** Where the map on the Contact page puts its pin: an address, or "latitude,longitude" for an exact spot. */
   mapQuery: "Street 12, Doha Industrial Area, Qatar",
+  /**
+   * Office hours for the "Open now" badge on the Contact page, in Doha time (UTC+3).
+   * Days use JavaScript numbering (0 = Sunday ... 6 = Saturday). Keep in step with the hours
+   * shown under Contact details.
+   */
+  officeHours: { days: [6, 0, 1, 2, 3, 4], open: 7, close: 18 },
 } as const;
 
 export type Settings = {

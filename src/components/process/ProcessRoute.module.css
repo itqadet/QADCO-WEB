@@ -1,0 +1,116 @@
+.route {
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: clamp(2.25rem, 4.5vw, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+/* the dashed line joining the stations */
+.route::before {
+  content: "";
+  position: absolute;
+  top: 27px;
+  inset-inline: 28px;
+  border-top: 2px dashed rgb(242 212 155 / 0.7);
+  filter: drop-shadow(0 0 6px rgb(242 212 155 / 0.6));
+}
+.station {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  height: 100%;
+  padding: 0 0 4px;
+  color: #fff;
+  text-decoration: none;
+}
+.node {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border: 2px solid var(--cove);
+  border-radius: 50%;
+  background: var(--ink-deep);
+  color: var(--cove);
+  font: 800 1.4rem var(--font-latin);
+  font-stretch: 125%;
+  box-shadow: 0 0 0 6px var(--ink-deep), 0 0 24px rgb(242 212 155 / 0.45);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+.station:hover .node,
+.station:focus-visible .node {
+  background: var(--cove);
+  color: var(--ink-deep);
+}
+.station:focus-visible {
+  outline: 3px solid var(--cove);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+.code {
+  justify-self: start;
+  padding: 2px 9px;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.75);
+  font: 600 0.75rem var(--font-latin);
+}
+.title {
+  font-family: var(--font-head);
+  font-stretch: 112%;
+  font-weight: 650;
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.5rem);
+}
+:lang(ar) .title {
+  font-stretch: normal;
+}
+.summary {
+  max-width: 34ch;
+  color: #c9cedd;
+  font-size: var(--fs-small);
+}
+.count {
+  color: var(--cove);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .route li {
+    animation: in 700ms var(--ease) both;
+    animation-delay: calc(250ms + var(--i) * 180ms);
+  }
+}
+@keyframes in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (max-width: 760px) {
+  .route {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+  .route::before {
+    top: 28px;
+    bottom: 28px;
+    inset-inline: 27px auto;
+    border-top: 0;
+    border-inline-start: 2px dashed rgb(242 212 155 / 0.7);
+  }
+  .station {
+    grid-template-columns: 56px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+  .node {
+    grid-row: span 4;
+    margin: 0;
+  }
+}

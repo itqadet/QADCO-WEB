@@ -145,8 +145,8 @@ export const stages: Stage[] = [
 
 /** The approval codes consultants return on submittals, as used in QADCO's own documents. */
 export const approvalCodes = [
-  { code: "A", label: { en: "Approved", ar: "معتمد" }, tone: "ok" },
-  { code: "B", label: { en: "Approved with comments", ar: "معتمد مع ملاحظات" }, tone: "ok" },
-  { code: "C", label: { en: "Revise and resubmit", ar: "يُعدَّل ويُعاد تقديمه" }, tone: "warn" },
-  { code: "D", label: { en: "Not approved", ar: "غير معتمد" }, tone: "stop" },
+  { code: "A", label: { en: "Approved", ar: "معتمد" }, note: { en: "Go ahead exactly as submitted.", ar: "ننفّذ كما قُدّم تمامًا." }, tone: "ok" },
+  { code: "B", label: { en: "Approved with comments", ar: "معتمد مع ملاحظات" }, note: { en: "Go ahead, building the comments in.", ar: "ننفّذ مع الأخذ بالملاحظات." }, tone: "ok" },
+  { code: "C", label: { en: "Revise and resubmit", ar: "يُعدَّل ويُعاد تقديمه" }, note: { en: "We revise and resubmit before ordering anything.", ar: "نعدّل ونعيد التقديم قبل طلب أي مواد." }, tone: "warn" },
+  { code: "D", label: { en: "Not approved", ar: "غير معتمد" }, note: { en: "Back to the drawing board with the consultant.", ar: "نعود إلى التصميم مع الاستشاري." }, tone: "stop" },
 ] as const;

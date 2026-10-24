@@ -8,7 +8,7 @@
  * build they are set aside (and always put back, even if the build fails):
  *   src/proxy.ts       language redirect  -> done by .htaccess instead
  *   src/app/api        Vercel mail route  -> contact.php instead
- *   src/app/studio     Sanity Studio      -> staff keep using the Studio on Vercel
+ *   src/app/studio     Sanity Studio      -> built separately as plain files into out/studio
  * Project pages are listed at build time, so dynamicParams is switched off too.
  * Then .htaccess and contact.php are copied in and out/ is zipped for upload.
  */
@@ -75,6 +75,21 @@ if (failed) {
   console.error("\nStatic build failed; the project files were put back as they were.");
   process.exit(1);
 }
+
+// Sanity Studio as plain files (it runs entirely in the browser), at <base>/studio
+try {
+  execSync("npx sanity build out/studio -y", {
+    cwd: root,
+    stdio: "inherit",
+    env: { ...process.env, SANITY_STUDIO_BASE_PATH: `${base}/studio` },
+  });
+} catch {
+  console.error("\nStudio build failed.");
+  process.exit(1);
+}
+// Sanity's page template links its icons from /static/ whatever the base path; point them at the Studio's own copy
+const studioPage = p("out/studio/index.html");
+writeFileSync(studioPage, readFileSync(studioPage, "utf8").replaceAll('href="/static/', `href="${base}/studio/static/`));
 
 writeFileSync(p("out/.htaccess"), readFileSync(p("deploy/bluehost/.htaccess"), "utf8").replaceAll("__BASE__", base));
 cpSync(p("deploy/bluehost/contact.php"), p("out/contact.php"));

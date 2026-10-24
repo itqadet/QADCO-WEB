@@ -13,3 +13,6 @@ next-env.d.ts
 /out
 /.static-aside
 /qadco-website-bluehost.zip
+
+# Sanity command line build files
+/.sanity

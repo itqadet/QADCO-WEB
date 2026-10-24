@@ -10,7 +10,9 @@ import { structure } from "./src/sanity/structure";
 export default defineConfig({
   name: "qadco",
   title: "QADCO website",
-  basePath: "/studio",
+  // On Vercel the Studio is a page of the site at /studio. The plain-file build for Bluehost sets
+  // its path in sanity.cli.ts instead, and this one is added on top of it, so it stays at the root.
+  basePath: process.env.SANITY_STUDIO_BASE_PATH ? "/" : "/studio",
   projectId,
   dataset,
   plugins: [structureTool({ structure })],

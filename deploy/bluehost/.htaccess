@@ -17,6 +17,10 @@ ErrorDocument 404 __BASE__/404.html
   RewriteRule ^$ __BASE__/ar/ [L,R=302]
   RewriteRule ^$ __BASE__/en/ [L,R=302]
 
+  # Sanity Studio: every address under /studio is handled by its single page
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^studio/ __BASE__/studio/index.html [L]
+
   # Pages without a language (/about) go to the English version
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

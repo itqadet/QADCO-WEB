@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24 # npm 11, the version package-lock.json was written with
           cache: npm
 
       - run: npm ci

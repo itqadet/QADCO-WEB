@@ -21,10 +21,11 @@ export const site = {
   /** WhatsApp number for the chat button, international form, digits only (as used in wa.me links). */
   whatsapp: "97444604337",
   /**
-   * Crisp live chat (crisp.chat): the Website ID from Crisp -> Settings -> Website settings ->
-   * Setup instructions. Empty keeps the help button WhatsApp-only. It is a public value.
+   * tawk.to live chat: "propertyId/widgetId", the end of the widget link in tawk.to ->
+   * Administration -> Chat Widget (https://embed.tawk.to/<propertyId>/<widgetId>). Public values.
+   * Empty keeps the help button WhatsApp-only.
    */
-  crispWebsiteId: "",
+  tawkTo: "",
 } as const;
 
 export type Settings = {

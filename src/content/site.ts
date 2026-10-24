@@ -20,6 +20,11 @@ export const site = {
   officeHours: { days: [6, 0, 1, 2, 3, 4], open: 7, close: 18 },
   /** WhatsApp number for the chat button, international form, digits only (as used in wa.me links). */
   whatsapp: "97444604337",
+  /**
+   * Crisp live chat (crisp.chat): the Website ID from Crisp -> Settings -> Website settings ->
+   * Setup instructions. Empty keeps the help button WhatsApp-only. It is a public value.
+   */
+  crispWebsiteId: "",
 } as const;
 
 export type Settings = {

@@ -7,6 +7,8 @@ import styles from "./ChatHelp.module.css";
 type ChatHelpProps = {
   /** WhatsApp number in international form, digits only (wa.me format). */
   number: string;
+  /** Crisp website ID: when set, visitors can also chat inside the site and the team answers in Crisp. */
+  crispId?: string;
   hours: { days: readonly number[]; open: number; close: number };
   locale: string;
   t: Dictionary["chat"];
@@ -42,12 +44,51 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+type CrispQueue = unknown[][] & { is?: (what: string) => boolean };
+declare global {
+  interface Window {
+    $crisp?: CrispQueue;
+    CRISP_WEBSITE_ID?: string;
+    CRISP_RUNTIME_CONFIG?: { locale: string };
+  }
+}
+
 /**
- * Help button in the corner of every page. Opens a small panel with today's office status and a
- * few common questions; the chosen message, which the visitor can edit, continues in WhatsApp.
+ * Loads Crisp's chat the first time it is needed, so its script and cookies only arrive for
+ * visitors who choose to chat. Its own round launcher stays hidden; this component's button is
+ * the way in, and it steps aside while the chat window is open.
  */
-export function ChatHelp({ number, hours, locale, t }: ChatHelpProps) {
+function openCrisp(id: string, locale: string, onToggle: (open: boolean) => void) {
+  if (!window.$crisp) {
+    window.$crisp = [] as CrispQueue;
+    window.CRISP_WEBSITE_ID = id;
+    window.CRISP_RUNTIME_CONFIG = { locale };
+    window.$crisp.push(["safe", true]);
+    window.$crisp.push(["do", "chat:hide"]);
+    window.$crisp.push(["on", "chat:opened", () => onToggle(true)]);
+    window.$crisp.push(["on", "chat:closed", () => {
+      window.$crisp?.push(["do", "chat:hide"]);
+      onToggle(false);
+    }]);
+    const script = document.createElement("script");
+    script.src = "https://client.crisp.chat/l.js";
+    script.async = true;
+    document.head.appendChild(script);
+  }
+  // the team sees which page the visitor was on
+  window.$crisp.push(["set", "session:data", [[["page", window.location.href]]]]);
+  window.$crisp.push(["do", "chat:show"]);
+  window.$crisp.push(["do", "chat:open"]);
+}
+
+/**
+ * Help button in the corner of every page. Opens a small panel with today's office status, a chat
+ * inside the site (when Crisp is set up), and a few common questions that continue in WhatsApp
+ * with a message the visitor can edit.
+ */
+export function ChatHelp({ number, crispId, hours, locale, t }: ChatHelpProps) {
   const [open, setOpen] = useState(false);
+  const [crispOpen, setCrispOpen] = useState(false);
   const [status, setStatus] = useState<Status | null>(null);
   const [topic, setTopic] = useState<number | null>(null);
   const [message, setMessage] = useState("");
@@ -104,12 +145,12 @@ export function ChatHelp({ number, hours, locale, t }: ChatHelpProps) {
   };
 
   return (
-    <div className={styles.dock}>
+    <div className={styles.dock} hidden={crispOpen}>
       <div
         ref={panelRef}
         id={panelId}
         role="dialog"
-        aria-label={t.title}
+        aria-label={crispId ? t.titleLive : t.title}
         className={styles.panel}
         data-open={open || undefined}
         hidden={!open}
@@ -119,7 +160,7 @@ export function ChatHelp({ number, hours, locale, t }: ChatHelpProps) {
             <WhatsAppIcon />
           </span>
           <span className={styles.headText}>
-            <strong>{t.title}</strong>
+            <strong>{crispId ? t.titleLive : t.title}</strong>
             {status ? (
               <span className={styles.status} data-open={status.open || undefined}>
                 <span className={styles.dot} aria-hidden="true" />
@@ -135,7 +176,26 @@ export function ChatHelp({ number, hours, locale, t }: ChatHelpProps) {
         </header>
 
         <div className={styles.body}>
-          <p className={styles.bubble}>{t.greeting}</p>
+          <p className={styles.bubble}>{crispId ? t.greetingLive : t.greeting}</p>
+
+          {crispId ? (
+            <>
+              <button
+                type="button"
+                className={styles.live}
+                onClick={() => {
+                  setOpen(false);
+                  openCrisp(crispId, locale, setCrispOpen);
+                }}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
+                  <path d="M4 5h16v11H9l-5 4V5Z" />
+                </svg>
+                {t.chatHere}
+              </button>
+              <p className={styles.or}>{t.orWhatsApp}</p>
+            </>
+          ) : null}
 
           <fieldset className={styles.topics}>
             <legend className="visually-hidden">{t.topicsLabel}</legend>

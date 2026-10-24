@@ -591,6 +591,10 @@ const en = {
     opensOn: "We reply from {time} on {day}.",
     close: "Close chat",
     greeting: "Hello! What can we help you with? Pick a topic and we'll carry on the conversation on WhatsApp.",
+    titleLive: "Talk to QADCO",
+    greetingLive: "Hello! Chat with our team right here, or pick a topic to continue on WhatsApp.",
+    chatHere: "Chat with us here",
+    orWhatsApp: "Or continue on WhatsApp:",
     topicsLabel: "Topics",
     topics: [
       { label: "Book a consultation", message: "Hello QADCO, I'd like to book a consultation for my space." },

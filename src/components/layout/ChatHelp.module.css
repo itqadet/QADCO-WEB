@@ -14,6 +14,9 @@
 .dock > * {
   pointer-events: auto;
 }
+.dock[hidden] {
+  display: none;
+}
 
 /* ---------- the button ---------- */
 
@@ -216,6 +219,37 @@
 }
 :global([dir="rtl"]) .bubble {
   border-radius: 14px 4px 14px 14px;
+}
+
+/* chat inside the site (Crisp): the main way in when it is set up */
+.live {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.live:hover {
+  background: var(--ink-deep);
+}
+.live svg {
+  width: 20px;
+  height: 20px;
+}
+.or {
+  margin: 0;
+  max-width: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .topics {

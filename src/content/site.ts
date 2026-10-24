@@ -18,6 +18,8 @@ export const site = {
    * shown under Contact details.
    */
   officeHours: { days: [6, 0, 1, 2, 3, 4], open: 7, close: 18 },
+  /** WhatsApp number for the chat button, international form, digits only (as used in wa.me links). */
+  whatsapp: "97444604337",
 } as const;
 
 export type Settings = {

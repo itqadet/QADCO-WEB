@@ -581,6 +581,28 @@ const en = {
     body: "The address may have changed or been typed incorrectly. Start again from the home page.",
     action: "Go to the home page",
   },
+  chat: {
+    button: "Chat with us",
+    title: "QADCO on WhatsApp",
+    online: "We're in the office now",
+    closed: "Closed now.",
+    opensToday: "We reply from {time} today.",
+    opensTomorrow: "We reply from {time} tomorrow.",
+    opensOn: "We reply from {time} on {day}.",
+    close: "Close chat",
+    greeting: "Hello! What can we help you with? Pick a topic and we'll carry on the conversation on WhatsApp.",
+    topicsLabel: "Topics",
+    topics: [
+      { label: "Book a consultation", message: "Hello QADCO, I'd like to book a consultation for my space." },
+      { label: "Price for a product", message: "Hello QADCO, I'd like a price for: " },
+      { label: "A project we're working on", message: "Hello QADCO, I have a question about our project: " },
+      { label: "Something else", message: "Hello QADCO, " },
+    ],
+    messageLabel: "Your message (you can edit it)",
+    send: "Continue on WhatsApp",
+    note: "Opens WhatsApp with this message. Nothing is sent until you press send there.",
+    sentFrom: "Sent from",
+  },
 };
 
 export type Dictionary = typeof en;

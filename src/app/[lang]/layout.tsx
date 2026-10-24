@@ -8,6 +8,7 @@ import { SkipLink } from "@/components/layout/SkipLink";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { RevealObserver } from "@/components/layout/RevealObserver";
+import { ChatHelp } from "@/components/layout/ChatHelp";
 
 /** Only /en and /ar exist; any other first segment is a 404. */
 export const dynamicParams = false;
@@ -35,7 +36,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
-  const [locale, { common }] = await Promise.all([getLocale(), getDictionary()]);
+  const [locale, { common, chat }] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
     <html lang={locale} dir={localeDirection[locale]} className={fontVariables}>
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <ChatHelp number={site.whatsapp} hours={site.officeHours} locale={locale} t={chat} />
         <RevealObserver />
       </body>
     </html>

@@ -45,7 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
-        <ChatHelp number={site.whatsapp} liveChat={site.tawkTo || undefined} hours={site.officeHours} locale={locale} t={chat} />
+        <ChatHelp number={site.whatsapp} chatApi={process.env.NEXT_PUBLIC_CHAT_ENDPOINT || "/api/chat"} hours={site.officeHours} locale={locale} t={chat} />
         <RevealObserver />
       </body>
     </html>

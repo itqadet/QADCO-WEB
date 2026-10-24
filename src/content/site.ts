@@ -20,12 +20,6 @@ export const site = {
   officeHours: { days: [6, 0, 1, 2, 3, 4], open: 7, close: 18 },
   /** WhatsApp number for the chat button, international form, digits only (as used in wa.me links). */
   whatsapp: "97444604337",
-  /**
-   * tawk.to live chat: "propertyId/widgetId", the end of the widget link in tawk.to ->
-   * Administration -> Chat Widget (https://embed.tawk.to/<propertyId>/<widgetId>). Public values.
-   * Empty keeps the help button WhatsApp-only.
-   */
-  tawkTo: "6adc616b1cec9534723728be/1k5mdp3r1",
 } as const;
 
 export type Settings = {

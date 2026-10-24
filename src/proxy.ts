@@ -25,6 +25,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, the Studio, the API, static images and any file with an extension (icon.png, robots.txt, sitemap.xml).
-  matcher: ["/((?!_next|studio|api|images|.*\\..*).*)"],
+  // Skip Next internals, the Studio, the chat inbox, the API, static images and any file with an extension (icon.png, robots.txt, sitemap.xml).
+  matcher: ["/((?!_next|studio|inbox|api|images|.*\\..*).*)"],
 };

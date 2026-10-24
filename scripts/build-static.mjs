@@ -9,6 +9,7 @@
  *   src/proxy.ts       language redirect  -> done by .htaccess instead
  *   src/app/api        Vercel mail route  -> contact.php instead
  *   src/app/studio     Sanity Studio      -> built separately as plain files into out/studio
+ *   src/app/inbox      chat inbox         -> the team uses it on Vercel; the chat talks to Vercel
  * Project pages are listed at build time, so dynamicParams is switched off too.
  * Then .htaccess and contact.php are copied in and out/ is zipped for upload.
  */
@@ -27,6 +28,7 @@ const moves = [
   ["src/proxy.ts", "proxy.ts"],
   ["src/app/api", "api"],
   ["src/app/studio", "studio"],
+  ["src/app/inbox", "inbox"],
 ];
 const slugPage = p("src/app/[lang]/projects/[slug]/page.tsx");
 const slugSource = readFileSync(slugPage, "utf8");
@@ -62,6 +64,8 @@ try {
       // use the PHP mailer on a host without that check.
       NEXT_PUBLIC_CONTACT_ENDPOINT: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "https://qadco-web.vercel.app/api/contact",
       // a sub-folder copy is a preview: keep it out of search results
+      // the live chat's API runs on Vercel with its database
+      NEXT_PUBLIC_CHAT_ENDPOINT: process.env.NEXT_PUBLIC_CHAT_ENDPOINT || "https://qadco-web.vercel.app/api/chat",
       NEXT_PUBLIC_NOINDEX: base ? "1" : process.env.NEXT_PUBLIC_NOINDEX || "",
       NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://www.qasralandalusco.com",
     },

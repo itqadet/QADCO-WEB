@@ -12,6 +12,8 @@ const basePath = isStatic ? (process.env.BASE_PATH ?? "").replace(/\/$/, "") : "
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // the in-memory Postgres used for the live chat in development is loaded as-is, not bundled
+  serverExternalPackages: ["@electric-sql/pglite"],
   ...(isStatic ? { output: "export", trailingSlash: true, basePath } : {}),
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
   images: {

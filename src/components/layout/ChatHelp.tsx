@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries/en";
+import { hasSavedChat, LiveChat } from "./LiveChat";
 import styles from "./ChatHelp.module.css";
 
 type ChatHelpProps = {
   /** WhatsApp number in international form, digits only (wa.me format). */
   number: string;
-  /** tawk.to "propertyId/widgetId": when set, visitors can also chat inside the site and the team answers in tawk.to. */
-  liveChat?: string;
+  /** Base address of our own live-chat API; the chat is offered once it reports being set up. */
+  chatApi: string;
   hours: { days: readonly number[]; open: number; close: number };
   locale: string;
   t: Dictionary["chat"];
@@ -44,61 +45,24 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
-type TawkApi = {
-  onLoad?: () => void;
-  onChatMaximized?: () => void;
-  onChatMinimized?: () => void;
-  maximize?: () => void;
-  showWidget?: () => void;
-  hideWidget?: () => void;
-  setAttributes?: (values: Record<string, string>, callback?: (error?: unknown) => void) => void;
-};
-declare global {
-  interface Window {
-    Tawk_API?: TawkApi;
-    Tawk_LoadStart?: Date;
-  }
-}
+const ChatIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.glyph} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
+    <path d="M4 5h16v11H9l-5 4V5Z" />
+    <path d="M8 9.5h8M8 12.5h5" strokeLinecap="round" />
+  </svg>
+);
 
 /**
- * Loads the tawk.to chat the first time it is needed, so its script and cookies only arrive for
- * visitors who choose to chat. Its own round launcher stays hidden; this component's button is
- * the way in, and it steps aside while the chat window is open.
+ * Help button in the corner of every page. Opens a small panel with today's office status, our own
+ * live chat (answered by the team in the inbox at /inbox), and a few common questions that continue
+ * in WhatsApp with a message the visitor can edit.
  */
-function openTawk(id: string, onToggle: (open: boolean) => void) {
-  const show = (api: TawkApi) => {
-    // the team sees which page the visitor was on
-    api.setAttributes?.({ page: window.location.href });
-    api.showWidget?.();
-    api.maximize?.();
-  };
-  if (window.Tawk_API?.maximize) return show(window.Tawk_API);
-  if (window.Tawk_API) return; // still loading; onLoad opens it
-
-  const api: TawkApi = (window.Tawk_API = {});
-  window.Tawk_LoadStart = new Date();
-  api.onLoad = () => show(api);
-  api.onChatMaximized = () => onToggle(true);
-  api.onChatMinimized = () => {
-    api.hideWidget?.();
-    onToggle(false);
-  };
-  const script = document.createElement("script");
-  script.src = `https://embed.tawk.to/${id}`;
-  script.async = true;
-  script.charset = "UTF-8";
-  script.setAttribute("crossorigin", "*");
-  document.head.appendChild(script);
-}
-
-/**
- * Help button in the corner of every page. Opens a small panel with today's office status, a chat
- * inside the site (when tawk.to is set up), and a few common questions that continue in WhatsApp
- * with a message the visitor can edit.
- */
-export function ChatHelp({ number, liveChat, hours, locale, t }: ChatHelpProps) {
+export function ChatHelp({ number, chatApi, hours, locale, t }: ChatHelpProps) {
   const [open, setOpen] = useState(false);
-  const [liveOpen, setLiveOpen] = useState(false);
+  const [view, setView] = useState<"home" | "live">("home");
+  const [liveEnabled, setLiveEnabled] = useState(false);
+  const [unread, setUnread] = useState(0);
+  const onUnread = useCallback((n: number) => setUnread(n), []);
   const [status, setStatus] = useState<Status | null>(null);
   const [topic, setTopic] = useState<number | null>(null);
   const [message, setMessage] = useState("");
@@ -113,6 +77,22 @@ export function ChatHelp({ number, liveChat, hours, locale, t }: ChatHelpProps) 
     const id = window.setInterval(check, 60_000);
     return () => window.clearInterval(id);
   }, [hours, t, locale]);
+
+  // Is the live chat set up? Asked once: straight away if this browser has a chat going (to show
+  // replies on the button), otherwise when the panel is first opened.
+  const asked = useRef(false);
+  useEffect(() => {
+    if (asked.current || !(open || hasSavedChat())) return;
+    asked.current = true;
+    fetch(`${chatApi}/status`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.enabled) return;
+        setLiveEnabled(true);
+        if (hasSavedChat()) setView("live");
+      })
+      .catch(() => {});
+  }, [open, chatApi]);
 
   // Esc closes the panel and returns focus to the button; so does a click outside it.
   useEffect(() => {
@@ -155,22 +135,22 @@ export function ChatHelp({ number, liveChat, hours, locale, t }: ChatHelpProps) 
   };
 
   return (
-    <div className={styles.dock} hidden={liveOpen}>
+    <div className={styles.dock}>
       <div
         ref={panelRef}
         id={panelId}
         role="dialog"
-        aria-label={liveChat ? t.titleLive : t.title}
+        aria-label={liveEnabled ? t.titleLive : t.title}
         className={styles.panel}
         data-open={open || undefined}
         hidden={!open}
       >
         <header className={styles.head}>
-          <span className={styles.avatar} aria-hidden="true">
-            <WhatsAppIcon />
+          <span className={styles.avatar} data-live={liveEnabled || undefined} aria-hidden="true">
+            {liveEnabled ? <ChatIcon /> : <WhatsAppIcon />}
           </span>
           <span className={styles.headText}>
-            <strong>{liveChat ? t.titleLive : t.title}</strong>
+            <strong>{liveEnabled ? t.titleLive : t.title}</strong>
             {status ? (
               <span className={styles.status} data-open={status.open || undefined}>
                 <span className={styles.dot} aria-hidden="true" />
@@ -185,19 +165,26 @@ export function ChatHelp({ number, liveChat, hours, locale, t }: ChatHelpProps) 
           </button>
         </header>
 
-        <div className={styles.body}>
-          <p className={styles.bubble}>{liveChat ? t.greetingLive : t.greeting}</p>
+        {liveEnabled ? (
+          <div className={styles.body} hidden={view !== "live"}>
+            <LiveChat
+              api={chatApi}
+              active={open && view === "live"}
+              officeOpen={status?.open ?? true}
+              locale={locale}
+              t={t}
+              onUnread={onUnread}
+              onBack={() => setView("home")}
+            />
+          </div>
+        ) : null}
 
-          {liveChat ? (
+        <div className={styles.body} hidden={view === "live"}>
+          <p className={styles.bubble}>{liveEnabled ? t.greetingLive : t.greeting}</p>
+
+          {liveEnabled ? (
             <>
-              <button
-                type="button"
-                className={styles.live}
-                onClick={() => {
-                  setOpen(false);
-                  openTawk(liveChat, setLiveOpen);
-                }}
-              >
+              <button type="button" className={styles.live} onClick={() => setView("live")}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round">
                   <path d="M4 5h16v11H9l-5 4V5Z" />
                 </svg>
@@ -255,7 +242,14 @@ export function ChatHelp({ number, liveChat, hours, locale, t }: ChatHelpProps) 
       >
         <WhatsAppIcon />
         <span className={styles.fabLabel}>{t.button}</span>
-        {status?.open ? <span className={styles.fabDot} aria-hidden="true" /> : null}
+        {unread > 0 ? (
+          <span className={styles.fabCount}>
+            {unread}
+            <span className="visually-hidden"> {t.unreadLabel}</span>
+          </span>
+        ) : status?.open ? (
+          <span className={styles.fabDot} aria-hidden="true" />
+        ) : null}
       </button>
     </div>
   );

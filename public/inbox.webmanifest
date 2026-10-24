@@ -1,0 +1,10 @@
+{
+  "name": "QADCO chat inbox",
+  "short_name": "QADCO Inbox",
+  "start_url": "/inbox",
+  "scope": "/inbox",
+  "display": "standalone",
+  "background_color": "#f3f3f0",
+  "theme_color": "#14215a",
+  "icons": [{ "src": "/images/brand/inbox-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+}

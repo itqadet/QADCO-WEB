@@ -13,25 +13,68 @@ import { createInterface } from "node:readline";
 import { promisify } from "node:util";
 
 const scryptAsync = promisify(scrypt);
+const ENTER = new Set(["\r", "\n"]);
+const CTRL_C = "\u0003";
+const BACKSPACE = new Set(["\u007f", "\b"]);
 
-function ask(question, hidden = false) {
-  return new Promise((resolve) => {
-    const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-    if (hidden) {
-      // don't echo the password as it is typed
-      rl._writeToOutput = (s) => rl.output.write(s.startsWith(question) ? s : "");
-    }
-    rl.question(question, (answer) => {
-      rl.close();
-      if (hidden) process.stdout.write("\n");
-      resolve(answer.trim());
+// Piped input (scripts, tests): all answers arrive at once, one per line.
+const piped = process.stdin.isTTY
+  ? null
+  : await new Promise((resolve) => {
+      let all = "";
+      process.stdin.setEncoding("utf8");
+      process.stdin.on("data", (c) => (all += c));
+      process.stdin.on("end", () => resolve(all.split(/\r?\n/)));
     });
+
+// One reader for the typed questions: a new reader per question can drop what was typed between them.
+const rl = process.stdin.isTTY ? createInterface({ input: process.stdin, output: process.stdout }) : null;
+const ask = (question) =>
+  piped ? Promise.resolve((piped.shift() ?? "").trim()) : new Promise((resolve) => rl.question(question, (a) => resolve(a.trim())));
+
+/** Reads a password key by key, showing * for each character, so it never appears on screen. */
+function askPassword(question) {
+  if (piped) return Promise.resolve(piped.shift() ?? "");
+  rl.close();
+  return new Promise((resolve) => {
+    process.stdout.write(question);
+    const stdin = process.stdin;
+    let value = "";
+    stdin.setRawMode(true);
+    stdin.setEncoding("utf8");
+    stdin.resume();
+    const onData = (chunk) => {
+      for (const ch of chunk) {
+        if (ENTER.has(ch)) {
+          stdin.setRawMode(false);
+          stdin.pause();
+          stdin.off("data", onData);
+          process.stdout.write("\n");
+          return resolve(value);
+        }
+        if (ch === CTRL_C) {
+          process.stdout.write("\n");
+          process.exit(1);
+        }
+        if (BACKSPACE.has(ch)) {
+          if (value) {
+            value = value.slice(0, -1);
+            process.stdout.write("\b \b");
+          }
+        } else if (ch >= " ") {
+          value += ch;
+          process.stdout.write("*");
+        }
+      }
+    };
+    stdin.on("data", onData);
   });
 }
 
 const name = await ask("Name shown to visitors (e.g. Ahmed): ");
-const id = (await ask(`Username for signing in [${name.toLowerCase().replace(/\s+/g, "")}]: `)) || name.toLowerCase().replace(/\s+/g, "");
-const password = await ask("Password (at least 10 characters): ", true);
+const suggested = name.toLowerCase().replace(/\s+/g, "");
+const id = (await ask(`Username for signing in [${suggested}]: `)) || suggested;
+const password = await askPassword("Password (at least 10 characters): ");
 if (!name || !id || password.length < 10) {
   console.error("\nName, username and a password of at least 10 characters are needed.");
   process.exit(1);
@@ -48,3 +91,4 @@ console.log(JSON.stringify({ id, name, hash }));
 console.log("\nThe whole value is a list, e.g. [ {first entry}, {second entry} ].");
 console.log("\nIf CHAT_SECRET isn't set yet, use this value for it (keep it private):\n");
 console.log(randomBytes(32).toString("base64url"));
+process.exit(0);

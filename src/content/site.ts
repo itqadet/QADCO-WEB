@@ -25,7 +25,7 @@ export const site = {
    * Administration -> Chat Widget (https://embed.tawk.to/<propertyId>/<widgetId>). Public values.
    * Empty keeps the help button WhatsApp-only.
    */
-  tawkTo: "",
+  tawkTo: "6adc616b1cec9534723728be/1k5mdp3r1",
 } as const;
 
 export type Settings = {

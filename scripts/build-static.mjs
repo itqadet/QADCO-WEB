@@ -95,7 +95,12 @@ try {
 const studioPage = p("out/studio/index.html");
 writeFileSync(studioPage, readFileSync(studioPage, "utf8").replaceAll('href="/static/', `href="${base}/studio/static/`));
 
-writeFileSync(p("out/.htaccess"), readFileSync(p("deploy/bluehost/.htaccess"), "utf8").replaceAll("__BASE__", base));
+// INBOX_URL: where <base>/inbox forwards to (the chat inbox on Vercel, or its own domain once set up)
+const inboxUrl = process.env.INBOX_URL || "https://qadco-web.vercel.app/inbox";
+writeFileSync(
+  p("out/.htaccess"),
+  readFileSync(p("deploy/bluehost/.htaccess"), "utf8").replaceAll("__BASE__", base).replaceAll("__INBOX__", inboxUrl),
+);
 cpSync(p("deploy/bluehost/contact.php"), p("out/contact.php"));
 // the root page: .htaccess sends visitors to /en/ or /ar/; this covers a server without rewrites
 writeFileSync(

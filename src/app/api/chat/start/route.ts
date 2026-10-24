@@ -44,7 +44,8 @@ async function start(request: Request): Promise<Response> {
     throw error;
   }
 
-  const inbox = `${new URL(request.url).origin}/inbox?c=${id}`;
+  // CHAT_INBOX_URL (Vercel setting) is the inbox address in emails, e.g. https://inbox.qasralandalusco.com/inbox
+  const inbox = `${process.env.CHAT_INBOX_URL?.trim().replace(/\/$/, "") || `${new URL(request.url).origin}/inbox`}?c=${id}`;
   const whatsapp = whatsappLink(contact);
   const who = name || "A visitor";
   const rows: [string, string][] = [

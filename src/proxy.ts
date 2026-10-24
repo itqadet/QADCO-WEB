@@ -14,9 +14,17 @@ function preferredLocale(request: NextRequest): Locale {
   return ranked.find((r) => hasLocale(r.lang))?.lang as Locale | undefined ?? defaultLocale;
 }
 
-/** Sends any path without a language prefix to the visitor's language: / → /ar, /about → /en/about. */
+/**
+ * Sends any path without a language prefix to the visitor's language: / → /ar, /about → /en/about.
+ * On the team's inbox address (inbox.<domain>) every site page leads to the inbox instead.
+ */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if ((request.headers.get("host") ?? "").startsWith("inbox.")) {
+    request.nextUrl.pathname = "/inbox";
+    request.nextUrl.search = "";
+    return NextResponse.redirect(request.nextUrl);
+  }
   const first = pathname.split("/")[1];
   if (locales.some((l) => l === first)) return;
 

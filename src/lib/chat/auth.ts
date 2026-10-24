@@ -29,6 +29,34 @@ function agents(): AgentRecord[] {
 const secret = () => process.env.CHAT_SECRET?.trim() ?? "";
 export const inboxConfigured = () => secret().length >= 32 && agents().length > 0;
 
+/** What is missing from the inbox settings, in words, without revealing any value. Empty when all is well. */
+export function setupProblems(): string[] {
+  const problems: string[] = [];
+  const s = secret();
+  if (!s) problems.push("CHAT_SECRET is missing.");
+  else if (s.length < 32) problems.push(`CHAT_SECRET is too short (${s.length} characters; it needs at least 32).`);
+
+  const raw = process.env.CHAT_AGENTS?.trim() ?? "";
+  if (!raw) problems.push("CHAT_AGENTS is missing.");
+  else {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      problems.push(
+        raw.startsWith("[")
+          ? "CHAT_AGENTS is not valid JSON. Check that it was pasted whole, with straight quotes, and ends with }]."
+          : "CHAT_AGENTS must start with [ and end with ] around the printed line, like [{...}].",
+      );
+    }
+    if (parsed !== undefined) {
+      if (!Array.isArray(parsed)) problems.push("CHAT_AGENTS must be a list: put [ before the printed line and ] after it.");
+      else if (agents().length === 0) problems.push("CHAT_AGENTS has no complete entries (each needs id, name and hash).");
+    }
+  }
+  return problems;
+}
+
 /** "scrypt:N:r:p:salt:hash", salt and hash in base64url. Colons, not dollar signs, which .env files would expand. */
 export async function hashPassword(password: string): Promise<string> {
   const salt = randomBytes(16);

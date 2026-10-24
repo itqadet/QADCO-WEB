@@ -3,17 +3,23 @@
 import { useState } from "react";
 import styles from "./Inbox.module.css";
 
-/** Sign-in for team members. */
-export function Login({ configured }: { configured: boolean }) {
+/** Sign-in for team members, or what is still missing from the setup. */
+export function Login({ problems }: { problems: string[] }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  if (!configured) {
+  if (problems.length) {
     return (
       <main className={styles.loginWrap}>
         <div className={styles.loginCard}>
           <h1 className={styles.loginTitle}>Chat inbox</h1>
-          <p className={styles.muted}>The inbox isn&apos;t set up yet: CHAT_SECRET and CHAT_AGENTS are missing in Vercel.</p>
+          <p className={styles.muted}>The inbox isn&apos;t set up yet. In Vercel → Settings → Environment Variables:</p>
+          <ul className={styles.problems}>
+            {problems.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+          <p className={styles.muted}>After changing a setting, redeploy for it to take effect.</p>
         </div>
       </main>
     );

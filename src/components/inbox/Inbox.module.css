@@ -337,3 +337,11 @@
   color: var(--error);
   font-size: 0.9rem;
 }
+.problems {
+  margin: 0;
+  padding-inline-start: 1.2em;
+  color: var(--error);
+  font-size: 0.92rem;
+  display: grid;
+  gap: 6px;
+}

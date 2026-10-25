@@ -40,7 +40,7 @@ export const works: WorkPhoto[] = [
   w("bedroom-cove", "interiors", 1110, 1400, "Bedroom with cove-lit ceiling", "غرفة نوم بسقف بإضاءة مخفية"),
   w("geometric-cove", "ceilings", 1400, 1400, "Geometric stepped ceiling with warm cove light", "سقف هندسي متدرج بإضاءة دافئة"),
   w("door-grooves", "doors", 769, 1400, "Entrance door with vertical grooves", "باب مدخل بأخاديد عمودية"),
-  w("dome-cornice", "classical", 1400, 1056, "Dome with dentil cornice", "قبة بكورنيش مسنّن"),
+  w("dome-cornice-gilded", "classical", 1400, 1056, "Dome with dentil cornice", "قبة بكورنيش مسنّن"),
   w("kitchen", "joinery", 1056, 1400, "Fitted kitchen", "مطبخ مُجهّز"),
   w("round-tiers", "ceilings", 1189, 1400, "Round tiered ceiling with chandelier", "سقف دائري متدرج مع ثريا"),
   w("door-diagonal", "doors", 769, 1400, "Entrance door with diagonal inlay", "باب مدخل بتطعيم مائل"),
